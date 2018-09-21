@@ -11,7 +11,8 @@ def on_esdouble_spin_box_changed(value):
 def on_checkbox_checked(value):
     print(value)
     print("Activate Double spinbox slot")
-    ok = MyExtraDialog.get_date_time()
+    dialog = MyExtraDialog.get_date_time()
+    # date = dialog.dateTime()
 
 
 class MyWindow(QtWidgets.QMainWindow):

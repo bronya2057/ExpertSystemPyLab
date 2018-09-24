@@ -1,23 +1,7 @@
 from PyQt5 import QtGui, QtWidgets, uic
 from PyQt5.QtCore import QDir, QIODevice, QFile
-from PyQt5.QtWidgets import QDialog, QListView, QFileSystemModel, QTreeView
-from PyQt5 import QtCore
-
-
-# slot example
+from PyQt5.QtWidgets import QDialog, QListView, QFileSystemModel, QTreeView, QRadioButton, QProgressBar
 from GUI.TreeModel import ExpertTreeModel
-
-
-def on_esdouble_spin_box_changed(value):
-    print(value)
-    print("Activate Double spinbox slot")
-
-
-def on_checkbox_checked(value):
-    print(value)
-    print("Activate Double spinbox slot")
-    dialog = MyExtraDialog.get_date_time()
-    # date = dialog.dateTime()
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -26,9 +10,9 @@ class MyWindow(QtWidgets.QMainWindow):
         uic.loadUi('Test.ui', self)
 
         # double spin box slot for sending value to function func
-        self.doubleSBEyeSeparation.valueChanged[float].connect(on_esdouble_spin_box_changed)
+        self.doubleSBEyeSeparation.valueChanged[float].connect(self.on_esdouble_spin_box_changed)
         # check box slot clicked
-        self.checkBoxStereoscopyOnOff.clicked[bool].connect(on_checkbox_checked)
+        self.checkBoxStereoscopyOnOff.clicked[bool].connect(self.on_checkbox_checked)
 
         # GET WIDGET FROM existing UI
         widget = self.findChild(QListView, "listViewContext")
@@ -37,6 +21,17 @@ class MyWindow(QtWidgets.QMainWindow):
         widget.setModel(model)
         item = QtGui.QStandardItem('one')
         model.appendRow(item)
+
+    # PUBLIC SLOTS:
+    def on_esdouble_spin_box_changed(value):
+        print(value)
+        print("Activate Double spinbox slot")
+
+    def on_checkbox_checked(value):
+        print(value)
+        print("Activate Double spinbox slot")
+        dialog = MyExtraDialog.get_date_time()
+        # date = dialog.dateTime()
 
 
 class MyExtraDialog(QtWidgets.QDialog):
@@ -81,12 +76,12 @@ def init_treeView():
     import sys
     app = QtWidgets.QApplication(sys.argv)
     window = MyExtraDialog()
-    #window.load_example_file_system()
+    # window.load_example_file_system()
     window.load_example_custom_model()
     window.show()
     sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
-    # init_gui() # Main window then TreeView
-    init_treeView()  # only treeView
+    init_gui()  # Main window then TreeView
+    # init_treeView()  # only treeView

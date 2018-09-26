@@ -1,6 +1,9 @@
-# Whenever going to Football match or music festieval we are asked for tickets. Below is example of system machine that checks the ticket and if not, it asks to buy a ticket. What you can check by this example is that order of
-# @Rules is not important for the engine. When asked by program you tell that both you have money and ticket it will pass two rules. First rule that is passed is the most suitable. By this I mean that if we have 2 arguments in
-# Rule and both are passed then it will be fired faster than Rule with only one condition. That is why we first receive Lucky you and below this is You can pass which has only one argument about the ticket.
+# Whenever going to Football match or music festieval we are asked for tickets. Below is example of system machine
+# that checks the ticket and if not, it asks to buy a ticket. What you can check by this example is that order of
+# @Rules is not important for the engine. When asked by program you tell that both you have money and ticket it will
+# pass two rules. First rule that is passed is the most suitable. By this I mean that if we have 2 arguments in Rule
+# and both are passed then it will be fired faster than Rule with only one condition. That is why we first receive
+# Lucky you and below this is You can pass which has only one argument about the ticket.
 from pyknow import *
 from random import choice
 

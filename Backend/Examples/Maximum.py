@@ -28,3 +28,4 @@ if __name__ == '__main__':
     m.declare(*[Fact(val=x) for x in (12, 33, 42, 99, 55, 11, 75)])
     # watch(RULES, FACTS, ACTIVATIONS)
     m.run()
+    print(m.facts)

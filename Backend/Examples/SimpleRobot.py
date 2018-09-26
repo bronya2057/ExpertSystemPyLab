@@ -1,6 +1,7 @@
 from pyknow import *
 from random import choice
 
+
 class Light(Fact):
     """Info about the traffic light."""
     pass
@@ -18,6 +19,7 @@ class RobotCrossStreet(KnowledgeEngine):
     @Rule('light' << Light(color=L('yellow') | L('blinking-yellow')))
     def cautious(self, light):
         print("Be cautious because light is", light["color"])
+
 
 if __name__ == '__main__':
     engine = RobotCrossStreet()

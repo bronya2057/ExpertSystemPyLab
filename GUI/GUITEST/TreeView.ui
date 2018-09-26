@@ -24,18 +24,18 @@
   <widget class="QTreeView" name="treeView">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>30</y>
-     <width>631</width>
-     <height>431</height>
+     <x>80</x>
+     <y>80</y>
+     <width>271</width>
+     <height>331</height>
     </rect>
    </property>
   </widget>
   <widget class="QLabel" name="lblTreeView">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>10</y>
+     <x>180</x>
+     <y>40</y>
      <width>47</width>
      <height>13</height>
     </rect>

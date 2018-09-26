@@ -1,13 +1,13 @@
 from PyQt5 import QtGui, QtWidgets, uic
 from PyQt5.QtCore import QDir, QIODevice, QFile
-from PyQt5.QtWidgets import QDialog, QListView, QFileSystemModel, QTreeView, QRadioButton, QProgressBar
-from GUI.TreeModel import ExpertTreeModel
+from PyQt5.QtWidgets import QDialog, QListView, QFileSystemModel, QTreeView
+from GUI.GUITEST.TreeModel import ExpertTreeModel
 
 
 class MyWindow(QtWidgets.QMainWindow):
     def __init__(self):  # ctor
         super(MyWindow, self).__init__()  # parent ctor
-        uic.loadUi('Test.ui', self)
+        uic.loadUi('./Test.ui', self)
 
         # double spin box slot for sending value to function func
         self.doubleSBEyeSeparation.valueChanged[float].connect(self.on_esdouble_spin_box_changed)
@@ -37,7 +37,7 @@ class MyWindow(QtWidgets.QMainWindow):
 class MyExtraDialog(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(MyExtraDialog, self).__init__(parent)
-        uic.loadUi('TreeView.ui', self)
+        uic.loadUi('./TreeView.ui', self)
 
     # static method to create the dialog and return (date, time, accepted)
     @staticmethod
@@ -84,4 +84,4 @@ def init_treeView():
 
 if __name__ == '__main__':
     init_gui()  # Main window then TreeView
-    # init_treeView()  # only treeView
+    #init_treeView()  # only treeView

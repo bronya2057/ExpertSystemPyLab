@@ -8,6 +8,7 @@ class RuleEditorController(QDialog):
         super(RuleEditorController, self).__init__()
         self.ui = Ui_RuleEditor()
         self.ui.setupUi(self)
+        self.setFixedSize(self.size())
         self.show()
 
 
@@ -19,4 +20,4 @@ def init_rule_editor_gui():
 
 
 if __name__ == "__main__":
-    init_gui()
+    init_rule_editor_gui()

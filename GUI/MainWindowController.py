@@ -2,17 +2,20 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QDialog
 
 from GUI.MainWindowView import Ui_MainWindow
+from GUI.Models.ESThemesListModel import ESThemesListModel, ESTheme
 from GUI.RuleEditorController import RuleEditorController
-
+from collections import OrderedDict
 
 class MainWindowController(QMainWindow):
     def __init__(self):
         super(MainWindowController, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.fillMenuBar()
+        self.fill_menu_bar()
+        self.init_es_themes_model()
         self.show()
 
+    ###############MENU ACTIONS###################
     def new_action(self):
         pass
 
@@ -35,8 +38,7 @@ class MainWindowController(QMainWindow):
         else:
             print("Cancel Button")
 
-
-    def fillMenuBar(self):
+    def fill_menu_bar(self):
         menu_bar = self.ui.menubar
 
         file = menu_bar.addMenu("File")
@@ -66,6 +68,32 @@ class MainWindowController(QMainWindow):
         open_action.triggered.connect(self.open_action)
         exit_action.triggered.connect(self.exit_action)
         rule_editor_action.triggered.connect(self.rule_editor_action)
+
+    ###############MODELS INIT###################
+    def init_es_themes_model(self):
+        es_themes_list_view = self.ui.listViewESThemes
+
+        ESThemeStructure = [
+            ESTheme("Eyes Infection Detect", OrderedDict({
+                                                            "What is your eyes color": ["Black", "Blue", "Brown"],
+                                                            "Did you Wash them with your hands": ["Yes", "No"]
+                                                        })
+                    ),
+            ESTheme("ComputerProblems Detect", OrderedDict({
+                                                            "What is your eyes color": ["Black", "Blue", "Brown"]
+                                                           })
+                    )
+                            ]
+
+        esThemesListModel = ESThemesListModel(ESThemeStructure, self)
+        es_themes_list_view.clicked.connect(esThemesListModel.request_theme_at_selected_index)
+        esThemesListModel.theme_selected.connect(self.recieve_questions_for_current_theme)
+        es_themes_list_view.setModel(esThemesListModel)
+
+    def recieve_questions_for_current_theme(self, questions):
+        for k in questions.keys():
+            print(k)
+        #self.ui.lblQuestion.setText(questions[0].key)
 
 
 def init_gui():

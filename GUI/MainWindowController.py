@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QDialog, QRadioButton, QVBoxLayout
 
 from Backend.EmptyExpertEngine import ExpertEngine, set_goal
@@ -18,9 +18,12 @@ class MainWindowController(QMainWindow):
         self.ui.setupUi(self)
         self.current_theme_question_dict = OrderedDict()
         self.fill_menu_bar()
+        self.esThemesListModel = ESThemesListModel(self)
         self.init_es_themes_model()
         self.show()
         self.selected_question = -1
+
+        self.ui.pBNextQuestion.clicked.connect(self.enable_next_question)
 
     ###############MENU ACTIONS###################
     def new_action(self):
@@ -80,24 +83,10 @@ class MainWindowController(QMainWindow):
     def init_es_themes_model(self):
         es_themes_list_view = self.ui.listViewESThemes
 
-        # ESThemeStructure = [
-        #     ESTheme("Eyes Infection Detect", OrderedDict({
-        #         "What is your eyes color": ["Black", "Blue", "Brown"],
-        #         "Did you Wash them with your hands": ["Yes", "No"]
-        #     })
-        #             ),
-        #     ESTheme("ComputerProblems Detect", OrderedDict({
-        #         "What is your eyes color": ["Black", "Blue", "Brown"]
-        #     })
-        #             )
-        # ]
-
-
-        esThemesListModel = ESThemesListModel(self)
-        esThemesListModel.load_theme('PersonalDetentionTheme.json')
-        es_themes_list_view.clicked.connect(esThemesListModel.request_theme_at_selected_index)
-        esThemesListModel.theme_selected.connect(self.recieve_questions_for_current_theme)
-        es_themes_list_view.setModel(esThemesListModel)
+        self.esThemesListModel.load_theme('PersonalDetentionTheme.json')
+        es_themes_list_view.clicked.connect(self.esThemesListModel.request_theme_at_selected_index)
+        self.esThemesListModel.theme_selected.connect(self.recieve_questions_for_current_theme)
+        es_themes_list_view.setModel(self.esThemesListModel)
 
         engine = ExpertEngine("methodName")  # PASS ALL Rules and fact parameters
 
@@ -128,14 +117,21 @@ class MainWindowController(QMainWindow):
         for i in reversed(range(layout.count())):
             layout.itemAt(i).widget().setParent(None)
 
-        for answer in answerInQuestion:
-            layout.addWidget(QRadioButton(answer))
+        first_radio_flag = False
 
+        for answer in answerInQuestion[self.selected_question]:
+            radio = QRadioButton(answer)
+            if not first_radio_flag:
+                radio.setChecked(True)
+                first_radio_flag = True
+            layout.addWidget(radio)
 
-        #layout.addWidget(QRadioButton(answer))
-        #layout.addWidget(self.ui.radioButtonTEMP)
         self.current_theme_question_dict = questions
-        # self.ui.lblQuestion.setText(lisst[0])
+
+    def enable_next_question(self):
+        if self.selected_question != -1:
+            self.selected_question += 1
+            self.esThemesListModel.get_current_theme_question(self.selected_question)
 
 
 def init_gui():

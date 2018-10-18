@@ -5,8 +5,9 @@ def set_goal():  # ADDING RULES!!!!!!!!!!!!!!!!!!!!!!!!!!!
     def goal(self):
         print("GOAL REACHED")
 
-    factTest = Fact(myFact="Brown")
-    factTest["myFact2"] = "Yes"
+    factTest = Fact()
+    factTest["What is your calories?"] = "1000-2000"
+    factTest["Vegan?"] = "Veg"
     return Rule(factTest)(goal)
 
 

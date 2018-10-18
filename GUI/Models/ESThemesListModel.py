@@ -9,7 +9,7 @@ class ESTheme:
 
 
 class ESThemesListModel(QAbstractListModel):
-    theme_selected = pyqtSignal(dict)  # define new signal
+    theme_selected = pyqtSignal()  # define new signal
 
     def __init__(self, parent=None, *args):
         """ datain: a list where each item is a row
@@ -33,8 +33,7 @@ class ESThemesListModel(QAbstractListModel):
     def request_theme_at_selected_index(self, index):
         try:
             self.selected_theme_index = index.row()
-            print(self.es_themes[index.row()].name)
-            self.theme_selected.emit(self.es_themes[index.row()].questions)
+            self.theme_selected.emit()
         except LookupError:
             print("Invalid index for selected theme")
 
@@ -57,9 +56,17 @@ class ESThemesListModel(QAbstractListModel):
             #  print(data[themeName]["Variables"])
 
     def get_current_theme_question(self, question_number):
-        questionList = list(self.es_themes[self.selected_theme_index].questions)
-        questionVal = list(self.es_themes[self.selected_theme_index].questions.values())
-        myQuestion = {}
-        myQuestion[questionList[question_number]] = questionVal[question_number]
-        print(myQuestion)
+        question_list = list(self.es_themes[self.selected_theme_index].questions)
+        question_val_list = list(self.es_themes[self.selected_theme_index].questions.values())
 
+        question_text = ""
+        answers_list = []
+
+        if question_number < len(question_list):
+            question_text = question_list[question_number]
+            answers_list = question_val_list[question_number]
+
+        return question_text, answers_list
+
+    def get_current_theme_questions_number(self):
+        return len(list(self.es_themes[self.selected_theme_index].questions))

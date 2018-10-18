@@ -1,19 +1,26 @@
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QDialog
+from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QDialog, QRadioButton, QVBoxLayout
 
+from Backend.EmptyExpertEngine import ExpertEngine, set_goal
 from GUI.MainWindowView import Ui_MainWindow
 from GUI.Models.ESThemesListModel import ESThemesListModel, ESTheme
 from GUI.RuleEditorController import RuleEditorController
 from collections import OrderedDict
+
+from pyknow import *
+from types import MethodType
+
 
 class MainWindowController(QMainWindow):
     def __init__(self):
         super(MainWindowController, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.current_theme_question_dict = OrderedDict()
         self.fill_menu_bar()
         self.init_es_themes_model()
         self.show()
+        self.selected_question = -1
 
     ###############MENU ACTIONS###################
     def new_action(self):
@@ -32,8 +39,8 @@ class MainWindowController(QMainWindow):
 
     def rule_editor_action(self):
         rule_editor_controller = RuleEditorController()
-        responce = rule_editor_controller.exec()
-        if responce == QtWidgets.QDialog.Accepted:
+        response = rule_editor_controller.exec()
+        if response == QtWidgets.QDialog.Accepted:
             print("The Ok button clicked")
         else:
             print("Cancel Button")
@@ -73,27 +80,62 @@ class MainWindowController(QMainWindow):
     def init_es_themes_model(self):
         es_themes_list_view = self.ui.listViewESThemes
 
-        ESThemeStructure = [
-            ESTheme("Eyes Infection Detect", OrderedDict({
-                                                            "What is your eyes color": ["Black", "Blue", "Brown"],
-                                                            "Did you Wash them with your hands": ["Yes", "No"]
-                                                        })
-                    ),
-            ESTheme("ComputerProblems Detect", OrderedDict({
-                                                            "What is your eyes color": ["Black", "Blue", "Brown"]
-                                                           })
-                    )
-                            ]
+        # ESThemeStructure = [
+        #     ESTheme("Eyes Infection Detect", OrderedDict({
+        #         "What is your eyes color": ["Black", "Blue", "Brown"],
+        #         "Did you Wash them with your hands": ["Yes", "No"]
+        #     })
+        #             ),
+        #     ESTheme("ComputerProblems Detect", OrderedDict({
+        #         "What is your eyes color": ["Black", "Blue", "Brown"]
+        #     })
+        #             )
+        # ]
 
-        esThemesListModel = ESThemesListModel(ESThemeStructure, self)
+
+        esThemesListModel = ESThemesListModel(self)
+        esThemesListModel.load_theme('PersonalDetentionTheme.json')
         es_themes_list_view.clicked.connect(esThemesListModel.request_theme_at_selected_index)
         esThemesListModel.theme_selected.connect(self.recieve_questions_for_current_theme)
         es_themes_list_view.setModel(esThemesListModel)
 
+        engine = ExpertEngine("methodName")  # PASS ALL Rules and fact parameters
+
+        engine.reset()
+
+        engine.declare(Fact(myFact="Brown", myFact2="Yes"))
+        # engine.add_method("Method1")
+        # setattr(engine, 'rule1', set_goal())
+        engine.run()
+        print(engine.get_rules())
+
     def recieve_questions_for_current_theme(self, questions):
-        for k in questions.keys():
-            print(k)
-        #self.ui.lblQuestion.setText(questions[0].key)
+        # for k in questions.keys():
+        #     print(k)
+        questionList = list(questions.keys())
+        answerInQuestion = list(questions.values())
+
+        # self.ui.gBAnswers.deleteLater()
+        print(questions)
+        self.selected_question = 0
+        self.ui.lblQuestion.setText(questionList[self.selected_question])
+
+        #  self.ui.gBAnswers.
+        # for answer in answerInQuestion:
+
+        layout = self.ui.gBAnswers.layout()
+
+        for i in reversed(range(layout.count())):
+            layout.itemAt(i).widget().setParent(None)
+
+        for answer in answerInQuestion:
+            layout.addWidget(QRadioButton(answer))
+
+
+        #layout.addWidget(QRadioButton(answer))
+        #layout.addWidget(self.ui.radioButtonTEMP)
+        self.current_theme_question_dict = questions
+        # self.ui.lblQuestion.setText(lisst[0])
 
 
 def init_gui():

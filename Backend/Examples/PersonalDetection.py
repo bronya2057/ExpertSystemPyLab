@@ -341,13 +341,18 @@ class MyDietician(KnowledgeEngine):
 
 
 if __name__ == '__main__':
+    import os
+    # import graphviz as gv
+    # import pylab
+    os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin'
+
     engine = MyDietician()
     engine.reset()
 
-    ask_calorie = int(input("How much calories would you like to eat? 1190 - 3299: "))
-    ask_preference = input("What is your preference? Veg or Non-veg: ")
+    # ask_calorie = int(input("How much calories would you like to eat? 1190 - 3299: "))
+    # ask_preference = input("What is your preference? Veg or Non-veg: ")
 
-    engine.declare(mass(calorie=ask_calorie, preference=ask_preference))
+    engine.declare(mass(calorie=2000, preference="Veg"))
 
     engine.run()
 
@@ -356,4 +361,24 @@ if __name__ == '__main__':
     print("[*]Snacks: " + snacks)
     print("[*]Dinner: " + dinner)
     engine.facts
-    engine.matcher.show_network()
+    # network = engine.matcher.show_network()
+    # network.render('round-table.dot', 'img', view=True)
+    # network.format = 'svg'
+    # # g1 = gv.Graph(format='png')
+
+    # g1.node('A')
+    # g1.node('B')
+    # g1.edge('A', 'B')
+
+    # network.view()
+    # print(network.source)
+
+    # filename = network.render(filename='img/g1')
+
+    # pylab.savefig('filename.png')
+    # from subprocess import check_call
+
+    # check_call(['unflatten', '-l', '3', 'round-table.gv | dot - Tpng -o', 'g1.png'])
+    # check_call(['dot', '-Tpng', 'g1.dot', '-o', 'g1.png'])
+    # with open('fst.dot', 'w') as f:
+        # f.write(network.draw())

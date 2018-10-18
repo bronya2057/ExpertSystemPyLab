@@ -21,23 +21,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="lblThemes">
-      <property name="text">
-       <string>EXPERT SYSTEM THEMES</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QListView" name="listViewESThemes">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="MinimumExpanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="1">
      <widget class="QGroupBox" name="gBQuestions">
       <property name="title">
@@ -45,10 +28,19 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QLabel" name="lblQuestion">
-         <property name="text">
-          <string>QuestionText:</string>
+        <widget class="QGroupBox" name="gbQuestions">
+         <property name="title">
+          <string>Questions</string>
          </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="lblQuestion">
+            <property name="text">
+             <string>QuestionText:</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -56,8 +48,8 @@
          <property name="title">
           <string>Answers</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
            <widget class="QRadioButton" name="radioButtonTEMP">
             <property name="text">
              <string>Answer1</string>
@@ -81,6 +73,23 @@
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QListView" name="listViewESThemes">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblThemes">
+      <property name="text">
+       <string>EXPERT SYSTEM THEMES</string>
+      </property>
      </widget>
     </item>
    </layout>

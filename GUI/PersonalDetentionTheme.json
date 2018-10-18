@@ -1,0 +1,26 @@
+{
+  "PersonalDetention":
+  {
+      "Questions":[
+        "What is your calories?",
+        "Vegan?"
+      ],
+      
+      "Variables":[
+        ["1000-2000", "3000-4000"],  
+        ["Veg", "NotVeg"] 
+      ]
+  },
+    "My Working Skills":
+  {
+      "Questions":[
+        "How much money do you spend at work?",
+        "Do you work 8 hours?"
+      ],
+      
+      "Variables":[
+        ["1$-2$", "10$-20;", "30$-60$"],  
+        ["Yes", "No", "sometimes"] 
+      ]
+  }
+}

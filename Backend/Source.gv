@@ -1,0 +1,17 @@
+digraph {
+ 46162000 [label="BusNode"];
+46162000 -> 48576048 [label="activate"];
+48576048 [label="FeatureTesterNode: type() == EyeProblem"];
+48576048 -> 48576016 [label="activate"];
+48576016 [label="FeatureTesterNode: eye_color (equal_literal) L('Blue')"];
+48576016 -> 48576272 [label="activate"];
+48576272 [label="FeatureTesterNode: washed_with_hands (equal_literal) L('No')"];
+48576272 -> 48576144 [label="activate"];
+48576144 [label="FeatureTesterNode: __pattern_48519408__ <= <Fact>"];
+48576144 -> 48576368 [label="activate"];
+48576368 [label="ConflictSetNode: calorie_a"];
+46162000 -> 48575824 [label="activate"];
+48575824 [label="FeatureTesterNode: type() == InitialFact"];
+48575824 -> 48576112 [label="activate"];
+48576112 [label="FeatureTesterNode: __pattern_48519352__ <= <Fact>"]; 
+}

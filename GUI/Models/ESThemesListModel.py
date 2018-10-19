@@ -1,12 +1,7 @@
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, Qt, pyqtSignal
 from pyknow import Rule, Fact
 
-class ESTheme:
-    def __init__(self, name="DummyName", questions_dictionary={}, rules_dictionary={}):
-        self.name = name
-        self.questions = questions_dictionary
-        self.rules = rules_dictionary
-        # self.rule = Fact(eye_color="Blue", washed_with_hands="Yes")
+from GUI.Models.Common import ESTheme
 
 
 class ESThemesListModel(QAbstractListModel):

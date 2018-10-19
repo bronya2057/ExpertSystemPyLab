@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QDi
 
 from Backend.EmptyExpertEngine import ExpertEngine
 from GUI.MainWindowView import Ui_MainWindow
-from GUI.Models.ESThemesListModel import ESThemesListModel, ESTheme
+from GUI.Models.ESThemesListModel import ESThemesListModel
 from GUI.RuleEditorController import RuleEditorController
 from collections import OrderedDict
 

@@ -22,7 +22,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="1">
-     <widget class="QGroupBox" name="gBQuestions">
+     <widget class="QGroupBox" name="gBMain">
       <property name="title">
        <string>Please choose one theme from the list</string>
       </property>
@@ -48,14 +48,19 @@
          <property name="title">
           <string>Answers</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3"/>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QRadioButton" name="radioButtonTEMP">
+            <property name="text">
+             <string>Answer1</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pBNextQuestion">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>

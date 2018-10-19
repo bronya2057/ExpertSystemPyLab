@@ -1,25 +1,34 @@
 from pyknow import *
+import re
+
+RULE_NO = "0"
 
 
-def set_goal():  # ADDING RULES!!!!!!!!!!!!!!!!!!!!!!!!!!!
+def create_rule(current_theme_questions, current_rule, output):
     def goal(self):
-        print("GOAL REACHED")
+        print(output)
 
-    factTest = Fact()
-    factTest["What is your calories?"] = "1000-2000"
-    factTest["Vegan?"] = "Veg"
-    return Rule(factTest)(goal)
+    current_rule = current_rule.replace(", ", ",")
+    rules_list = current_rule.split(",")
+    facts = Fact()
+
+    for index, questions in enumerate(current_theme_questions):
+        facts[questions] = rules_list[index]
+
+    return Rule(facts)(goal)
 
 
 class ExpertEngine(KnowledgeEngine):
-    def __init__(self, name):
-        #self.rule2 = set_goal()
-        self.add_method(name)
+    def __init__(self, current_theme_questions, current_theme_rules):
+        for rule, output in current_theme_rules.items():
+            self.add_method(current_theme_questions, rule, output)
         super().__init__()
 
-    def add_method(self, name):
+    def add_method(self, current_theme_questions, rule, output):
         # self.name = set_goal()
-        setattr(self, name, set_goal())# insert fact parameters HERE!
+        new_rule = create_rule(current_theme_questions, rule, output)
+        setattr(self, output + RULE_NO, new_rule)  # insert fact parameters HERE!
+
     # @Rule(Fact(myFact="Brown", myFact2="Yes"))
     # def pr(self):
     #     print("WOR")

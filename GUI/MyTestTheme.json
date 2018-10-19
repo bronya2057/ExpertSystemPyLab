@@ -1,5 +1,5 @@
 {
-  "PersonalDetention":
+  "TEEST":
   {
       "Questions":[
         "What is your calories?",
@@ -16,24 +16,6 @@
        "3000-4000, NotVeg": "FAT",
        "1000-2000, NotVeg": "You are not fat at all",
        "3000-4000, Veg": "Very fat"
-      }
-  },
-  
-  "My Working Skills":
-  {
-      "Questions":[
-        "How much money do you spend at work?",
-        "Do you work 8 hours?"
-      ],
-      
-      "Variables":[
-        ["1$-2$", "10$-20$", "30$-60$"],  
-        ["Yes", "No", "sometimes"] 
-      ],
-      
-       "Rules":{
-       "1$-2$, Yes": "LOW",
-       "10$-20$, Yes": "A lot"
       }
   }
 }

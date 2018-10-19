@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QDialog, QRadioButton, QVBoxLayout
 
-from Backend.EmptyExpertEngine import ExpertEngine, set_goal
+from Backend.EmptyExpertEngine import ExpertEngine
 from GUI.MainWindowView import Ui_MainWindow
 from GUI.Models.ESThemesListModel import ESThemesListModel, ESTheme
 from GUI.RuleEditorController import RuleEditorController
@@ -24,7 +24,6 @@ class MainWindowController(QMainWindow):
         self.init_es_themes_model()
         self.show()
         self.selected_question = -1
-        self.questions_number = 0
         self.current_theme_facts = Fact()
     #  TO DECOUPLE JUST CREATE ANOTHER CLASS AND PASS self of this class
         self.ui.pBNextQuestion.clicked.connect(self.enable_next_question)
@@ -39,6 +38,7 @@ class MainWindowController(QMainWindow):
                                                   "Json Files (*.json)", options=options)
         if fileName:
             print(fileName)
+            self.esThemesListModel.load_theme(fileName)
 
     def exit_action(self):
         self.close()
@@ -87,22 +87,23 @@ class MainWindowController(QMainWindow):
     def init_es_themes_model(self):
         es_themes_list_view = self.ui.listViewESThemes
 
-        self.esThemesListModel.load_theme('PersonalDetentionTheme.json')
+        self.esThemesListModel.load_theme('PersonalDetentionTheme.json')  # TEST ONLY
         es_themes_list_view.clicked.connect(self.esThemesListModel.request_theme_at_selected_index)
         self.esThemesListModel.theme_selected.connect(self.set_initial_question)
         es_themes_list_view.setModel(self.esThemesListModel)
 
-        engine = ExpertEngine("methodName")  # PASS ALL Rules and fact parameters
+        # engine = ExpertEngine()  # PASS ALL Rules and fact parameters
 
-        engine.reset()
+        # engine.reset()
 
-        engine.declare(Fact(myFact="Brown", myFact2="Yes"))
+        # engine.declare(Fact(myFact="Brown", myFact2="Yes"))
         # engine.add_method("Method1")
         # setattr(engine, 'rule1', set_goal())
-        engine.run()
-        print(engine.get_rules())
+        # engine.run()
+        # print(engine.get_rules())
 
     def set_initial_question(self):
+        self.ui.gBMain.setTitle("Expert system theme is chosen, please answer all questions")
         self.ui.pBNextQuestion.setEnabled(True)
         self.selected_question = self.INITIAL_QUESTION_INDEX
         self.set_next_question()
@@ -118,15 +119,18 @@ class MainWindowController(QMainWindow):
             answers_layout = self.ui.gBAnswers.layout()
             self.clear_answers_and_questions(answers_layout)
 
-            engine = ExpertEngine("methodName")  # PASS ALL Rules and fact parameters
-            engine.reset()
-            engine.declare(self.current_theme_facts)
-            engine.run()
+            current_theme_rules = self.esThemesListModel.get_current_theme_rules(self.selected_question)
+            current_theme_questions = self.esThemesListModel.get_current_theme_questions()
+
+            main_expert_engine = ExpertEngine(current_theme_questions, current_theme_rules)  # PASS ALL Rules and fact parameters
+            main_expert_engine.reset()
+            main_expert_engine.declare(self.current_theme_facts)
+            main_expert_engine.run()
             self.current_theme_facts = Fact()
 
+            self.ui.listViewESThemes.clearSelection()
+            self.ui.gBMain.setTitle("Please choose one theme from the list")
             self.ui.pBNextQuestion.setEnabled(False)
-
-
 
     def set_next_question(self):
         question_name, answers = self.esThemesListModel.get_current_theme_question(self.selected_question)

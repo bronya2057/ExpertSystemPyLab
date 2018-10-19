@@ -6,6 +6,7 @@ RULE_NO = "0"
 
 def create_rule(current_theme_questions, current_rule, output):
     def goal(self):
+        self.output = output
         print(output)
 
     current_rule = current_rule.replace(", ", ",")
@@ -20,6 +21,7 @@ def create_rule(current_theme_questions, current_rule, output):
 
 class ExpertEngine(KnowledgeEngine):
     def __init__(self, current_theme_questions, current_theme_rules):
+        self.output = ""
         for rule, output in current_theme_rules.items():
             self.add_method(current_theme_questions, rule, output)
         super().__init__()
@@ -29,6 +31,8 @@ class ExpertEngine(KnowledgeEngine):
         new_rule = create_rule(current_theme_questions, rule, output)
         setattr(self, output + RULE_NO, new_rule)  # insert fact parameters HERE!
 
+    def get_output(self):
+        return self.output
     # @Rule(Fact(myFact="Brown", myFact2="Yes"))
     # def pr(self):
     #     print("WOR")

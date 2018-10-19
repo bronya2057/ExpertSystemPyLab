@@ -28,6 +28,7 @@ class MainWindowController(QMainWindow):
     #  TO DECOUPLE JUST CREATE ANOTHER CLASS AND PASS self of this class
         self.ui.pBNextQuestion.clicked.connect(self.enable_next_question)
 
+
     ###############MENU ACTIONS###################
     def new_action(self):
         pass
@@ -128,6 +129,7 @@ class MainWindowController(QMainWindow):
             main_expert_engine.run()
             self.current_theme_facts = Fact()
 
+            self.ui.lblQuestion.setText(main_expert_engine.get_output())
             self.ui.listViewESThemes.clearSelection()
             self.ui.gBMain.setTitle("Please choose one theme from the list")
             self.ui.pBNextQuestion.setEnabled(False)

@@ -20,7 +20,13 @@
    <string>ExpertS</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow::separator {
+   <string notr="true">QLabel, QRadioButton, QGroupBox{
+	font-size:16px;
+	font-family:&quot;Courier New&quot;;
+	padding:5px;
+}
+
+QMainWindow::separator {
     background: yellow;
     width: 10px; /* when vertical */
     height: 10px; /* when horizontal */
@@ -52,6 +58,7 @@ QPushButton {
     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                       stop: 0 #f6f7fa, stop: 1 #dadbde);
     min-width: 80px;
+	min-height:40px;
 }
 
 QPushButton:pressed {
@@ -132,12 +139,147 @@ QRadioButton::indicator:checked:hover
 QRadioButton::indicator:checked:pressed 
 {
     image: url(&quot;images/Radio_Off.PNG&quot;);
+}
+
+QMenu {
+    background-color: #ABABAB; /* sets background of the menu */
+    border: 1px solid black;
+}
+
+QMenu::item {
+    /* sets background of menu item. set this to something non-transparent
+        if you want menu color and menu item color to be different */
+    background-color: transparent;
+}
+
+QMenu::item:selected { /* when user selects item using mouse or keyboard */
+    background-color: #654321;
+}
+
+QMenu {
+    background-color: white;
+    margin: 2px; /* some spacing around the menu */
+}
+
+QMenu::item {
+    padding: 2px 25px 2px 20px;
+    border: 1px solid transparent; /* reserve space for selection border */
+}
+
+QMenu::item:selected {
+    border-color: darkblue;
+    background: rgba(100, 100, 100, 150);
+}
+
+QMenu::icon:checked { /* appearance of a 'checked' icon */
+    background: gray;
+    border: 1px inset gray;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+    left: 1px;
+}
+
+QMenu::separator {
+    height: 2px;
+    background: lightblue;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+QMenu::indicator {
+    width: 13px;
+    height: 13px;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="1">
+    <item row="1" column="0">
+     <widget class="QListView" name="listViewESThemes">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListView {
+    alternate-background-color: yellow;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, x3:2, y3:2,
+                                      stop: 0 #dce3f4, stop: 1 #c9d4ed, stop: 2 #fff);
+	margin-right:10px
+}
+
+QListView {
+    show-decoration-selected: 1; /* make the selection span the entire width of the view */
+}
+
+QListView::item:alternate {
+    background: #EEEEEE;
+}
+
+QListView::item:selected {
+    border: 1px solid #6a6ea9;
+}
+
+QListView::item:selected:!active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #ABAFE5, stop: 1 #8588B2);
+}
+
+QListView::item:selected:active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #6a6ea9, stop: 1 #888dd9);
+}
+
+QListView::item:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #FAFBFE, stop: 1 #DCDEF1);
+}</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblThemes">
+      <property name="font">
+       <font>
+        <family>Trebuchet MS</family>
+        <pointsize>-1</pointsize>
+        <stylestrategy>PreferDefault</stylestrategy>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLabel{
+	font-family:&quot;Trebuchet MS&quot;;
+	font-color:#333;
+    color: #253c93;	
+border: 1px solid black;
+margin-right:10px;
+
+}</string>
+      </property>
+      <property name="text">
+       <string>EXPERT SYSTEM THEMES</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2">
      <widget class="QGroupBox" name="gBMain">
+      <property name="styleSheet">
+       <string notr="true">QGroupBox{
+	padding:10px;
+	margin-top:10px;
+	text-transform: uppercase;
+	font-family: &quot;Times New Roman&quot;;
+}</string>
+      </property>
       <property name="title">
        <string>Please choose one theme from the list</string>
       </property>
@@ -150,6 +292,9 @@ QRadioButton::indicator:checked:pressed
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QLabel" name="lblQuestion">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string>QuestionText:</string>
             </property>
@@ -182,29 +327,18 @@ QRadioButton::indicator:checked:pressed
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton
+{
+	margin-top:5px
+}</string>
+         </property>
          <property name="text">
           <string>Next Question</string>
          </property>
         </widget>
        </item>
       </layout>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QListView" name="listViewESThemes">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="MinimumExpanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="lblThemes">
-      <property name="text">
-       <string>EXPERT SYSTEM THEMES</string>
-      </property>
      </widget>
     </item>
    </layout>

@@ -43,6 +43,14 @@ class CommonSerializedData:
         else:
             return []
 
+    @staticmethod
+    def get_answers_list_at_index(index):
+            all_answers_list = list(CommonSerializedData.es_theme.questions.values())
+            if index < len(all_answers_list):
+                return all_answers_list[index]
+            else:
+                return []
+
 
 
 

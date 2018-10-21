@@ -1,11 +1,13 @@
 from PyQt5 import QtGui, QtCore, QtWidgets, Qt
 from PyQt5.QtWidgets import QItemDelegate, QComboBox, QStyle
 
+from GUI.Models.CommonSerializedData import *
+
 
 class ColumnButtonDelegate(QItemDelegate):
-    def __init__(self, owner, itemslist):
+    def __init__(self, owner):
         QItemDelegate.__init__(self, owner)
-        self.itemslist = itemslist
+        self.editors_list = []
 
     def paint(self, painter, option, index):
         # Get Item Data
@@ -23,9 +25,12 @@ class ColumnButtonDelegate(QItemDelegate):
         # create the ProgressBar as our editor.
         print(index.row())  # just get the needed row data from common
         editor = QComboBox(parent)
-        editor.addItems(self.itemslist)
+        answers_for_indexed_question = CommonSerializedData.get_answers_list_at_index(index.row())
+        editor.addItems(answers_for_indexed_question)
         editor.setCurrentIndex(0)
         editor.installEventFilter(self)
+        self.editors_list.append(editor)
+        self.editors_list[0].addItems(["EWTWETWE"])  #  Store reference to every combo box and update it if needed
         return editor
 
     def setEditorData(self, editor, index):

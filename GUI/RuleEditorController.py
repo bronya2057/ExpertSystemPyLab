@@ -38,9 +38,7 @@ class RuleEditorController(QDialog):
         #  self.ui.listViewVariables.setModelColumn(1)
         self.ui.tableViewRules.setModel(self.questions_model)
 
-        self.checkValues = ['TODO', 'WAITING', 'RETAKE', 'OK']
-
-        self.ui.tableViewRules.setItemDelegateForColumn(1, ColumnButtonDelegate(self, self.checkValues))
+        self.ui.tableViewRules.setItemDelegateForColumn(1, ColumnButtonDelegate(self))
         for row in range(0, self.questions_model.rowCount()):
             self.ui.tableViewRules.openPersistentEditor(self.questions_model.index(row, 1))
         #  FOR TEST ONLY

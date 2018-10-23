@@ -5,9 +5,21 @@ from GUI.Models.CommonSerializedData import *
 
 
 class ColumnButtonDelegate(QItemDelegate):
+    editors_list = []
     def __init__(self, owner):
         QItemDelegate.__init__(self, owner)
-        self.editors_list = []
+
+    @staticmethod
+    def get_combo_box_at_index(index):
+        if index < len(ColumnButtonDelegate.editors_list):
+            return ColumnButtonDelegate.editors_list[index]
+        else:
+            return -1
+
+    @staticmethod
+    def remove_combo_box_at_index(index):
+        if index < len(ColumnButtonDelegate.editors_list):
+            del ColumnButtonDelegate.editors_list[index]
 
     def paint(self, painter, option, index):
         # Get Item Data
@@ -29,8 +41,8 @@ class ColumnButtonDelegate(QItemDelegate):
         editor.addItems(answers_for_indexed_question)
         editor.setCurrentIndex(0)
         editor.installEventFilter(self)
-        self.editors_list.append(editor)
-        self.editors_list[0].addItems(["EWTWETWE"])  #  Store reference to every combo box and update it if needed
+        ColumnButtonDelegate.editors_list.append(editor)
+        # self.editors_list[0].addItems(["EWTWETWE"])  #  Store reference to every combo box and update it if needed
         return editor
 
     def setEditorData(self, editor, index):

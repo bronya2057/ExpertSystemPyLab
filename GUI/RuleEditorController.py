@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, Qt
+from PyQt5.QtCore import QModelIndex
 from PyQt5.QtWidgets import QAction, QFileDialog, QApplication, QDialog, QToolBar
 
 from GUI.Models.AnswersListModel import AnswersListModel
@@ -58,12 +59,17 @@ class RuleEditorController(QDialog):
         index = self.ui.listViewQuestions.currentIndex()
         item_text = str(index.data())
         self.questions_model.remove_question(item_text, index.row())
+        self.ui.listViewQuestions.clearSelection()
+        self.variables_model.clear_all_variables()
 
     def on_add_variable_clicked(self):
+        self.variables_model.add_new_variable()
         print("add var")
 
     def on_remove_variable_clicked(self):
-        print("rem var")
+        index = self.ui.listViewVariables.currentIndex()
+        self.variables_model.remove_variable(index.row())
+        self.ui.listViewVariables.clearSelection()
 
     def on_add_rule_clicked(self):
         print("add rule")

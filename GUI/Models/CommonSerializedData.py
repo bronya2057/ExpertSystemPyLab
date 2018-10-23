@@ -1,6 +1,5 @@
 from GUI.Models.Common import ESTheme
 
-
 class CommonSerializedData:
     INVALID_INDEX = -1
     # es_theme = ESTheme("", {}, {})
@@ -21,6 +20,11 @@ class CommonSerializedData:
         del CommonSerializedData.es_theme.questions[old_key]
 
     @staticmethod
+    def update_answer(index, value):
+        answers_list = CommonSerializedData.get_answers_list_at_selected_index()
+        answers_list[index] = value
+
+    @staticmethod
     def add_variable_for_selected_question(answer):
         if not CommonSerializedData.selected_question_index == CommonSerializedData.INVALID_INDEX:
             current_question_answers = list(CommonSerializedData.es_theme.questions.values())
@@ -37,11 +41,14 @@ class CommonSerializedData:
 
     @staticmethod
     def get_answers_list_at_selected_index():
+        res = []
+
         if CommonSerializedData.get_question_selection_validity():
             all_answers_list = list(CommonSerializedData.es_theme.questions.values())
-            return all_answers_list[CommonSerializedData.selected_question_index]
-        else:
-            return []
+            if CommonSerializedData.selected_question_index < len(all_answers_list):
+                res = all_answers_list[CommonSerializedData.selected_question_index]
+
+        return res
 
     @staticmethod
     def get_answers_list_at_index(index):

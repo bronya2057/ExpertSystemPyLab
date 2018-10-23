@@ -21,6 +21,12 @@ class ColumnButtonDelegate(QItemDelegate):
         if index < len(ColumnButtonDelegate.editors_list):
             del ColumnButtonDelegate.editors_list[index]
 
+    @staticmethod
+    def remove_combo_box_item(question_index, answer_index):
+        if question_index < len(ColumnButtonDelegate.editors_list):
+            if answer_index < ColumnButtonDelegate.editors_list[question_index].count():
+                ColumnButtonDelegate.editors_list[question_index].removeItem(answer_index)
+
     def paint(self, painter, option, index):
         # Get Item Data
         #  value = str(index.data(Qt.DisplayRole))

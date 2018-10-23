@@ -58,7 +58,7 @@ class RuleEditorController(QDialog):
     def on_remove_question_clicked(self):
         index = self.ui.listViewQuestions.currentIndex()
         item_text = str(index.data())
-        self.questions_model.remove_question(item_text, index.row())
+        self.questions_model.remove_question(index.row())
         self.ui.listViewQuestions.clearSelection()
         self.variables_model.clear_all_variables()
 

@@ -2,7 +2,9 @@ from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, Qt, pyqtSign
 
 from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
 from GUI.Models.CommonSerializedData import *
-es_theme = CommonSerializedData.es_theme
+
+questions_list = CommonSerializedData.es_questions_list
+answers_list = CommonSerializedData.es_answers_list
 
 
 class QuestionsListModel(QAbstractTableModel):
@@ -17,7 +19,6 @@ class QuestionsListModel(QAbstractTableModel):
     def data(self, index, role=None):
         if role == Qt.DisplayRole:
             if index.column() == 0:
-                questions_list = list(es_theme.questions.keys())
                 return QVariant(questions_list[index.row()])
             elif index.column() == 1:
                 return QVariant()
@@ -25,7 +26,7 @@ class QuestionsListModel(QAbstractTableModel):
             return QVariant()
 
     def rowCount(self, parent=QModelIndex()):
-        return len(CommonSerializedData.es_theme.questions)
+        return len(questions_list)
 
     def columnCount(self, *args, **kwargs):
         return 2
@@ -59,20 +60,23 @@ class QuestionsListModel(QAbstractTableModel):
         self.endRemoveRows()
 
     def add_new_question(self):
-        if not (self.NEW_QUESTION_STR in es_theme.questions):
-            new_row_index = len(es_theme.questions)
+        if not (self.NEW_QUESTION_STR in questions_list):
+            new_row_index = len(questions_list)
             self.insertRow(new_row_index)
-            es_theme.questions[self.NEW_QUESTION_STR] = []
+            questions_list.insert(new_row_index, self.NEW_QUESTION_STR)
+            answers_list.insert(new_row_index, [])
             self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
 
-    def remove_question(self, question_text, selected_index):
+    def remove_question(self, selected_index):
         if selected_index > -1:
             self.removeRow(selected_index)
             ColumnButtonDelegate.remove_combo_box_at_index(selected_index)
-            del es_theme.questions[question_text]
+            del questions_list[selected_index]
+            del answers_list[selected_index]
+            CommonSerializedData.selected_question_index = -1
 
     def setData(self, index, value, role=Qt.DisplayRole):
-        if index.isValid() and role == Qt.EditRole and value and not (value in es_theme.questions):
+        if index.isValid() and role == Qt.EditRole and value and not (value in questions_list):
             CommonSerializedData.update_question(index.row(), value)
             self.dataChanged.emit(index, index, [])
             return True

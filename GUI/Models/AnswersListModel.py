@@ -3,7 +3,7 @@ from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, pyqtSignal, 
 from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
 from GUI.Models.CommonSerializedData import *
 
-es_theme = CommonSerializedData.es_theme
+answers_list = CommonSerializedData.es_answers_list
 
 
 class AnswersListModel(QAbstractListModel):
@@ -17,17 +17,17 @@ class AnswersListModel(QAbstractListModel):
     def data(self, index, role=None):
         if role == Qt.DisplayRole:
             print("Change Data")
-            answers_list = CommonSerializedData.get_answers_list_at_selected_index()
-            print(answers_list)
+            answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
+            print(answers_list_at_selected_question)
             row = index.row()
-            return QVariant(answers_list[row])
+            return QVariant(answers_list_at_selected_question[row])
         else:
             return QVariant()
 
     def rowCount(self, parent=QModelIndex()):
         if CommonSerializedData.get_question_selection_validity():
-            answers_list = CommonSerializedData.get_answers_list_at_selected_index()
-            return len(answers_list)
+            answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
+            return len(answers_list_at_selected_question)
         else:
             return 0
 
@@ -35,8 +35,8 @@ class AnswersListModel(QAbstractListModel):
         CommonSerializedData.set_selected_question_index(index.row())
 
         print("Question Selected" + str(index.row()))
-        answers_list = CommonSerializedData.get_answers_list_at_selected_index()
-        self.insertRows(0, len(answers_list))
+        answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
+        self.insertRows(0, len(answers_list_at_selected_question))
         #  self.dataChanged.emit(QModelIndex(), [])
 
         # self.dataChanged.emit(self.index(index.row(), 0), [])
@@ -68,25 +68,24 @@ class AnswersListModel(QAbstractListModel):
         self.beginInsertRows(QModelIndex(), row, 1)
         self.endInsertRows()
 
-    def removeRow(self, row, parent=None, *args, **kwargs):
-        self.beginRemoveRows(QModelIndex(), row, row)
-
+    def removeRow(self, answer, parent=None, *args, **kwargs):
+        self.beginRemoveRows(QModelIndex(), answer, answer)
+        del answers_list[CommonSerializedData.selected_question_index][answer]
+        ColumnButtonDelegate.remove_combo_box_item(CommonSerializedData.selected_question_index, answer)
         self.endRemoveRows()
 
     def add_new_variable(self):
         if not (self.NEW_ANSWER_STR in CommonSerializedData.get_answers_list_at_selected_index()):
             new_row_index = len(CommonSerializedData.get_answers_list_at_selected_index())
             self.insertRow(new_row_index)
-            answer_list = CommonSerializedData.get_answers_list_at_selected_index()
-            answer_list.append(self.NEW_ANSWER_STR)
+            answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
+            answers_list_at_selected_question.append(self.NEW_ANSWER_STR)
             self.set_rule_combo_box_at_index(CommonSerializedData.selected_question_index)
             self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
 
     def remove_variable(self, selected_answer_index):
         if selected_answer_index > -1:
-            answers_list = CommonSerializedData.get_answers_list_at_selected_index()
-            del answers_list[selected_answer_index]
-            self.removeRow(selected_answer_index - 1)
+            self.removeRow(selected_answer_index)
 
     def setData(self, index, value, role=Qt.DisplayRole):
         if index.isValid() and role == Qt.EditRole and value and not (value in CommonSerializedData.get_answers_list_at_selected_index()):
@@ -100,10 +99,10 @@ class AnswersListModel(QAbstractListModel):
 
     def set_rule_combo_box_at_index(self, index):
         combo_box = ColumnButtonDelegate.get_combo_box_at_index(index)
-        answer_list = CommonSerializedData.get_answers_list_at_selected_index()
+        answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
         if not (-1 == combo_box):
             combo_box.clear()
-            combo_box.addItems(answer_list)
+            combo_box.addItems(answers_list_at_selected_question)
 
     def clear_all_variables(self):
         self.removeRow(0)

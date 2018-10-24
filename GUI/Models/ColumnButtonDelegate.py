@@ -61,3 +61,13 @@ class ColumnButtonDelegate(QItemDelegate):
 
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
+
+    @staticmethod
+    def set_combo_item_at_index(index, rule):
+        referenced_combo = ColumnButtonDelegate.get_combo_box_at_index(index)
+
+        if -1 != referenced_combo:
+            matched_text_index = referenced_combo.findText(rule, QtCore.Qt.MatchFixedString)
+
+            if matched_text_index >= 0:
+                referenced_combo.setCurrentIndex(matched_text_index)

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '.\RuleEditor.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,7 @@ class Ui_RuleEditor(object):
     def setupUi(self, RuleEditor):
         RuleEditor.setObjectName("RuleEditor")
         RuleEditor.setEnabled(True)
-        RuleEditor.resize(824, 612)
+        RuleEditor.resize(824, 624)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -101,15 +101,15 @@ class Ui_RuleEditor(object):
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setContentsMargins(0, -1, -1, -1)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.listView = QtWidgets.QListView(self.gbRules)
+        self.listViewRules = QtWidgets.QListView(self.gbRules)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.listView.sizePolicy().hasHeightForWidth())
-        self.listView.setSizePolicy(sizePolicy)
-        self.listView.setMaximumSize(QtCore.QSize(200, 16777215))
-        self.listView.setObjectName("listView")
-        self.verticalLayout_4.addWidget(self.listView)
+        sizePolicy.setHeightForWidth(self.listViewRules.sizePolicy().hasHeightForWidth())
+        self.listViewRules.setSizePolicy(sizePolicy)
+        self.listViewRules.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.listViewRules.setObjectName("listViewRules")
+        self.verticalLayout_4.addWidget(self.listViewRules)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
@@ -122,6 +122,7 @@ class Ui_RuleEditor(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_5)
         self.horizontalLayout_2.addLayout(self.verticalLayout_4)
         self.tableViewRules = QtWidgets.QTableView(self.gbRules)
+        self.tableViewRules.setEnabled(False)
         self.tableViewRules.setObjectName("tableViewRules")
         self.horizontalLayout_2.addWidget(self.tableViewRules)
         self.gridLayout_2.addWidget(self.gbRules, 1, 0, 1, 1)
@@ -134,6 +135,9 @@ class Ui_RuleEditor(object):
         self.textEditOutput = QtWidgets.QTextEdit(self.gBAllInfo)
         self.textEditOutput.setObjectName("textEditOutput")
         self.verticalLayout.addWidget(self.textEditOutput)
+        self.pbUpdateOutput = QtWidgets.QPushButton(self.gBAllInfo)
+        self.pbUpdateOutput.setObjectName("pbUpdateOutput")
+        self.verticalLayout.addWidget(self.pbUpdateOutput)
         self.gridLayout_2.addLayout(self.verticalLayout, 1, 1, 1, 1)
         self.gridLayout.addWidget(self.gBAllInfo, 1, 0, 1, 2)
 
@@ -158,6 +162,7 @@ class Ui_RuleEditor(object):
         self.pbAddRule.setText(_translate("RuleEditor", "Add New Rule"))
         self.pbRemoveRule.setText(_translate("RuleEditor", "Remove Selected Rule"))
         self.lblOutput.setText(_translate("RuleEditor", "Output Info:"))
+        self.pbUpdateOutput.setText(_translate("RuleEditor", "Update output for selected rule"))
 
 
 if __name__ == "__main__":

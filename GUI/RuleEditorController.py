@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QAction, QFileDialog, QApplication, QDialog, QToolBa
 from GUI.Models.AnswersListModel import AnswersListModel
 from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
 from GUI.Models.QuestionsListModel import QuestionsListModel
+from GUI.Models.RulesListModel import RulesListModel
 from GUI.RuleEditorView import Ui_RuleEditor
 
 
@@ -30,6 +31,7 @@ class RuleEditorController(QDialog):
 
         self.questions_model = QuestionsListModel(self)
         self.variables_model = AnswersListModel(self)
+        self.rules_model = RulesListModel(self)
         self.ui.listViewQuestions.setModel(self.questions_model)
         self.ui.listViewQuestions.clicked.connect(self.variables_model.request_variables_for_question)
         self.questions_model.dataChanged.connect(self.new_question_added)
@@ -37,9 +39,12 @@ class RuleEditorController(QDialog):
         self.ui.listViewVariables.setModel(self.variables_model)
         #  self.ui.listViewVariables.setModelColumn(1)
         self.ui.tableViewRules.setModel(self.questions_model)
+        self.ui.listViewRules.setModel(self.rules_model)
+        self.ui.listViewRules.clicked.connect(self.request_all_data_for_rule)
+        self.ui.pbUpdateOutput.clicked.connect(self.update_output_for_selected_rule)
         for col in range(self.questions_model.columnCount()):
             self.ui.tableViewRules.setColumnWidth(col, 140)
-        self.ui.tableViewRules.setEnabled(False)
+        self.update_rule_components_state(False)
 
         self.ui.tableViewRules.setItemDelegateForColumn(1, ColumnButtonDelegate(self))
         for row in range(0, self.questions_model.rowCount()):
@@ -74,13 +79,13 @@ class RuleEditorController(QDialog):
         self.ui.listViewVariables.clearSelection()
 
     def on_add_rule_clicked(self):
-        print("add rule")
+        self.rules_model.add_rule()
 
     def on_remove_rule_clicked(self):
-        print("remove rule")
-
-    def on_rename_rule_clicked(self):
-        print("rename rule")
+        self.ui.listViewRules.clearSelection()
+        self.update_rule_components_state(False)
+        index = self.ui.listViewRules.currentIndex()
+        self.rules_model.remove_rule(index.row())
 
     def on_save_clicked(self):
         print("save")
@@ -89,7 +94,21 @@ class RuleEditorController(QDialog):
         for row in range(0, self.questions_model.rowCount()):
             self.ui.tableViewRules.openPersistentEditor(self.questions_model.index(row, 1))
 
+    def request_all_data_for_rule(self):
+        self.update_rule_components_state(True)
+        index = self.ui.listViewRules.currentIndex()
+        self.rules_model.set_all_combo_boxes_for_selected_rule(index.row())
+        output = self.rules_model.get_output_for_selected_rule(index.row())
+        self.ui.textEditOutput.setText(output)
 
+    def update_rule_components_state(self, is_enabled):
+        self.ui.tableViewRules.setEnabled(is_enabled)
+        self.ui.textEditOutput.setEnabled(is_enabled)
+
+    def update_output_for_selected_rule(self):
+        index = self.ui.listViewRules.currentIndex()
+        output = self.ui.textEditOutput.toPlainText()
+        self.rules_model.update_output_for_selected_rule(index.row(), output)
 
 def init_rule_editor_gui():
     import sys

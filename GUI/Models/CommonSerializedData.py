@@ -13,8 +13,14 @@ class CommonSerializedData:
     es_questions_list = ["How many calories", "Veg?", "Are you working out?"]
     es_answers_list = [["1000-2000", "3000-4000"], ["Veg", "NotVeg", "Never Thought"], ["Yes", "No", "Sometimes"]]
 
-    rules_list = [["1000-2000", "Veg", "Yes"], ["3000-4000", "NotVeg", "No"], ["1000-2000", "NotVeg", "Sometimes"], ["3000-4000", "Veg", "Yes"]]
-    rules_output = ["Not so fat", "Fat", "You are not fat at all", "Very fat"]
+    rules_name = []
+    rules_list = []
+    rules_output = []
+
+    #rules_name = ["DummyRule"]
+    #rules_list = [["1000-2000", "Veg", "Yes"]]
+    # rules_list = [["1000-2000", "Veg", "Yes"]# , ["3000-4000", "NotVeg", "No"], ["1000-2000", "NotVeg", "Sometimes"], ["3000-4000", "Veg", "Yes"]]
+    # rules_output = ["Not so fat", "Fat", "You are not fat at all", "Very fat"]
 
     selected_answer_index = INVALID_INDEX
     selected_question_index = INVALID_INDEX
@@ -40,8 +46,6 @@ class CommonSerializedData:
     def add_variable_for_selected_question(answer):
         if not CommonSerializedData.selected_question_index == CommonSerializedData.INVALID_INDEX:
             CommonSerializedData.es_answers_list[CommonSerializedData.selected_question_index] = answer
-            # current_question_answers = list(CommonSerializedData.es_theme.questions.values())
-            # current_question_answers.append(answer)
 
     @staticmethod
     def get_question_selection_validity():
@@ -57,10 +61,6 @@ class CommonSerializedData:
             return CommonSerializedData.es_answers_list[CommonSerializedData.selected_question_index]
         else:
             return []
-        #     all_answers_list = list(CommonSerializedData.es_theme.questions.values())
-        #     if CommonSerializedData.selected_question_index < len(all_answers_list):
-        #         res = all_answers_list[CommonSerializedData.selected_question_index]
-
 
     @staticmethod
     def get_answers_list_at_index(index):
@@ -69,6 +69,54 @@ class CommonSerializedData:
         else:
             return []
 
+    @staticmethod
+    def get_rules_list_at_index(index):
+        if index < len(CommonSerializedData.rules_list):
+            return CommonSerializedData.rules_list[index]
 
+    @staticmethod
+    def get_rules_names():
+        return CommonSerializedData.rules_name
 
+    @staticmethod
+    def get_rules_list():
+        return CommonSerializedData.rules_list
+
+    @staticmethod
+    def get_rules_outputs():
+        return CommonSerializedData.rules_output
+
+    @staticmethod
+    def add_rule():
+        rule_list_to_add = []
+        for question_index, answer_list in enumerate(CommonSerializedData.es_answers_list):
+            if len(answer_list) > 0:
+                print("Answer")
+                print(answer_list)
+                print("question")
+                print(question_index)
+                rule_list_to_add.append(answer_list[0])
+
+        CommonSerializedData.rules_list.append(rule_list_to_add)
+        CommonSerializedData.rules_output.append("")
+
+    @staticmethod
+    def update_rule_name(index, value):
+        rules_names = CommonSerializedData.rules_name
+        if index < len(rules_names):
+            rules_names[index] = value
+
+    @staticmethod
+    def remove_rule_at(index):
+        if index < len(CommonSerializedData.rules_name) and \
+                index < len(CommonSerializedData.rules_list) and \
+                index < len(CommonSerializedData.rules_output):
+            del CommonSerializedData.rules_name[index]
+            del CommonSerializedData.rules_list[index]
+            del CommonSerializedData.rules_output[index]
+
+    @staticmethod
+    def get_output_for_selected_rule(index):
+        if index < len(CommonSerializedData.rules_output):
+            return CommonSerializedData.rules_output[index]
 

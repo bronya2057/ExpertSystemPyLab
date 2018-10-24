@@ -1,7 +1,10 @@
+import json
+
 from PyQt5 import QtCore, Qt
 from PyQt5.QtCore import QModelIndex
 from PyQt5.QtWidgets import QAction, QFileDialog, QApplication, QDialog, QToolBar
 
+from Backend import Serializer
 from GUI.Models.AnswersListModel import AnswersListModel
 from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
 from GUI.Models.QuestionsListModel import QuestionsListModel
@@ -41,6 +44,7 @@ class RuleEditorController(QDialog):
         self.ui.tableViewRules.setModel(self.questions_model)
         self.ui.listViewRules.setModel(self.rules_model)
         self.ui.listViewRules.clicked.connect(self.request_all_data_for_rule)
+        self.ui.pbUpdateRule.clicked.connect(self.on_pb_update_rule_clicked)
         self.ui.pbUpdateOutput.clicked.connect(self.update_output_for_selected_rule)
         for col in range(self.questions_model.columnCount()):
             self.ui.tableViewRules.setColumnWidth(col, 140)
@@ -87,9 +91,6 @@ class RuleEditorController(QDialog):
         index = self.ui.listViewRules.currentIndex()
         self.rules_model.remove_rule(index.row())
 
-    def on_save_clicked(self):
-        print("save")
-
     def new_question_added(self, index1, index2):
         for row in range(0, self.questions_model.rowCount()):
             self.ui.tableViewRules.openPersistentEditor(self.questions_model.index(row, 1))
@@ -109,6 +110,23 @@ class RuleEditorController(QDialog):
         index = self.ui.listViewRules.currentIndex()
         output = self.ui.textEditOutput.toPlainText()
         self.rules_model.update_output_for_selected_rule(index.row(), output)
+
+    def on_pb_update_rule_clicked(self):
+        complete_rule_list = ColumnButtonDelegate.get_all_combo_box_values_list()
+        print(complete_rule_list)
+        index = self.ui.listViewRules.currentIndex()
+        self.rules_model.update_rule_at(index.row(), complete_rule_list)
+
+    def on_save_clicked(self):
+        data_1 = Serializer.get_json_ready_data()
+        data = {"PersonalDetention2":
+                    {"Questions": ["Hey","Hey2"], # cannot be NUMBER ONLY!!!
+                     "Variables":[["1000-2000", "3000-4000"],["Veg", "NotVeg"]],
+                     "Rules":{"1000-2000, Veg":"Not so fat","3000-4000, NotVeg":"FAT"}}}
+        json_str = json.dumps(data_1, indent=2)
+        print(json_str)
+        with open("data_file.json", "w") as write_file:
+            json.dump(data_1, write_file, indent=2)
 
 def init_rule_editor_gui():
     import sys

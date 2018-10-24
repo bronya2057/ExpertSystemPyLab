@@ -108,3 +108,7 @@ class RulesListModel(QAbstractListModel):
 
     def get_output_for_selected_rule(self, index):
         return CommonSerializedData.get_output_for_selected_rule(index)
+
+    def update_rule_at(self, index, new_rule_data):
+        CommonSerializedData.set_rule_data_at(index, new_rule_data)
+        # self.dataChanged.emit(self.index(index, 0), self.index(index, 0), [])

@@ -40,7 +40,10 @@ class CommonSerializedData:
     def update_answer(index, value):
         answers_list = CommonSerializedData.get_answers_list_at_selected_index()
         if answers_list:
+            CommonSerializedData.update_rule_variable_at(CommonSerializedData.selected_question_index, answers_list[index], value)
             answers_list[index] = value
+
+
 
     @staticmethod
     def add_variable_for_selected_question(answer):
@@ -107,6 +110,13 @@ class CommonSerializedData:
             rules_names[index] = value
 
     @staticmethod
+    def update_rule_variable_at(index, old_variable_value, new_variable_value):
+        for rule_array in CommonSerializedData.rules_list:
+            if index < len(rule_array):
+                if rule_array[index] == old_variable_value:
+                    rule_array[index] = new_variable_value
+
+    @staticmethod
     def remove_rule_at(index):
         if index < len(CommonSerializedData.rules_name) and \
                 index < len(CommonSerializedData.rules_list) and \
@@ -126,3 +136,12 @@ class CommonSerializedData:
         if index < len(CommonSerializedData.rules_output):
             return CommonSerializedData.rules_output[index]
 
+    @staticmethod
+    def add_variable_to_all_rules_to(index):
+        for rule_array in CommonSerializedData.rules_list:
+            rule_array.insert(index, "Dummy variable")
+
+    @staticmethod
+    def set_rule_data_at(index, new_rule_data):
+        if index < len(CommonSerializedData.rules_list):
+            CommonSerializedData.rules_list[index] = new_rule_data

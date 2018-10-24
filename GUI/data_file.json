@@ -1,0 +1,30 @@
+{
+  "Some Name": {
+    "Questions": [
+      "How many calories",
+      "Veg?",
+      "Are you working out?"
+    ],
+    "Variables": [
+      [
+        "1000-2000",
+        "3000-4000"
+      ],
+      [
+        "Veg",
+        "NotVeg",
+        "Never Thought"
+      ],
+      [
+        "Yes",
+        "No",
+        "Sometimes",
+        "I'm working out every second"
+      ]
+    ],
+    "Rules": {
+      "1000-2000, Veg, Yes": "First rule is best",
+      "3000-4000, Veg, I'm working out every second": "Fat shit"
+    }
+  }
+}

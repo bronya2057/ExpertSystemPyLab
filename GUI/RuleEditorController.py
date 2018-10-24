@@ -25,7 +25,6 @@ class RuleEditorController(QDialog):
 
         self.ui.pbAddRule.clicked.connect(self.on_add_rule_clicked)
         self.ui.pbRemoveRule.clicked.connect(self.on_remove_rule_clicked)
-        self.ui.pbRenameRule.clicked.connect(self.on_rename_rule_clicked)
 
         self.ui.pbSave.clicked.connect(self.on_save_clicked)
 
@@ -38,6 +37,9 @@ class RuleEditorController(QDialog):
         self.ui.listViewVariables.setModel(self.variables_model)
         #  self.ui.listViewVariables.setModelColumn(1)
         self.ui.tableViewRules.setModel(self.questions_model)
+        for col in range(self.questions_model.columnCount()):
+            self.ui.tableViewRules.setColumnWidth(col, 140)
+        self.ui.tableViewRules.setEnabled(False)
 
         self.ui.tableViewRules.setItemDelegateForColumn(1, ColumnButtonDelegate(self))
         for row in range(0, self.questions_model.rowCount()):

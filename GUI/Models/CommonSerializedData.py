@@ -11,7 +11,7 @@ class CommonSerializedData:
 
     es_theme_name = "Some Name"
     es_questions_list = ["How many calories", "Veg?", "Are you working out?"]
-    es_answers_list = [["1000-2000", "3000-4000"], ["Veg", "NotVeg", "Never Thought"], ["Yes, No, Sometimes"]]
+    es_answers_list = [["1000-2000", "3000-4000"], ["Veg", "NotVeg", "Never Thought"], ["Yes", "No", "Sometimes"]]
 
     rules_list = [["1000-2000", "Veg", "Yes"], ["3000-4000", "NotVeg", "No"], ["1000-2000", "NotVeg", "Sometimes"], ["3000-4000", "Veg", "Yes"]]
     rules_output = ["Not so fat", "Fat", "You are not fat at all", "Very fat"]

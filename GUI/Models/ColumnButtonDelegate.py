@@ -11,7 +11,7 @@ class ColumnButtonDelegate(QItemDelegate):
 
     @staticmethod
     def get_combo_box_at_index(index):
-        if index < len(ColumnButtonDelegate.editors_list):
+        if index < len(ColumnButtonDelegate.editors_list) and not (index == -1):
             return ColumnButtonDelegate.editors_list[index]
         else:
             return -1

@@ -70,12 +70,16 @@ class AnswersListModel(QAbstractListModel):
 
     def removeRow(self, answer, parent=None, *args, **kwargs):
         self.beginRemoveRows(QModelIndex(), answer, answer)
-        del answers_list[CommonSerializedData.selected_question_index][answer]
-        ColumnButtonDelegate.remove_combo_box_item(CommonSerializedData.selected_question_index, answer)
+        temp_answer_list = CommonSerializedData.get_answers_list_at_selected_index()
+        if temp_answer_list:
+            del temp_answer_list[answer]
+        # del answers_list[CommonSerializedData.selected_question_index][answer]
+            ColumnButtonDelegate.remove_combo_box_item(CommonSerializedData.selected_question_index, answer)
+        # CommonSerializedData.selected_question_index = -1
         self.endRemoveRows()
 
     def add_new_variable(self):
-        if not (self.NEW_ANSWER_STR in CommonSerializedData.get_answers_list_at_selected_index()):
+        if not (self.NEW_ANSWER_STR in CommonSerializedData.get_answers_list_at_selected_index()) and CommonSerializedData.get_question_selection_validity():
             new_row_index = len(CommonSerializedData.get_answers_list_at_selected_index())
             self.insertRow(new_row_index)
             answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()

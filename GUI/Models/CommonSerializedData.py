@@ -116,6 +116,12 @@ class CommonSerializedData:
             del CommonSerializedData.rules_output[index]
 
     @staticmethod
+    def remove_rule_variable_at(selected_index):
+        for rule_array in CommonSerializedData.rules_list:
+            del rule_array[selected_index]
+
+
+    @staticmethod
     def get_output_for_selected_rule(index):
         if index < len(CommonSerializedData.rules_output):
             return CommonSerializedData.rules_output[index]

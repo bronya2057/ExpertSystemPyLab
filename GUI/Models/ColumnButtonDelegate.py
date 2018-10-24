@@ -45,14 +45,14 @@ class ColumnButtonDelegate(QItemDelegate):
         editor = QComboBox(parent)
         answers_for_indexed_question = CommonSerializedData.get_answers_list_at_index(index.row())
         editor.addItems(answers_for_indexed_question)
-        editor.setCurrentIndex(0)
+        AllItems = [editor.itemText(i) for i in range(editor.count())]
         editor.installEventFilter(self)
         ColumnButtonDelegate.editors_list.append(editor)
         # self.editors_list[0].addItems(["EWTWETWE"])  #  Store reference to every combo box and update it if needed
         return editor
 
     def setEditorData(self, editor, index):
-        value = 1
+        value = 0   # HERE SET combo box item index!!!
         editor.setCurrentIndex(value)
 
     def setModelData(self, editor, model, index):

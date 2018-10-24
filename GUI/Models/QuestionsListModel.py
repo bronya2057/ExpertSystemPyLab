@@ -65,7 +65,8 @@ class QuestionsListModel(QAbstractTableModel):
             self.insertRow(new_row_index)
             questions_list.insert(new_row_index, self.NEW_QUESTION_STR)
             CommonSerializedData.set_selected_question_index(new_row_index)
-            answers_list.insert(new_row_index, [])
+            answers_list.insert(new_row_index, ["Dummy variable"])
+            #CommonSerializedData.add_rule_variable_at(selected_index)  ADD To each rule list new question
             self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
 
     def remove_question(self, selected_index):
@@ -74,7 +75,9 @@ class QuestionsListModel(QAbstractTableModel):
             ColumnButtonDelegate.remove_combo_box_at_index(selected_index)
             del questions_list[selected_index]
             del answers_list[selected_index]
+            CommonSerializedData.remove_rule_variable_at(selected_index)
             CommonSerializedData.selected_question_index = -1
+
 
     def setData(self, index, value, role=Qt.DisplayRole):
         if index.isValid() and role == Qt.EditRole and value and not (value in questions_list):

@@ -88,7 +88,7 @@ class AnswersListModel(QAbstractListModel):
             self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
 
     def remove_variable(self, selected_answer_index):
-        if selected_answer_index > -1:
+        if selected_answer_index > 0:
             self.removeRow(selected_answer_index)
 
     def setData(self, index, value, role=Qt.DisplayRole):

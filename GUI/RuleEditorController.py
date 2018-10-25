@@ -3,6 +3,7 @@ import json
 from PyQt5.QtWidgets import QApplication, QDialog
 
 from Backend import Serializer
+from GUI.Models.CommonSerializedData import CommonSerializedData
 from GUI.Models.AnswersListModel import AnswersListModel
 from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
 from GUI.Models.QuestionsListModel import QuestionsListModel
@@ -29,6 +30,7 @@ class RuleEditorController(QDialog):
         self.ui.pbRemoveRule.clicked.connect(self.on_remove_rule_clicked)
 
         self.ui.pbSave.clicked.connect(self.on_save_clicked)
+        self.ui.pbLoad.clicked.connect(self.on_load_clicked)
 
         self.questions_model = QuestionsListModel(self)
         self.variables_model = AnswersListModel(self)
@@ -59,6 +61,8 @@ class RuleEditorController(QDialog):
 
         enable_all_elements = True if theme_name else False
         self.ui.gBAllInfo.setEnabled(enable_all_elements)
+        self.ui.pbSave.setEnabled(enable_all_elements)
+        CommonSerializedData.add_theme_name(theme_name)
 
     def on_add_question_clicked(self):
         self.questions_model.add_new_question()
@@ -125,6 +129,9 @@ class RuleEditorController(QDialog):
         print(json_str)
         with open("data_file.json", "w") as write_file:
             json.dump(data_1, write_file, indent=2)
+
+    def on_load_clicked(self):
+        print("load")
 
 def init_rule_editor_gui():
     import sys

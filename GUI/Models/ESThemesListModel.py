@@ -31,6 +31,11 @@ class ESThemesListModel(QAbstractListModel):
 
         self.endInsertRows()
 
+    def removeRow(self, row, parent=None, *args, **kwargs):
+        self.beginRemoveRows(QModelIndex(), row, row)
+
+        self.endRemoveRows()
+
 
     def request_theme_at_selected_index(self, index):
         try:
@@ -41,16 +46,16 @@ class ESThemesListModel(QAbstractListModel):
 
     def load_theme(self, file_path):
         import json
-        import copy
         with open(file_path) as f:
             data = json.load(f)
 
         add_theme = True
 
         for themeName in data:
-            for theme in self.es_themes:
+            for index, theme in enumerate(self.es_themes):
                 if theme.name == themeName:
-                    add_theme = False
+                    self.removeRow(index)
+                    del self.es_themes[index]
 
             if add_theme:
                 self.insertRow(len(self.es_themes))
@@ -92,4 +97,10 @@ class ESThemesListModel(QAbstractListModel):
 
     def get_current_theme_rules(self, question_number):
         return self.es_themes[self.selected_theme_index].rules
+
+    def remove_theme_at(self, selected_theme_index):
+        if len(self.es_themes) > selected_theme_index > -1:
+            self.removeRow(selected_theme_index)
+            del self.es_themes[selected_theme_index]
+
 

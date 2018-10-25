@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QRadioButton, QDialog
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QRadioButton, QDialog, QMenu
 from pyknow import Fact
 
 from Backend.EmptyExpertEngine import ExpertEngine
@@ -18,11 +19,13 @@ class MainWindowController(QMainWindow):
         self.current_theme_question_dict = OrderedDict()
         self.fill_menu_bar()
         self.esThemesListModel = ESThemesListModel(self)
+        self.themes_list_menu = QMenu("Themes list menu", self)
         self.init_es_themes_model()
         self.show()
         self.selected_question = -1
         self.current_theme_facts = Fact()
     #  TO DECOUPLE JUST CREATE ANOTHER CLASS AND PASS self of this class
+        self.ui.pBNextQuestion.setEnabled(False)
         self.ui.pBNextQuestion.clicked.connect(self.enable_next_question)
 
 
@@ -37,6 +40,10 @@ class MainWindowController(QMainWindow):
         if fileName:
             print(fileName)
             self.esThemesListModel.load_theme(fileName)
+
+        self.ui.listViewESThemes.clearSelection()
+
+        self.clear_answers_and_questions()
 
     def exit_action(self):
         self.close()
@@ -56,9 +63,9 @@ class MainWindowController(QMainWindow):
         file = menu_bar.addMenu("File")
         tools = menu_bar.addMenu("Tools")
 
-        new_action = QAction("New", menu_bar)
-        new_action.setShortcut("Ctrl+N")
-        file.addAction(new_action)
+        # new_action = QAction("New", menu_bar)
+        # new_action.setShortcut("Ctrl+N")
+        # file.addAction(new_action)
 
         open_action = QAction("Open", menu_bar)
         open_action.setShortcut("Ctrl+O")
@@ -76,7 +83,7 @@ class MainWindowController(QMainWindow):
         # edit.addAction("copy")
         # edit.addAction("paste")
 
-        new_action.triggered.connect(self.new_action)
+        # new_action.triggered.connect(self.new_action)
         open_action.triggered.connect(self.open_action)
         exit_action.triggered.connect(self.exit_action)
         rule_editor_action.triggered.connect(self.rule_editor_action)
@@ -90,7 +97,16 @@ class MainWindowController(QMainWindow):
         self.esThemesListModel.theme_selected.connect(self.set_initial_question)
         es_themes_list_view.setModel(self.esThemesListModel)
 
+        es_themes_list_view.setContextMenuPolicy(Qt.CustomContextMenu)
+        es_themes_list_view.customContextMenuRequested.connect(self.on_context_menu_called)
+
+        remove_action = QAction("Remove theme", self.themes_list_menu)
+        self.themes_list_menu.addAction(remove_action)
+        remove_action.triggered.connect(self.remove_menu_action_triggered)
+
     def set_initial_question(self):
+        self.ui.gbQuestions.setTitle("QUESTIONS")
+        self.ui.gBAnswers.setTitle("ANSWERS")
         self.ui.gBMain.setTitle("Expert system theme is chosen, please answer all questions")
         self.ui.pBNextQuestion.setEnabled(True)
         self.selected_question = self.INITIAL_QUESTION_INDEX
@@ -100,12 +116,10 @@ class MainWindowController(QMainWindow):
         self.selected_question += 1
         #  Check radio that is checked and cache answer
         self.cache_fact()
-
         if self.selected_question < self.esThemesListModel.get_current_theme_questions_number():
             self.set_next_question()
         else:
-            answers_layout = self.ui.gBAnswers.layout()
-            self.clear_answers_and_questions(answers_layout)
+            self.clear_answers_and_questions()
 
             current_theme_rules = self.esThemesListModel.get_current_theme_rules(self.selected_question)
             current_theme_questions = self.esThemesListModel.get_current_theme_questions()
@@ -117,9 +131,11 @@ class MainWindowController(QMainWindow):
             self.current_theme_facts = Fact()
 
             self.ui.lblQuestion.setText(main_expert_engine.get_output())
+            self.ui.gbQuestions.setTitle("Your output:")
+            self.ui.gBAnswers.setTitle("")
+            self.ui.pBNextQuestion.setEnabled(False)
             self.ui.listViewESThemes.clearSelection()
             self.ui.gBMain.setTitle("Please choose one theme from the list")
-            self.ui.pBNextQuestion.setEnabled(False)
 
     def set_next_question(self):
         question_name, answers = self.esThemesListModel.get_current_theme_question(self.selected_question)
@@ -128,7 +144,7 @@ class MainWindowController(QMainWindow):
 
     def reset_questions_and_answers(self, selected_question_text, answers):
         layout = self.ui.gBAnswers.layout()
-        self.clear_answers_and_questions(layout)
+        self.clear_answers_and_questions()
 
         self.ui.lblQuestion.setText(selected_question_text)
         first_radio_flag = False
@@ -140,7 +156,8 @@ class MainWindowController(QMainWindow):
                 first_radio_flag = True
             layout.addWidget(radio, index)  # ADDING PADDING??
 
-    def clear_answers_and_questions(self, answers_layout):
+    def clear_answers_and_questions(self):
+        answers_layout = self.ui.gBAnswers.layout()
         self.ui.lblQuestion.setText("")
         for i in reversed(range(answers_layout.count())):
             answers_layout.itemAt(i).widget().setParent(None)
@@ -151,6 +168,25 @@ class MainWindowController(QMainWindow):
             if button.isChecked():
                 self.current_theme_facts[self.ui.lblQuestion.text()] = button.text()
                 print(button.text())
+
+    def on_context_menu_called(self, point):
+        print(point)
+        row_height = 17
+        rows = self.esThemesListModel.rowCount()
+        selected_theme_index = self.ui.listViewESThemes.currentIndex().row()
+        print(point.y())
+        if selected_theme_index >= 0 and point.y() < (row_height * rows):
+            self.themes_list_menu.exec_(self.ui.listViewESThemes.mapToGlobal(point))
+
+
+    def remove_menu_action_triggered(self):
+        selected_theme_index = self.ui.listViewESThemes.currentIndex().row()
+
+        self.esThemesListModel.remove_theme_at(selected_theme_index)
+        self.clear_answers_and_questions()
+        self.ui.pBNextQuestion.setEnabled(False)
+
+
 
 def init_gui():
     import sys

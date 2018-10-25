@@ -266,7 +266,7 @@ QListView::item:hover {
              <string notr="true"/>
             </property>
             <property name="text">
-             <string>QuestionText:</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -278,15 +278,7 @@ QListView::item:hover {
          <property name="title">
           <string>Answers</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QRadioButton" name="radioButtonTEMP">
-            <property name="text">
-             <string>Answer1</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <layout class="QVBoxLayout" name="verticalLayout_3"/>
         </widget>
        </item>
        <item>

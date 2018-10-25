@@ -1,5 +1,5 @@
 {
-  "Some Name": {
+  "SECOND theme": {
     "Questions": [
       "How many calories",
       "Veg?",
@@ -19,12 +19,12 @@
         "Yes",
         "No",
         "Sometimes",
-        "I'm working out every second"
+        "New answer"
       ]
     ],
     "Rules": {
-      "1000-2000, Veg, Yes": "First rule is best",
-      "3000-4000, Veg, I'm working out every second": "Fat shit"
+      "1000-2000, Veg, Yes": "First initial",
+      "3000-4000, NotVeg, No": "Second initial"
     }
   }
 }

@@ -8,7 +8,7 @@ class CommonSerializedData:
     #                       "Veg?": ["Veg", "NotVeg", "Never thought about it"]},
     #                      {"1000-2000": "Oh My"})
 
-    es_theme_name = "Some Name"
+    es_theme_name = ""
     es_questions_list = ["How many calories", "Veg?", "Are you working out?"]
     es_answers_list = [["1000-2000", "3000-4000"], ["Veg", "NotVeg", "Never Thought"], ["Yes", "No", "Sometimes"]]
 

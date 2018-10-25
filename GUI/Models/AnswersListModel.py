@@ -1,7 +1,7 @@
-from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, pyqtSignal, QAbstractTableModel, Qt
+from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, Qt
 
 from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
-from GUI.Models.CommonSerializedData import *
+from GUI.Models.CommonSerializedData import CommonSerializedData
 
 answers_list = CommonSerializedData.es_answers_list
 

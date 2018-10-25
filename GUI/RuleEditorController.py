@@ -1,8 +1,6 @@
 import json
 
-from PyQt5 import QtCore, Qt
-from PyQt5.QtCore import QModelIndex
-from PyQt5.QtWidgets import QAction, QFileDialog, QApplication, QDialog, QToolBar
+from PyQt5.QtWidgets import QApplication, QDialog
 
 from Backend import Serializer
 from GUI.Models.AnswersListModel import AnswersListModel

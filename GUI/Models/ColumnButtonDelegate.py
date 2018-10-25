@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtCore, QtWidgets, Qt
+from PyQt5 import QtCore, QtWidgets, Qt
 from PyQt5.QtWidgets import QItemDelegate, QComboBox, QStyle
 
 from GUI.Models.CommonSerializedData import *
@@ -6,6 +6,7 @@ from GUI.Models.CommonSerializedData import *
 
 class ColumnButtonDelegate(QItemDelegate):
     editors_list = []
+
     def __init__(self, owner):
         QItemDelegate.__init__(self, owner)
 

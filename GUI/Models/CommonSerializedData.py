@@ -1,4 +1,3 @@
-from GUI.Models.Common import ESTheme
 
 
 class CommonSerializedData:

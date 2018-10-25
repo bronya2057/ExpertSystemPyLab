@@ -1,14 +1,11 @@
-from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QDialog, QRadioButton, QVBoxLayout
+from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QRadioButton, QDialog
+from pyknow import Fact
 
 from Backend.EmptyExpertEngine import ExpertEngine
 from GUI.MainWindowView import Ui_MainWindow
 from GUI.Models.ESThemesListModel import ESThemesListModel
 from GUI.RuleEditorController import RuleEditorController
 from collections import OrderedDict
-
-from pyknow import *
-from types import MethodType
 
 
 class MainWindowController(QMainWindow):
@@ -48,7 +45,7 @@ class MainWindowController(QMainWindow):
     def rule_editor_action(self):
         rule_editor_controller = RuleEditorController()
         response = rule_editor_controller.exec()
-        if response == QtWidgets.QDialog.Accepted:
+        if response == QDialog.Accepted:
             print("The Ok button clicked")
         else:
             print("Cancel Button")
@@ -93,16 +90,6 @@ class MainWindowController(QMainWindow):
         self.esThemesListModel.theme_selected.connect(self.set_initial_question)
         es_themes_list_view.setModel(self.esThemesListModel)
 
-        # engine = ExpertEngine()  # PASS ALL Rules and fact parameters
-
-        # engine.reset()
-
-        # engine.declare(Fact(myFact="Brown", myFact2="Yes"))
-        # engine.add_method("Method1")
-        # setattr(engine, 'rule1', set_goal())
-        # engine.run()
-        # print(engine.get_rules())
-
     def set_initial_question(self):
         self.ui.gBMain.setTitle("Expert system theme is chosen, please answer all questions")
         self.ui.pBNextQuestion.setEnabled(True)
@@ -123,7 +110,7 @@ class MainWindowController(QMainWindow):
             current_theme_rules = self.esThemesListModel.get_current_theme_rules(self.selected_question)
             current_theme_questions = self.esThemesListModel.get_current_theme_questions()
 
-            main_expert_engine = ExpertEngine(current_theme_questions, current_theme_rules)  # PASS ALL Rules and fact parameters
+            main_expert_engine = ExpertEngine(current_theme_questions, current_theme_rules)
             main_expert_engine.reset()
             main_expert_engine.declare(self.current_theme_facts)
             main_expert_engine.run()

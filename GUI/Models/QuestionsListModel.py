@@ -1,7 +1,7 @@
-from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, Qt, pyqtSignal, QAbstractTableModel
+from PyQt5.QtCore import QModelIndex, QVariant, Qt, QAbstractTableModel
 
 from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
-from GUI.Models.CommonSerializedData import *
+from GUI.Models.CommonSerializedData import CommonSerializedData
 
 questions_list = CommonSerializedData.es_questions_list
 answers_list = CommonSerializedData.es_answers_list
@@ -41,14 +41,8 @@ class QuestionsListModel(QAbstractTableModel):
                 elif section == 1:
                     return "Facts"
 
-
-    # def columnCount(self, parent=QModelIndex()):
-    #     return 2  # len(self.es_themes)
-
     def flags(self, index):
             return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsEditable
-
-        # return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsEditable
 
     def insertRow(self, row, parent=None, *args, **kwargs):
         self.beginInsertRows(QModelIndex(), row, row)
@@ -77,7 +71,6 @@ class QuestionsListModel(QAbstractTableModel):
             del answers_list[selected_index]
             CommonSerializedData.remove_rule_variable_at(selected_index)
             CommonSerializedData.selected_question_index = -1
-
 
     def setData(self, index, value, role=Qt.DisplayRole):
         if index.isValid() and role == Qt.EditRole and value and not (value in questions_list):

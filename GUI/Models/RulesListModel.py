@@ -24,6 +24,7 @@ class RulesListModel(QAbstractListModel):
             data = CommonSerializedData.rules_name[index.row()]
             print(CommonSerializedData.rules_name)
             print(CommonSerializedData.rules_list)
+            print(CommonSerializedData.rules_output)
             # print(CommonSerializedData.rules_output)
 
             return QVariant(data)

@@ -1,5 +1,5 @@
 {
-  "SECOND theme": {
+  "My test theme": {
     "Questions": [
       "How many calories",
       "Veg?",
@@ -18,13 +18,14 @@
       [
         "Yes",
         "No",
-        "Sometimes",
-        "New answer"
+        "Sometimes"
       ]
     ],
     "Rules": {
-      "1000-2000, Veg, Yes": "First initial",
-      "3000-4000, NotVeg, No": "Second initial"
-    }
+      "1000-2000, Veg, Yes": ""
+    },
+    "RulesNames": [
+      "2"
+    ]
   }
 }

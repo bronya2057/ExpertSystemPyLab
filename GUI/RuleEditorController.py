@@ -131,6 +131,14 @@ class RuleEditorController(QDialog):
             json.dump(data_1, write_file, indent=2)
 
     def on_load_clicked(self):
+        from PyQt5.QtWidgets import QFileDialog
+
+        options = QFileDialog.Options()
+        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
+                                                  "Json Files (*.json)", options=options)
+        if fileName:
+            print(fileName)
+            Serializer.de_serialize_to_internal_data(fileName)
         print("load")
 
 def init_rule_editor_gui():

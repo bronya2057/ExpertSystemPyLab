@@ -240,36 +240,6 @@ QListView::item:hover {
       </property>
      </widget>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="lblThemes">
-      <property name="font">
-       <font>
-        <family>Trebuchet MS</family>
-        <pointsize>-1</pointsize>
-        <stylestrategy>PreferDefault</stylestrategy>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QLabel{
-	font-family:&quot;Trebuchet MS&quot;;
-	font-color:#333;
-    color: #253c93;	
-border: 1px solid black;
-margin-right:10px;
-
-}</string>
-      </property>
-      <property name="text">
-       <string>EXPERT SYSTEM THEMES</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="1" rowspan="2">
      <widget class="QGroupBox" name="gBMain">
       <property name="styleSheet">
@@ -339,6 +309,16 @@ margin-right:10px;
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblThemes">
+      <property name="text">
+       <string>EXPERT SYSTEM THEMES</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
    </layout>

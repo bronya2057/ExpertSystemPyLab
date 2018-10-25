@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -234,24 +234,6 @@ class Ui_MainWindow(object):
 "}")
         self.listViewESThemes.setObjectName("listViewESThemes")
         self.gridLayout.addWidget(self.listViewESThemes, 1, 0, 1, 1)
-        self.lblThemes = QtWidgets.QLabel(self.centralwidget)
-        font = QtGui.QFont()
-        font.setFamily("Trebuchet MS")
-        font.setPointSize(-1)
-        font.setStyleStrategy(QtGui.QFont.PreferDefault)
-        self.lblThemes.setFont(font)
-        self.lblThemes.setStyleSheet("QLabel{\n"
-"    font-family:\"Trebuchet MS\";\n"
-"    font-color:#333;\n"
-"    color: #253c93;    \n"
-"border: 1px solid black;\n"
-"margin-right:10px;\n"
-"\n"
-"}")
-        self.lblThemes.setTextFormat(QtCore.Qt.AutoText)
-        self.lblThemes.setAlignment(QtCore.Qt.AlignCenter)
-        self.lblThemes.setObjectName("lblThemes")
-        self.gridLayout.addWidget(self.lblThemes, 0, 0, 1, 1)
         self.gBMain = QtWidgets.QGroupBox(self.centralwidget)
         self.gBMain.setStyleSheet("QGroupBox{\n"
 "    padding:10px;\n"
@@ -292,6 +274,10 @@ class Ui_MainWindow(object):
         self.pBNextQuestion.setObjectName("pBNextQuestion")
         self.verticalLayout.addWidget(self.pBNextQuestion)
         self.gridLayout.addWidget(self.gBMain, 0, 1, 2, 1)
+        self.lblThemes = QtWidgets.QLabel(self.centralwidget)
+        self.lblThemes.setAlignment(QtCore.Qt.AlignCenter)
+        self.lblThemes.setObjectName("lblThemes")
+        self.gridLayout.addWidget(self.lblThemes, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1020, 21))
@@ -307,13 +293,13 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "ExpertS"))
-        self.lblThemes.setText(_translate("MainWindow", "EXPERT SYSTEM THEMES"))
         self.gBMain.setTitle(_translate("MainWindow", "Please choose one theme from the list"))
         self.gbQuestions.setTitle(_translate("MainWindow", "Questions"))
         self.lblQuestion.setText(_translate("MainWindow", "QuestionText:"))
         self.gBAnswers.setTitle(_translate("MainWindow", "Answers"))
         self.radioButtonTEMP.setText(_translate("MainWindow", "Answer1"))
         self.pBNextQuestion.setText(_translate("MainWindow", "Next Question"))
+        self.lblThemes.setText(_translate("MainWindow", "EXPERT SYSTEM THEMES"))
 
 
 if __name__ == "__main__":

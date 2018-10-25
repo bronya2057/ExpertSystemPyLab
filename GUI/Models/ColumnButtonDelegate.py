@@ -1,7 +1,7 @@
-from PyQt5 import QtCore, QtWidgets, Qt
-from PyQt5.QtWidgets import QItemDelegate, QComboBox, QStyle
+from PyQt5.QtCore import Qt, QVariant
+from PyQt5.QtWidgets import QItemDelegate, QComboBox
 
-from GUI.Models.CommonSerializedData import *
+from GUI.Models.CommonSerializedData import CommonSerializedData
 
 
 class ColumnButtonDelegate(QItemDelegate):
@@ -29,16 +29,17 @@ class ColumnButtonDelegate(QItemDelegate):
                 ColumnButtonDelegate.editors_list[question_index].removeItem(answer_index)
 
     def paint(self, painter, option, index):
+        pass
         # Get Item Data
         #  value = str(index.data(Qt.DisplayRole))
         # fill style options with item data
-        style = Qt.QApplication.style()
-        opt = QtWidgets.QStyleOptionComboBox()
-        opt.currentText = "HI"
-        opt.rect = option.rect
+        # style = Qt.QApplication.style() ???
+        # opt = QtWidgets.QStyleOptionComboBox()
+        # opt.currentText = "HI"
+        # opt.rect = option.rect
 
         # draw item data as ComboBox
-        style.drawComplexControl(QStyle.CC_ComboBox, opt, painter)
+        #style.drawComplexControl(QStyle.CC_ComboBox, opt, painter) ???
 
     def createEditor(self, parent, option, index):
         # create the ProgressBar as our editor.
@@ -58,7 +59,7 @@ class ColumnButtonDelegate(QItemDelegate):
 
     def setModelData(self, editor, model, index):
         value = editor.currentIndex()
-        model.setData(index, QtCore.QVariant(value))
+        model.setData(index, QVariant(value))
 
     def updateEditorGeometry(self, editor, option, index):
         editor.setGeometry(option.rect)
@@ -68,7 +69,7 @@ class ColumnButtonDelegate(QItemDelegate):
         referenced_combo = ColumnButtonDelegate.get_combo_box_at_index(index)
 
         if -1 != referenced_combo:
-            matched_text_index = referenced_combo.findText(rule, QtCore.Qt.MatchFixedString)
+            matched_text_index = referenced_combo.findText(rule, Qt.MatchFixedString)
 
             if matched_text_index >= 0:
                 referenced_combo.setCurrentIndex(matched_text_index)

@@ -42,12 +42,16 @@ class CommonSerializedData:
             CommonSerializedData.update_rule_variable_at(CommonSerializedData.selected_question_index, answers_list[index], value)
             answers_list[index] = value
 
-
-
     @staticmethod
     def add_variable_for_selected_question(answer):
         if not CommonSerializedData.selected_question_index == CommonSerializedData.INVALID_INDEX:
             CommonSerializedData.es_answers_list[CommonSerializedData.selected_question_index] = answer
+
+    @staticmethod
+    def set_answer_at_question(index, answer):
+        if index == len(CommonSerializedData.es_answers_list):
+            CommonSerializedData.es_answers_list.append([])
+        CommonSerializedData.es_answers_list[index].append(answer)
 
     @staticmethod
     def get_question_selection_validity():

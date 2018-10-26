@@ -16,7 +16,9 @@
        "3000-4000, NotVeg": "FAT",
        "1000-2000, NotVeg": "You are not fat at all",
        "3000-4000, Veg": "Very fat"
-      }
+      },
+      "RulesNames": 
+      ["1","2","3","4"]
   },
   
   "My Working Skills":
@@ -34,6 +36,8 @@
        "Rules":{
        "1$-2$, Yes": "LOW",
        "10$-20$, Yes": "A lot"
-      }
+      },
+      "RulesNames": 
+      ["1","2"]
   }
 }

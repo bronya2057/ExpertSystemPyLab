@@ -149,6 +149,9 @@ class RuleEditorController(QDialog):
 
             CommonSerializedData.set_theme_name(theme_struct.theme_name)
 
+            self.questions_model.add_questions_from_file(theme_struct.questions_list)
+            self.variables_model.add_variables_from_file(theme_struct.answers_list)
+
         print("load")
 
 def init_rule_editor_gui():

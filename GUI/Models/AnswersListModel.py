@@ -87,6 +87,16 @@ class AnswersListModel(QAbstractListModel):
             self.set_rule_combo_box_at_index(CommonSerializedData.selected_question_index)
             self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
 
+    def add_variabale_from_file(self, index, answers_in_question):
+        if -1 < index < CommonSerializedData.get_questions_len():
+            # answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_index(index)
+            for answer_in_question_index, answer in enumerate(answers_in_question):
+                self.insertRow(answer_in_question_index)
+                CommonSerializedData.set_answer_at_question(index, answer)
+                self.set_rule_combo_box_at_index(index, index)
+                self.dataChanged.emit(self.index(answer_in_question_index, 0), self.index(answer_in_question_index, 0), [])
+
+
     def remove_variable(self, selected_answer_index, data_resetting=False):
         if selected_answer_index > 0 or data_resetting:
             self.removeRow(selected_answer_index)
@@ -101,9 +111,12 @@ class AnswersListModel(QAbstractListModel):
             return True
         return False
 
-    def set_rule_combo_box_at_index(self, index):
+    def set_rule_combo_box_at_index(self, index, answer_index=-1):
         combo_box = ColumnButtonDelegate.get_combo_box_at_index(index)
-        answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
+        if answer_index == -1:
+            answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
+        else:
+            answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_index(answer_index)
         if not (-1 == combo_box):
             combo_box.clear()
             combo_box.addItems(answers_list_at_selected_question)
@@ -118,4 +131,8 @@ class AnswersListModel(QAbstractListModel):
             for answer_index in range(len(answers)):
                 self.remove_variable(0, True)
             CommonSerializedData.selected_question_index = -1
+
+    def add_variables_from_file(self, answers_list):
+        for index, answers_in_question in enumerate(answers_list):
+            self.add_variabale_from_file(index, answers_in_question)
 

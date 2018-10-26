@@ -53,14 +53,21 @@ class QuestionsListModel(QAbstractTableModel):
 
         self.endRemoveRows()
 
-    def add_new_question(self):
-        if not (self.NEW_QUESTION_STR in questions_list):
+    def add_new_question(self, new_question_text=NEW_QUESTION_STR):
+        if not (new_question_text in questions_list):
             new_row_index = len(questions_list)
             self.insertRow(new_row_index)
-            questions_list.insert(new_row_index, self.NEW_QUESTION_STR)
+            questions_list.insert(new_row_index, new_question_text)
             # CommonSerializedData.set_selected_question_index(new_row_index)
             answers_list.insert(new_row_index, ["New answer"])
             CommonSerializedData.add_variable_to_all_rules_to(new_row_index)
+            self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
+
+    def add_question_from_file(self, new_question_text):
+        if not (new_question_text in questions_list):
+            new_row_index = len(questions_list)
+            self.insertRow(new_row_index)
+            questions_list.insert(new_row_index, new_question_text)
             self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
 
     def remove_question(self, selected_index):
@@ -82,3 +89,7 @@ class QuestionsListModel(QAbstractTableModel):
     def remove_all_questions(self):
         for question in range(CommonSerializedData.get_questions_len()):
             self.remove_question(0)
+
+    def add_questions_from_file(self, all_questions):
+        for question in all_questions:
+            self.add_question_from_file(question)

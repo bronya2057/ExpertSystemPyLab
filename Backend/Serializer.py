@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+from GUI.Models.Common import ESThemeSimple
 from GUI.Models.CommonSerializedData import CommonSerializedData
 
 es_theme_name = "Some Name"
@@ -41,13 +42,7 @@ def de_serialize_to_internal_data(file_path):
     with open(file_path) as f:
         data = json.load(f)
 
-    add_theme = True
-    theme_name = ""
-    question_list = []
-    answer_list = []
-    rule_list = []
-    rule_output = []
-    rules_names = []
+    theme = ESThemeSimple("")
 
     themes = data.keys()
     if len(themes) > 0:
@@ -55,16 +50,19 @@ def de_serialize_to_internal_data(file_path):
         all_themes = list(themes)
 
         print(all_themes[FIRST_THEME_TO_SERIALIZE])
-        theme_name = all_themes[FIRST_THEME_TO_SERIALIZE]
+        theme.theme_name = all_themes[FIRST_THEME_TO_SERIALIZE]
         value_struct = list(data.values())[0]
 
-        question_list = value_struct["Questions"]
-        answer_list = value_struct["Variables"]
+        theme.questions_list = value_struct["Questions"]
+        theme.answers_list = value_struct["Variables"]
 
+        theme.rules_list = list(value_struct["Rules"].keys())
+        theme.rules_output = list(value_struct["Rules"].values())
+        theme.rules_names = list(value_struct["RulesNames"])
 
-        rules_list = list(value_struct["Rules"].keys())
-        rules_output = list(value_struct["Rules"].values())
-        rules_names = list(value_struct["RulesNames"])
+        print(theme)
+
+    return theme
 
 if __name__ == "__main__":
-    de_serialize_to_internal_data("C:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/GUI/data_file.json")
+    de_serialize_to_internal_data("c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/GUI/data_file.json")

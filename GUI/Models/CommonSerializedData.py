@@ -25,7 +25,7 @@ class CommonSerializedData:
     selected_question_index = INVALID_INDEX
 
     @staticmethod
-    def add_theme_name(theme_name):
+    def set_theme_name(theme_name):
         CommonSerializedData.es_theme_name = theme_name
 
     @staticmethod
@@ -52,6 +52,10 @@ class CommonSerializedData:
     @staticmethod
     def get_question_selection_validity():
         return not (CommonSerializedData.selected_question_index == CommonSerializedData.INVALID_INDEX)
+
+    @staticmethod
+    def get_questions_len():
+        return len(CommonSerializedData.es_questions_list)
 
     @staticmethod
     def set_selected_question_index(index):
@@ -138,9 +142,9 @@ class CommonSerializedData:
     @staticmethod
     def add_variable_to_all_rules_to(index):
         for rule_array in CommonSerializedData.rules_list:
-            rule_array.insert(index, "Dummy variable")
+            rule_array.insert(index, "New answer")
 
     @staticmethod
     def set_rule_data_at(index, new_rule_data):
-        if index < len(CommonSerializedData.rules_list):
+        if -1 < index < len(CommonSerializedData.rules_list):
             CommonSerializedData.rules_list[index] = new_rule_data

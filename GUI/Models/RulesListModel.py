@@ -103,7 +103,7 @@ class RulesListModel(QAbstractListModel):
 
     def update_output_for_selected_rule(self, index, output):
         rules_outputs = CommonSerializedData.get_rules_outputs()
-        if index < len (rules_outputs):
+        if -1 < index < len (rules_outputs):
             rules_outputs[index] = output
             print(rules_outputs)
 
@@ -113,3 +113,8 @@ class RulesListModel(QAbstractListModel):
     def update_rule_at(self, index, new_rule_data):
         CommonSerializedData.set_rule_data_at(index, new_rule_data)
         # self.dataChanged.emit(self.index(index, 0), self.index(index, 0), [])
+
+    def remove_all_rules(self):
+        for rule_index in range(len(CommonSerializedData.get_rules_list())):
+            remove_rule(rule_index)
+

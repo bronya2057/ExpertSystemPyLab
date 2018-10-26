@@ -59,7 +59,7 @@ class QuestionsListModel(QAbstractTableModel):
             self.insertRow(new_row_index)
             questions_list.insert(new_row_index, self.NEW_QUESTION_STR)
             # CommonSerializedData.set_selected_question_index(new_row_index)
-            answers_list.insert(new_row_index, ["Dummy variable"])
+            answers_list.insert(new_row_index, ["New answer"])
             CommonSerializedData.add_variable_to_all_rules_to(new_row_index)
             self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
 
@@ -78,3 +78,7 @@ class QuestionsListModel(QAbstractTableModel):
             self.dataChanged.emit(index, index, [])
             return True
         return False
+
+    def remove_all_questions(self):
+        for question in range(CommonSerializedData.get_questions_len()):
+            self.remove_question(0)

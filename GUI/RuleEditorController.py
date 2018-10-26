@@ -46,8 +46,11 @@ class RuleEditorController(QDialog):
         self.ui.listViewRules.clicked.connect(self.request_all_data_for_rule)
         self.ui.pbUpdateRule.clicked.connect(self.on_pb_update_rule_clicked)
         self.ui.pbUpdateOutput.clicked.connect(self.update_output_for_selected_rule)
+
         for col in range(self.questions_model.columnCount()):
             self.ui.tableViewRules.setColumnWidth(col, 140)
+
+        self.ui.tableViewRules.setColumnWidth(0, 250)
         self.update_rule_components_state(False)
 
         self.ui.tableViewRules.setItemDelegateForColumn(1, ColumnButtonDelegate(self))
@@ -62,7 +65,7 @@ class RuleEditorController(QDialog):
         enable_all_elements = True if theme_name else False
         self.ui.gBAllInfo.setEnabled(enable_all_elements)
         self.ui.pbSave.setEnabled(enable_all_elements)
-        CommonSerializedData.add_theme_name(theme_name)
+        CommonSerializedData.set_theme_name(theme_name)
 
     def on_add_question_clicked(self):
         self.questions_model.add_new_question()
@@ -92,6 +95,7 @@ class RuleEditorController(QDialog):
         self.update_rule_components_state(False)
         index = self.ui.listViewRules.currentIndex()
         self.rules_model.remove_rule(index.row())
+        self.ui.textEditOutput.setText("")
 
     def new_question_added(self, index1, index2):
         for row in range(0, self.questions_model.rowCount()):
@@ -138,7 +142,13 @@ class RuleEditorController(QDialog):
                                                   "Json Files (*.json)", options=options)
         if fileName:
             print(fileName)
-            Serializer.de_serialize_to_internal_data(fileName)
+            theme_struct = Serializer.de_serialize_to_internal_data(fileName)
+            self.variables_model.remove_all_variables_in_all_questions()
+            self.questions_model.remove_all_questions()
+            self.rules_model.remove_all_rules()
+
+            CommonSerializedData.set_theme_name(theme_struct.theme_name)
+
         print("load")
 
 def init_rule_editor_gui():

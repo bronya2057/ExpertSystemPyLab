@@ -1,31 +1,8 @@
 {
   "My test theme": {
-    "Questions": [
-      "How many calories",
-      "Veg?",
-      "Are you working out?"
-    ],
-    "Variables": [
-      [
-        "1000-2000",
-        "3000-4000"
-      ],
-      [
-        "Veg",
-        "NotVeg",
-        "Never Thought"
-      ],
-      [
-        "Yes",
-        "No",
-        "Sometimes"
-      ]
-    ],
-    "Rules": {
-      "1000-2000, Veg, Yes": ""
-    },
-    "RulesNames": [
-      "2"
-    ]
+    "Questions": [],
+    "Variables": [],
+    "Rules": {},
+    "RulesNames": []
   }
 }

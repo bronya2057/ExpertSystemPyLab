@@ -87,8 +87,8 @@ class AnswersListModel(QAbstractListModel):
             self.set_rule_combo_box_at_index(CommonSerializedData.selected_question_index)
             self.dataChanged.emit(self.index(new_row_index, 0), self.index(new_row_index, 0), [])
 
-    def remove_variable(self, selected_answer_index):
-        if selected_answer_index > 0:
+    def remove_variable(self, selected_answer_index, data_resetting=False):
+        if selected_answer_index > 0 or data_resetting:
             self.removeRow(selected_answer_index)
 
     def setData(self, index, value, role=Qt.DisplayRole):
@@ -110,3 +110,12 @@ class AnswersListModel(QAbstractListModel):
 
     def clear_all_variables(self):
         self.removeRow(0)
+
+    def remove_all_variables_in_all_questions(self):
+        for question in range(CommonSerializedData.get_questions_len()):
+            CommonSerializedData.selected_question_index = question
+            answers = CommonSerializedData.get_answers_list_at_selected_index()
+            for answer_index in range(len(answers)):
+                self.remove_variable(0, True)
+            CommonSerializedData.selected_question_index = -1
+

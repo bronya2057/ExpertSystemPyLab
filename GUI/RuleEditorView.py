@@ -12,7 +12,7 @@ class Ui_RuleEditor(object):
     def setupUi(self, RuleEditor):
         RuleEditor.setObjectName("RuleEditor")
         RuleEditor.setEnabled(True)
-        RuleEditor.resize(974, 624)
+        RuleEditor.resize(1175, 624)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

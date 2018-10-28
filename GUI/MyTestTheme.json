@@ -3,9 +3,9 @@
   {
       "Questions":[
         "What is your calories?",
-        "Vegan?"
-      ],
-      
+        "Vegan?",
+      ],21r
+      21r
       "Variables":[
         ["1000-2000", "3000-4000"],  
         ["Veg", "NotVeg"] 

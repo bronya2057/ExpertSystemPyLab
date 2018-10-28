@@ -1,6 +1,6 @@
 import json
 
-from PyQt5.QtWidgets import QApplication, QDialog
+from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox
 
 from Backend import Serializer
 from GUI.Models.CommonSerializedData import CommonSerializedData
@@ -16,7 +16,7 @@ class RuleEditorController(QDialog):
         super(RuleEditorController, self).__init__()
         self.ui = Ui_RuleEditor()
         self.ui.setupUi(self)
-        self.setFixedSize(self.size())
+        # self.setFixedSize(self.size())
         self.show()
         self.ui.textEditThemeName.textChanged.connect(self.on_text_edit_theme_name_changed)
 
@@ -47,18 +47,20 @@ class RuleEditorController(QDialog):
         self.ui.pbUpdateRule.clicked.connect(self.on_pb_update_rule_clicked)
         self.ui.pbUpdateOutput.clicked.connect(self.update_output_for_selected_rule)
 
-        for col in range(self.questions_model.columnCount()):
-            self.ui.tableViewRules.setColumnWidth(col, 140)
+        # for col in range(self.questions_model.columnCount()):
+            # self.ui.tableViewRules.setColumnWidth(col, 250)
 
-        self.ui.tableViewRules.setColumnWidth(0, 250)
+        self.ui.tableViewRules.setColumnWidth(0, 200)
+        self.ui.tableViewRules.setColumnWidth(1, 250)
         self.update_rule_components_state(False)
 
         self.ui.tableViewRules.setItemDelegateForColumn(1, ColumnButtonDelegate(self))
         for row in range(0, self.questions_model.rowCount()):
             self.ui.tableViewRules.openPersistentEditor(self.questions_model.index(row, 1))
         #  FOR TEST ONLY
-        self.ui.textEditThemeName.setText("My test theme")
+        self.ui.textEditThemeName.setText("")
 
+        self.clear_all()
     def on_text_edit_theme_name_changed(self):
         theme_name = self.ui.textEditThemeName.toPlainText()
 
@@ -143,16 +145,26 @@ class RuleEditorController(QDialog):
         if fileName:
             print(fileName)
             theme_struct = Serializer.de_serialize_to_internal_data(fileName)
-            self.variables_model.remove_all_variables_in_all_questions()
-            self.questions_model.remove_all_questions()
-            self.rules_model.remove_all_rules()
+            if not theme_struct == -1:
+                self.clear_all()
 
-            CommonSerializedData.set_theme_name(theme_struct.theme_name)
+                CommonSerializedData.set_theme_name(theme_struct.theme_name)
 
-            self.questions_model.add_questions_from_file(theme_struct.questions_list)
-            self.variables_model.add_variables_from_file(theme_struct.answers_list)
-
+                self.ui.textEditThemeName.setText(theme_struct.theme_name)
+                self.questions_model.add_questions_from_file(theme_struct.questions_list)
+                self.variables_model.add_variables_from_file(theme_struct.answers_list)
+                self.rules_model.add_rules_from_file(theme_struct.rules_struct)
+            else:
+                msg = QMessageBox()
+                msg.setText("Serialization failed due to file corruption")
+                retval = msg.exec_()
         print("load")
+
+    def clear_all(self):
+        self.variables_model.remove_all_variables_in_all_questions()
+        self.questions_model.remove_all_questions()
+        self.rules_model.remove_all_rules()
+        ColumnButtonDelegate.clear_editors_list()
 
 def init_rule_editor_gui():
     import sys

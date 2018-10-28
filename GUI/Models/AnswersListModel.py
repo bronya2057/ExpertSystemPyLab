@@ -15,7 +15,7 @@ class AnswersListModel(QAbstractListModel):
         QAbstractListModel.__init__(self, parent, *args)
 
     def data(self, index, role=None):
-        if role == Qt.DisplayRole:
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             print("Change Data")
             answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
             print(answers_list_at_selected_question)

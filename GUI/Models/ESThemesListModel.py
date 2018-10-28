@@ -1,4 +1,7 @@
+from json import JSONDecodeError
+
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, Qt, pyqtSignal
+from PyQt5.QtWidgets import QMessageBox
 from pyknow import Rule, Fact
 
 from GUI.Models.Common import ESTheme
@@ -45,32 +48,38 @@ class ESThemesListModel(QAbstractListModel):
             print("Invalid index for selected theme")
 
     def load_theme(self, file_path):
-        import json
-        with open(file_path) as f:
-            data = json.load(f)
+        try:
+            import json
+            with open(file_path) as f:
+                data = json.load(f)
 
-        add_theme = True
+            add_theme = True
 
-        for themeName in data:
-            for index, theme in enumerate(self.es_themes):
-                if theme.name == themeName:
-                    self.removeRow(index)
-                    del self.es_themes[index]
+            for themeName in data:
+                for index, theme in enumerate(self.es_themes):
+                    if theme.name == themeName:
+                        self.removeRow(index)
+                        del self.es_themes[index]
 
-            if add_theme:
-                self.insertRow(len(self.es_themes))
-                self.es_themes.append(ESTheme(themeName, {}, {}))
-                for i, questionText in enumerate(data[themeName]["Questions"]):
-                    #  print(str(i) + " " + questionText)
-                    my_list = list()
-                    for variable in data[themeName]["Variables"][i]:
-                       my_list.append(variable)
-                    print(variable)
-                    self.es_themes[-1].questions[questionText] = my_list
+                if add_theme:
+                    self.insertRow(len(self.es_themes))
+                    self.es_themes.append(ESTheme(themeName, {}, {}))
+                    for i, questionText in enumerate(data[themeName]["Questions"]):
+                        #  print(str(i) + " " + questionText)
+                        my_list = list()
+                        for variable in data[themeName]["Variables"][i]:
+                            my_list.append(variable)
+                        print(variable)
+                        self.es_themes[-1].questions[questionText] = my_list
 
-                for facts, rule_output in data[themeName]["Rules"].items():
-                    self.es_themes[-1].rules[facts] = rule_output
-                    print(facts + " " + rule_output)
+                    for facts, rule_output in data[themeName]["Rules"].items():
+                        self.es_themes[-1].rules[facts] = rule_output
+                        print(facts + " " + rule_output)
+        except JSONDecodeError:
+            msg = QMessageBox()
+            msg.setText("Serialization failed due to file corruption")
+            retval = msg.exec_()
+            print("JSON file contains malicious content")
 
 
 

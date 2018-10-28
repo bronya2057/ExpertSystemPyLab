@@ -10,6 +10,11 @@ class ESThemeSimple:
         self.theme_name = name
         self.questions_list = []
         self.answers_list = []
+        self.rules_struct = RulesContainer()
+
+
+class RulesContainer:
+    def __init__(self):
         self.rules_names = []
         self.rules_list = []
         self.rules_output = []

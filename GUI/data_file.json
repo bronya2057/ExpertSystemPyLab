@@ -1,8 +1,19 @@
 {
-  "My test theme": {
-    "Questions": [],
-    "Variables": [],
-    "Rules": {},
-    "RulesNames": []
+  "My new theme": {
+    "Questions": [
+      "New question"
+    ],
+    "Variables": [
+      [
+        "My answer1",
+        "Answer 2"
+      ]
+    ],
+    "Rules": {
+      "My answer1": "New rule output\n"
+    },
+    "RulesNames": [
+      "New rule"
+    ]
   }
 }

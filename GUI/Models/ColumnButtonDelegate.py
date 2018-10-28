@@ -11,6 +11,10 @@ class ColumnButtonDelegate(QItemDelegate):
         QItemDelegate.__init__(self, owner)
 
     @staticmethod
+    def clear_editors_list():
+        ColumnButtonDelegate.editors_list = []
+
+    @staticmethod
     def get_combo_box_at_index(index):
         if index < len(ColumnButtonDelegate.editors_list) and not (index == -1):
             return ColumnButtonDelegate.editors_list[index]

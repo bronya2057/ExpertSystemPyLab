@@ -17,7 +17,7 @@ class QuestionsListModel(QAbstractTableModel):
         QAbstractTableModel.__init__(self, parent, *args)
 
     def data(self, index, role=None):
-        if role == Qt.DisplayRole:
+        if role == Qt.DisplayRole or role == Qt.EditRole:
             if index.column() == 0:
                 return QVariant(questions_list[index.row()])
             elif index.column() == 1:

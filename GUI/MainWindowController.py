@@ -1,11 +1,13 @@
-from PyQt5.QtCore import Qt, QTranslator, QLibraryInfo
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QAction, QFileDialog, QMainWindow, QApplication, QRadioButton, QDialog, QMenu, QCheckBox, \
     QWidgetAction
 from pyknow import Fact
 
 from Backend.EmptyExpertEngine import ExpertEngine
-from GUI.MainWindowView import Ui_MainWindow
-from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
+from GUI.Common import *
+from GUI.SemanticEditorController import SemanticEditorController
+from GUI.Views.MainWindowView import Ui_MainWindow
+from GUI.Models.Helpers.ColumnButtonDelegate import ColumnButtonDelegate
 from GUI.Models.ESThemesListModel import ESThemesListModel
 from GUI.RuleEditorController import RuleEditorController
 from collections import OrderedDict
@@ -24,36 +26,34 @@ class MainWindowController(QMainWindow):
         self.themes_list_menu = QMenu("Themes list menu", self)
         self.init_es_themes_model()
         self.show()
-        self.selected_question = -1
+        self.selected_question = INVALID_INDEX
         self.current_theme_facts = Fact()
     #  TO DECOUPLE JUST CREATE ANOTHER CLASS AND PASS self of this class
-        self.ui.pBNextQuestion.setEnabled(False)
-        self.ui.pBNextQuestion.clicked.connect(self.enable_next_question)
         self.is_tooltip_needed = False
-
         self.set_all_tooltips()
-        self.ui.lblQuestion.setWordWrap(True)
+        self.configure_ui_elements()
 
 
     ###############MENU ACTIONS###################
-    def new_action(self):
-        pass
-
     def open_action(self):
         options = QFileDialog.Options()
-        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
-                                                  "Json Files (*.json)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token,
+                                                  open_file_dialog_label, options=options)
         if fileName:
             print(fileName)
             self.esThemesListModel.load_theme(fileName)
 
         self.ui.listViewESThemes.clearSelection()
-
         self.clear_answers_and_questions()
 
     def exit_action(self):
         self.close()
         pass
+
+    def configure_ui_elements(self):
+        self.ui.lblQuestion.setWordWrap(True)
+        self.ui.pBNextQuestion.setEnabled(False)
+        self.ui.pBNextQuestion.clicked.connect(self.enable_next_question)
 
     def rule_editor_action(self):
         rule_editor_controller = RuleEditorController()
@@ -69,19 +69,29 @@ class MainWindowController(QMainWindow):
             rule_editor_controller.deleteLater()
             print("Cancel Button")
 
+    def semantic_editor_action(self):
+        semantic_editor_controller = SemanticEditorController()
+        response = semantic_editor_controller.exec()
+        semantic_editor_controller.setAttribute(Qt.WA_DeleteOnClose)
+        if response == QDialog.Accepted:
+            print("The Ok button clicked")
+        else:
+            semantic_editor_controller.deleteLater()
+            print("Cancel Button")
+
     def fill_menu_bar(self):
         menu_bar = self.ui.menubar
 
         file = menu_bar.addMenu("File")
         tools = menu_bar.addMenu("Tools")
-        help = menu_bar.addMenu("Help")
+        help_menu = menu_bar.addMenu("Help")
 
         # new_action = QAction("New", menu_bar)
         # new_action.setShortcut("Ctrl+N")
         # file.addAction(new_action)
 
         open_action = QAction("Open", menu_bar)
-        open_action.setShortcut("Ctrl+O")
+        open_action.setShortcut("Ctrl+O");
         file.addAction(open_action)
 
         exit_action = QAction("Exit", menu_bar)
@@ -92,20 +102,20 @@ class MainWindowController(QMainWindow):
         rule_editor_action.setShortcut("Ctrl+R")
         tools.addAction(rule_editor_action)
 
-        check_box_tooltips = QCheckBox(help)
+        semantic_editor_action = QAction("Semantic Editor", menu_bar)
+        semantic_editor_action.setShortcut("Ctrl+Alt+S")
+        tools.addAction(semantic_editor_action)
+
+        check_box_tooltips = QCheckBox(help_menu)
         check_box_tooltips.setText("Tooltips Enabled")
-        chk_box_action = QWidgetAction(help)
+        chk_box_action = QWidgetAction(help_menu)
         chk_box_action.setDefaultWidget(check_box_tooltips)
-        help.addAction(chk_box_action)
+        help_menu.addAction(chk_box_action)
 
-        # edit = file.addMenu("Edit")
-        # edit.addAction("copy")
-        # edit.addAction("paste")
-
-        # new_action.triggered.connect(self.new_action)
         open_action.triggered.connect(self.open_action)
         exit_action.triggered.connect(self.exit_action)
         rule_editor_action.triggered.connect(self.rule_editor_action)
+        semantic_editor_action.triggered.connect(self.semantic_editor_action)
         check_box_tooltips.clicked.connect(self.on_check_box_tooltip_checked)
 
 
@@ -140,23 +150,7 @@ class MainWindowController(QMainWindow):
         if self.selected_question < self.esThemesListModel.get_current_theme_questions_number():
             self.set_next_question()
         else:
-            self.clear_answers_and_questions()
-
-            current_theme_rules = self.esThemesListModel.get_current_theme_rules(self.selected_question)
-            current_theme_questions = self.esThemesListModel.get_current_theme_questions()
-
-            main_expert_engine = ExpertEngine(current_theme_questions, current_theme_rules)
-            main_expert_engine.reset()
-            main_expert_engine.declare(self.current_theme_facts)
-            main_expert_engine.run()
-            self.current_theme_facts = Fact()
-
-            self.ui.lblQuestion.setText(main_expert_engine.get_output())
-            self.ui.gbQuestions.setTitle("Your output:")
-            self.ui.gBAnswers.setTitle("")
-            self.ui.pBNextQuestion.setEnabled(False)
-            self.ui.listViewESThemes.clearSelection()
-            self.ui.gBMain.setTitle("Please choose one theme from the list")
+            self.prepare_theme_output()
 
     def set_next_question(self):
         question_name, answers = self.esThemesListModel.get_current_theme_question(self.selected_question)
@@ -175,7 +169,7 @@ class MainWindowController(QMainWindow):
             if not first_radio_flag:
                 radio.setChecked(True)
                 first_radio_flag = True
-            layout.addWidget(radio, index)  # ADDING PADDING??
+            layout.addWidget(radio, index)
 
     def clear_answers_and_questions(self):
         answers_layout = self.ui.gBAnswers.layout()
@@ -191,14 +185,11 @@ class MainWindowController(QMainWindow):
                 print(button.text())
 
     def on_context_menu_called(self, point):
-        print(point)
-        row_height = 17
         rows = self.esThemesListModel.rowCount()
         selected_theme_index = self.ui.listViewESThemes.currentIndex().row()
         print(point.y())
-        if selected_theme_index >= 0 and point.y() < (row_height * rows):
+        if selected_theme_index >= 0 and point.y() < (remove_theme_context_menu_line_height * rows):
             self.themes_list_menu.exec_(self.ui.listViewESThemes.mapToGlobal(point))
-
 
     def remove_menu_action_triggered(self):
         selected_theme_index = self.ui.listViewESThemes.currentIndex().row()
@@ -213,18 +204,36 @@ class MainWindowController(QMainWindow):
     def set_all_tooltips(self):
         if self.is_tooltip_needed:
             self.ui.pBNextQuestion.setToolTip("This button will be enabled when")
-
         else:
             self.ui.pBNextQuestion.setToolTip("")
+
+    def prepare_theme_output(self):
+        self.clear_answers_and_questions()
+
+        current_theme_rules = self.esThemesListModel.get_current_theme_rules(self.selected_question)
+        current_theme_questions = self.esThemesListModel.get_current_theme_questions()
+
+        main_expert_engine = ExpertEngine(current_theme_questions, current_theme_rules)
+        main_expert_engine.reset()
+        main_expert_engine.declare(self.current_theme_facts)
+        main_expert_engine.run()
+        self.current_theme_facts = Fact()
+
+        self.ui.lblQuestion.setText(main_expert_engine.get_output())
+        self.ui.gbQuestions.setTitle("Your output:")
+        self.ui.gBAnswers.setTitle("")
+        self.ui.pBNextQuestion.setEnabled(False)
+        self.ui.listViewESThemes.clearSelection()
+        self.ui.gBMain.setTitle("Please choose one theme from the list")
 
 
 def init_gui():
     import sys
     app = QApplication(sys.argv)
-    translator = QTranslator()
-    print("Translator")
-    #print(translator.load("qt_ru", QLibraryInfo.location(QLibraryInfo.TranslationsPath)))
-    app.installTranslator(translator)
+    # translator = QTranslator()
+    # print("Translator")
+    # print(translator.load("qt_ru", QLibraryInfo.location(QLibraryInfo.TranslationsPath)))
+    # app.installTranslator(translator)
     uiHandler = MainWindowController()
     app.exec_()
 

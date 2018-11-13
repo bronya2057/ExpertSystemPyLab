@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1157</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>ExpertS</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow, QWidget{
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #697378, stop: 1 #96A4AD);
+
+	
+
+}
+
+*{
+	font-size:14px;
+	font-family:&quot;Bahnschrift&quot;;
+	padding:5px;
+	color:white;
+}
+
+QLabel,QRadioButton{
+	background-color: rgba(0,0,0,0%)
+}
+
+QPushButton
+{
+
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                     stop: 0 #96A4AD, stop: 1 #697378 );
+
+border: 2px solid #96A4AD;
+border-radius:6px;
+
+    min-width: 80px;
+	min-height:30px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                     stop: 0 #74828B, stop: 1 #697378 );
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: #535a66;
+}
+
+QPushButton:disabled {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #475156, stop: 1 #74828B);
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; /* position at the top center */
+    padding: 0 3px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #FFOECE, stop: 1 #FFFFFF);
+
+}
+
+QRadioButton::indicator
+{
+    width: 13px;
+    height: 13px;
+}
+
+QRadioButton::indicator::unchecked
+{
+   image: url(&quot;images/Radio_Off.PNG&quot;);
+}
+
+QRadioButton::indicator:unchecked:hover
+{
+    image: url(&quot;images/Radio_Hover.PNG&quot;);
+}
+
+QRadioButton::indicator:unchecked:pressed
+{
+    image: url(&quot;images/Radio_Off.PNG&quot;);
+}
+
+QRadioButton::indicator::checked 
+{
+    image: url(&quot;images/Radio_On.PNG&quot;);
+}
+
+QRadioButton::indicator:checked:hover 
+{
+    image: url(&quot;images/Radio_On.PNG&quot;);
+}
+
+QRadioButton::indicator:checked:pressed 
+{
+    image: url(&quot;images/Radio_Off.PNG&quot;);
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="1" column="0">
+     <widget class="QListView" name="listViewESThemes">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QListView {
+    alternate-background-color: yellow;
+    background-color: #697378;
+	margin-right:10px
+}
+
+QListView {
+    show-decoration-selected: 1; /* make the selection span the entire width of the view */
+}
+
+QListView::item:selected:active {
+	 background-color: #96A4AD;
+}
+
+QListView::item:hover {
+     background-color: #96A4AD;
+}</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2">
+     <widget class="QGroupBox" name="gBMain">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QGroupBox{
+	    background-color: #697378;
+		    border: 2px solid #96A4AD;
+    border-radius: 5px;
+    margin-top: 3ex; /* leave space at the top for the title */
+text-transform: uppercase;
+}</string>
+      </property>
+      <property name="title">
+       <string>Please choose one theme from the list</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QGroupBox" name="gbQuestions">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #697378, stop: 1 #96A4AD);
+}</string>
+         </property>
+         <property name="title">
+          <string>Questions</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="lblQuestion">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gBAnswers">
+         <property name="styleSheet">
+          <string notr="true">QGroupBox {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #697378, stop: 1 #96A4AD);
+}</string>
+         </property>
+         <property name="title">
+          <string>Answers</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3"/>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QPushButton" name="pBNextQuestion">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>Next
+Question</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblThemes">
+      <property name="text">
+       <string>EXPERT SYSTEM THEMES</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1157</width>
+     <height>33</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

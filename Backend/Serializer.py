@@ -1,8 +1,8 @@
 from collections import OrderedDict
 from json import JSONDecodeError
 
-from GUI.Models.Common import ESThemeSimple
-from GUI.Models.CommonSerializedData import CommonSerializedData
+from GUI.Models.Helpers.ESTheme import ESThemeSimple
+from GUI.Models.Helpers.CommonSerializedData import CommonSerializedData
 
 def get_json_ready_data():
     name = CommonSerializedData.es_theme_name

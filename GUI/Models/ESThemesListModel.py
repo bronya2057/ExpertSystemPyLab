@@ -2,9 +2,8 @@ from json import JSONDecodeError
 
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, Qt, pyqtSignal
 from PyQt5.QtWidgets import QMessageBox
-from pyknow import Rule, Fact
 
-from GUI.Models.Common import ESTheme
+from GUI.Models.Helpers.ESTheme import ESTheme
 
 
 class ESThemesListModel(QAbstractListModel):

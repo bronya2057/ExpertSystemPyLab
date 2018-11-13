@@ -1,0 +1,30 @@
+{
+  "PersonalDetention": {
+    "Questions": [
+      "What is your calories?",
+      "Vegan?"
+    ],
+    "Variables": [
+      [
+        "1000-2000",
+        "3000-4000"
+      ],
+      [
+        "Veg",
+        "NotVeg"
+      ]
+    ],
+    "Rules": {
+      "1000-2000, Veg": "Not so fat",
+      "3000-4000, NotVeg": "FAT",
+      "1000-2000, NotVeg": "You are not fat at all",
+      "3000-4000, Veg": "Very fat"
+    },
+    "RulesNames": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ]
+  }
+}

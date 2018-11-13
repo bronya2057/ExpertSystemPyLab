@@ -1,14 +1,16 @@
 import json
+import os
 
 from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox
 
 from Backend import Serializer
-from GUI.Models.CommonSerializedData import CommonSerializedData
+from GUI.Common import *
+from GUI.Models.Helpers.CommonSerializedData import CommonSerializedData
 from GUI.Models.AnswersListModel import AnswersListModel
-from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
+from GUI.Models.Helpers.ColumnButtonDelegate import ColumnButtonDelegate
 from GUI.Models.QuestionsListModel import QuestionsListModel
 from GUI.Models.RulesListModel import RulesListModel
-from GUI.RuleEditorView import Ui_RuleEditor
+from GUI.Views.RuleEditorView import Ui_RuleEditor
 
 
 class RuleEditorController(QDialog):
@@ -18,6 +20,35 @@ class RuleEditorController(QDialog):
         self.ui.setupUi(self)
         # self.setFixedSize(self.size())
         self.show()
+        self.questions_model = QuestionsListModel(self)
+        self.variables_model = AnswersListModel(self)
+        self.rules_model = RulesListModel(self)
+        self.init_models()
+        self.init_ui_components()
+        self.clear_all()
+
+    def init_models(self):
+        self.ui.listViewQuestions.setModel(self.questions_model)
+        self.ui.listViewQuestions.clicked.connect(self.variables_model.request_variables_for_question)
+        self.questions_model.dataChanged.connect(self.new_question_added)
+
+        self.ui.listViewVariables.setModel(self.variables_model)
+        self.ui.tableViewRules.setModel(self.questions_model)
+        self.ui.listViewRules.setModel(self.rules_model)
+        self.ui.listViewRules.clicked.connect(self.request_all_data_for_rule)
+
+        # for col in range(self.questions_model.columnCount()):
+            # self.ui.tableViewRules.setColumnWidth(col, 250)
+
+        self.ui.tableViewRules.setColumnWidth(0, 200)
+        self.ui.tableViewRules.setColumnWidth(1, 250)
+        self.update_rule_components_state(False)
+
+        self.ui.tableViewRules.setItemDelegateForColumn(1, ColumnButtonDelegate(self))
+        for row in range(0, self.questions_model.rowCount()):
+            self.ui.tableViewRules.openPersistentEditor(self.questions_model.index(row, 1))
+
+    def init_ui_components(self):
         self.ui.textEditThemeName.textChanged.connect(self.on_text_edit_theme_name_changed)
 
         self.ui.pbAddQuestion.clicked.connect(self.on_add_question_clicked)
@@ -32,37 +63,13 @@ class RuleEditorController(QDialog):
         self.ui.pbSave.clicked.connect(self.on_save_clicked)
         self.ui.pbLoad.clicked.connect(self.on_load_clicked)
 
-        self.questions_model = QuestionsListModel(self)
-        self.variables_model = AnswersListModel(self)
-        self.rules_model = RulesListModel(self)
-        self.ui.listViewQuestions.setModel(self.questions_model)
-        self.ui.listViewQuestions.clicked.connect(self.variables_model.request_variables_for_question)
-        self.questions_model.dataChanged.connect(self.new_question_added)
-
-        self.ui.listViewVariables.setModel(self.variables_model)
-        #  self.ui.listViewVariables.setModelColumn(1)
-        self.ui.tableViewRules.setModel(self.questions_model)
-        self.ui.listViewRules.setModel(self.rules_model)
-        self.ui.listViewRules.clicked.connect(self.request_all_data_for_rule)
         self.ui.pbUpdateRule.clicked.connect(self.on_pb_update_rule_clicked)
         self.ui.pbUpdateOutput.clicked.connect(self.update_output_for_selected_rule)
 
-        # for col in range(self.questions_model.columnCount()):
-            # self.ui.tableViewRules.setColumnWidth(col, 250)
-
-        self.ui.tableViewRules.setColumnWidth(0, 200)
-        self.ui.tableViewRules.setColumnWidth(1, 250)
-        self.update_rule_components_state(False)
-
-        self.ui.tableViewRules.setItemDelegateForColumn(1, ColumnButtonDelegate(self))
-        for row in range(0, self.questions_model.rowCount()):
-            self.ui.tableViewRules.openPersistentEditor(self.questions_model.index(row, 1))
-        #  FOR TEST ONLY
         self.ui.textEditThemeName.setText("")
 
-        self.clear_all()
     def on_text_edit_theme_name_changed(self):
-        theme_name = self.ui.textEditThemeName.toPlainText()
+        theme_name = self.ui.textEditThemeName.text()
 
         enable_all_elements = True if theme_name else False
         self.ui.gBAllInfo.setEnabled(enable_all_elements)
@@ -71,18 +78,15 @@ class RuleEditorController(QDialog):
 
     def on_add_question_clicked(self):
         self.questions_model.add_new_question()
-        print("add question")
 
     def on_remove_question_clicked(self):
         index = self.ui.listViewQuestions.currentIndex()
-        item_text = str(index.data())
         self.questions_model.remove_question(index.row())
         self.ui.listViewQuestions.clearSelection()
         self.variables_model.clear_all_variables()
 
     def on_add_variable_clicked(self):
         self.variables_model.add_new_variable()
-        print("add var")
 
     def on_remove_variable_clicked(self):
         index = self.ui.listViewVariables.currentIndex()
@@ -126,26 +130,32 @@ class RuleEditorController(QDialog):
         self.rules_model.update_rule_at(index.row(), complete_rule_list)
 
     def on_save_clicked(self):
-        data_1 = Serializer.get_json_ready_data()
-        data = {"PersonalDetention2":
-                    {"Questions": ["Hey","Hey2"], # cannot be NUMBER ONLY!!!
-                     "Variables":[["1000-2000", "3000-4000"],["Veg", "NotVeg"]],
-                     "Rules":{"1000-2000, Veg":"Not so fat","3000-4000, NotVeg":"FAT"}}}
-        json_str = json.dumps(data_1, indent=2)
+        data = Serializer.get_json_ready_data()
+
+        json_str = json.dumps(data, indent=2)
         print(json_str)
-        with open("data_file.json", "w") as write_file:
-            json.dump(data_1, write_file, indent=2)
+
+        file_name = self.ui.textEditThemeName.text()
+        file_path = os.path.join(os.path.dirname(os.getcwd()), es_knowledge_base_str_token)
+        full_file_path = os.path.join(file_path, file_name + extention_separator_token + es_extension_token)
+        print(full_file_path)
+
+        try:
+            with open(full_file_path, "w") as write_file:
+                json.dump(data, write_file, indent=2)
+        except OSError as e:
+            RuleEditorController.prompt_error("Theme name too big")
 
     def on_load_clicked(self):
         from PyQt5.QtWidgets import QFileDialog
 
         options = QFileDialog.Options()
-        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
-                                                  "Json Files (*.json)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token,
+                                                  open_file_dialog_label, options=options)
         if fileName:
             print(fileName)
             theme_struct = Serializer.de_serialize_to_internal_data(fileName)
-            if not theme_struct == -1:
+            if not theme_struct == INVALID_INDEX:
                 self.clear_all()
 
                 CommonSerializedData.set_theme_name(theme_struct.theme_name)
@@ -155,9 +165,7 @@ class RuleEditorController(QDialog):
                 self.variables_model.add_variables_from_file(theme_struct.answers_list)
                 self.rules_model.add_rules_from_file(theme_struct.rules_struct)
             else:
-                msg = QMessageBox()
-                msg.setText("Serialization failed due to file corruption")
-                retval = msg.exec_()
+                RuleEditorController.prompt_error("Serialization failed due to file corruption")
         print("load")
 
     def clear_all(self):
@@ -165,6 +173,12 @@ class RuleEditorController(QDialog):
         self.questions_model.remove_all_questions()
         self.rules_model.remove_all_rules()
         ColumnButtonDelegate.clear_editors_list()
+
+    @staticmethod
+    def prompt_error(error_text):
+        msg = QMessageBox()
+        msg.setText(error_text)
+        retval = msg.exec_()
 
 def init_rule_editor_gui():
     import sys

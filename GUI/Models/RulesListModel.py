@@ -1,7 +1,7 @@
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, Qt
 
-from GUI.Models.ColumnButtonDelegate import ColumnButtonDelegate
-from GUI.Models.CommonSerializedData import CommonSerializedData
+from GUI.Models.Helpers.ColumnButtonDelegate import ColumnButtonDelegate
+from GUI.Models.Helpers.CommonSerializedData import CommonSerializedData
 
 
 class RulesListModel(QAbstractListModel):

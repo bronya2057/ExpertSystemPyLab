@@ -1,0 +1,110 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file '.\SemanticEditor.ui'
+#
+# Created by: PyQt5 UI code generator 5.11.2
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_SemanticEditor(object):
+    def setupUi(self, SemanticEditor):
+        SemanticEditor.setObjectName("SemanticEditor")
+        SemanticEditor.setEnabled(True)
+        SemanticEditor.resize(1175, 624)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(SemanticEditor.sizePolicy().hasHeightForWidth())
+        SemanticEditor.setSizePolicy(sizePolicy)
+        self.gridLayout = QtWidgets.QGridLayout(SemanticEditor)
+        self.gridLayout.setObjectName("gridLayout")
+        self.gBConnections = QtWidgets.QGroupBox(SemanticEditor)
+        self.gBConnections.setObjectName("gBConnections")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.gBConnections)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setContentsMargins(0, -1, -1, -1)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.listViewObjects = QtWidgets.QListView(self.gBConnections)
+        self.listViewObjects.setObjectName("listViewObjects")
+        self.verticalLayout_3.addWidget(self.listViewObjects)
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.pbAddObject = QtWidgets.QPushButton(self.gBConnections)
+        self.pbAddObject.setObjectName("pbAddObject")
+        self.horizontalLayout_4.addWidget(self.pbAddObject)
+        self.pbRemoveObject = QtWidgets.QPushButton(self.gBConnections)
+        self.pbRemoveObject.setObjectName("pbRemoveObject")
+        self.horizontalLayout_4.addWidget(self.pbRemoveObject)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_3)
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setContentsMargins(0, -1, -1, -1)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.tableViewInput = QtWidgets.QTableView(self.gBConnections)
+        self.tableViewInput.setObjectName("tableViewInput")
+        self.verticalLayout.addWidget(self.tableViewInput)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.pbAddInput = QtWidgets.QPushButton(self.gBConnections)
+        self.pbAddInput.setObjectName("pbAddInput")
+        self.horizontalLayout.addWidget(self.pbAddInput)
+        self.pbRemoveInput = QtWidgets.QPushButton(self.gBConnections)
+        self.pbRemoveInput.setObjectName("pbRemoveInput")
+        self.horizontalLayout.addWidget(self.pbRemoveInput)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_2.setContentsMargins(0, -1, -1, -1)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.tableViewOutput = QtWidgets.QTableView(self.gBConnections)
+        self.tableViewOutput.setObjectName("tableViewOutput")
+        self.verticalLayout_2.addWidget(self.tableViewOutput)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.pbAddOutput = QtWidgets.QPushButton(self.gBConnections)
+        self.pbAddOutput.setObjectName("pbAddOutput")
+        self.horizontalLayout_3.addWidget(self.pbAddOutput)
+        self.pbRemoveOutput = QtWidgets.QPushButton(self.gBConnections)
+        self.pbRemoveOutput.setObjectName("pbRemoveOutput")
+        self.horizontalLayout_3.addWidget(self.pbRemoveOutput)
+        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        self.horizontalLayout_2.addLayout(self.verticalLayout_2)
+        self.gridLayout.addWidget(self.gBConnections, 0, 1, 1, 1)
+        self.graphicsView = QtWidgets.QGraphicsView(SemanticEditor)
+        self.graphicsView.setObjectName("graphicsView")
+        self.gridLayout.addWidget(self.graphicsView, 0, 0, 1, 1)
+        self.pushButton = QtWidgets.QPushButton(SemanticEditor)
+        self.pushButton.setObjectName("pushButton")
+        self.gridLayout.addWidget(self.pushButton, 1, 0, 1, 1)
+
+        self.retranslateUi(SemanticEditor)
+        QtCore.QMetaObject.connectSlotsByName(SemanticEditor)
+
+    def retranslateUi(self, SemanticEditor):
+        _translate = QtCore.QCoreApplication.translate
+        SemanticEditor.setWindowTitle(_translate("SemanticEditor", "RuleEditor"))
+        self.gBConnections.setTitle(_translate("SemanticEditor", "Semantic objects Editor"))
+        self.pbAddObject.setText(_translate("SemanticEditor", "Add Object"))
+        self.pbRemoveObject.setText(_translate("SemanticEditor", "Remove Object"))
+        self.pbAddInput.setText(_translate("SemanticEditor", "Add Input"))
+        self.pbRemoveInput.setText(_translate("SemanticEditor", "Remove Input"))
+        self.pbAddOutput.setText(_translate("SemanticEditor", "Add Output"))
+        self.pbRemoveOutput.setText(_translate("SemanticEditor", "Remove Output"))
+        self.pushButton.setText(_translate("SemanticEditor", "PushButton"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    SemanticEditor = QtWidgets.QDialog()
+    ui = Ui_SemanticEditor()
+    ui.setupUi(SemanticEditor)
+    SemanticEditor.show()
+    sys.exit(app.exec_())
+

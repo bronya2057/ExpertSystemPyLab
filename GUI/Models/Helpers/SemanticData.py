@@ -14,11 +14,12 @@ class SemanticNodeType(Enum):
 
 
 class SemanticData:
+    # FOR TEST
+    # node1 = SemanticNode("Candy", ["Lion", "Man", "Caramel"], ["dont like", "eats", "Ingredient of"], ["made of"], ["soup"])
+    # node2 = SemanticNode("Man", ["Lion", "Flesh"], ["like", "Ingredient of"], ["made of", "eats"], ["soup", "Lion"])
+    # semantic_nodes = [node1, node2]
 
-    node1 = SemanticNode("Candy", ["Lion", "Man", "Caramel"], ["dont like", "eats", "Ingredient of"], ["made of"], ["soup"])
-    node2 = SemanticNode("Man", ["Lion", "Flesh"], ["like", "Ingredient of"], ["made of", "eats"], ["soup", "Lion"])
-
-    semantic_nodes = [node1, node2]
+    semantic_nodes = []
     selected_semantic_object_index = INVALID_INDEX
 
     # OBJECTS

@@ -22,8 +22,116 @@
   <property name="windowTitle">
    <string>RuleEditor</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QListView {
+    alternate-background-color: yellow;
+    background-color: #697378;
+	margin-right:10px
+}
+
+QListView {
+    show-decoration-selected: 1; /* make the selection span the entire width of the view */
+}
+
+QListView::item:selected:active {
+	 background-color: #96A4AD;
+}
+
+QListView::item:hover {
+     background-color: #96A4AD;
+}
+
+ QHeaderView::section {
+	 background-color: rgba(0,0,0,0%);
+	 color: white;
+	padding:5px;
+text-transform:uppercase;
+ }
+
+QTableCornerButton::section {background-color: rgba(0,0,0,0); }
+
+*::disabled
+{
+		background-color:#b4bdc6;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #475156, stop: 1 #74828B);
+		color:black;
+}
+
+QMainWindow, QWidget{
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #697378, stop: 1 #96A4AD);
+}
+
+*{
+	font-size:14px;
+	font-family:&quot;Bahnschrift&quot;;
+	/*padding:5px;*/
+	color:white;
+}
+
+*:diabled{
+	    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #475156, stop: 1 #74828B);
+}
+
+QLabel,QRadioButton{
+	background-color: rgba(0,0,0,0%)
+}
+
+QPushButton
+{
+
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                     stop: 0 #96A4AD, stop: 1 #697378 );
+
+border: 2px solid #96A4AD;
+border-radius:6px;
+
+    min-width: 80px;
+	min-height:30px;
+}
+
+QPushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                     stop: 0 #74828B, stop: 1 #697378 );
+    /*background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #dadbde, stop: 1 #f6f7fa);*/
+}
+
+QPushButton:flat {
+    border: none; /* no border for a flat push button */
+}
+
+QPushButton:default {
+    border-color: #535a66;
+}
+
+QPushButton:disabled {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #475156, stop: 1 #74828B);
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; /* position at the top center */
+    padding: 0 3px;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #FFOECE, stop: 1 #FFFFFF);
+
+}
+
+QListView::item:selected:active {
+	 background-color: #96A4AD;
+}
+
+QListView::item:hover {
+     background-color: #96A4AD;
+}
+</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1">
+   <item row="0" column="0" colspan="2">
     <widget class="QGroupBox" name="gBConnections">
      <property name="title">
       <string>Semantic objects Editor</string>
@@ -125,13 +233,10 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QGraphicsView" name="graphicsView"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QPushButton" name="pushButton">
+   <item row="1" column="1">
+    <widget class="QPushButton" name="pbShowPlot">
      <property name="text">
-      <string>PushButton</string>
+      <string>Show Plot</string>
      </property>
     </widget>
    </item>

@@ -18,6 +18,112 @@ class Ui_SemanticEditor(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(SemanticEditor.sizePolicy().hasHeightForWidth())
         SemanticEditor.setSizePolicy(sizePolicy)
+        SemanticEditor.setStyleSheet("QListView {\n"
+"    alternate-background-color: yellow;\n"
+"    background-color: #697378;\n"
+"    margin-right:10px\n"
+"}\n"
+"\n"
+"QListView {\n"
+"    show-decoration-selected: 1; /* make the selection span the entire width of the view */\n"
+"}\n"
+"\n"
+"QListView::item:selected:active {\n"
+"     background-color: #96A4AD;\n"
+"}\n"
+"\n"
+"QListView::item:hover {\n"
+"     background-color: #96A4AD;\n"
+"}\n"
+"\n"
+" QHeaderView::section {\n"
+"     background-color: rgba(0,0,0,0%);\n"
+"     color: white;\n"
+"    padding:5px;\n"
+"text-transform:uppercase;\n"
+" }\n"
+"\n"
+"QTableCornerButton::section {background-color: rgba(0,0,0,0); }\n"
+"\n"
+"*::disabled\n"
+"{\n"
+"        background-color:#b4bdc6;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #475156, stop: 1 #74828B);\n"
+"        color:black;\n"
+"}\n"
+"\n"
+"QMainWindow, QWidget{\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #697378, stop: 1 #96A4AD);\n"
+"}\n"
+"\n"
+"*{\n"
+"    font-size:14px;\n"
+"    font-family:\"Bahnschrift\";\n"
+"    /*padding:5px;*/\n"
+"    color:white;\n"
+"}\n"
+"\n"
+"*:diabled{\n"
+"        background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #475156, stop: 1 #74828B);\n"
+"}\n"
+"\n"
+"QLabel,QRadioButton{\n"
+"    background-color: rgba(0,0,0,0%)\n"
+"}\n"
+"\n"
+"QPushButton\n"
+"{\n"
+"\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                     stop: 0 #96A4AD, stop: 1 #697378 );\n"
+"\n"
+"border: 2px solid #96A4AD;\n"
+"border-radius:6px;\n"
+"\n"
+"    min-width: 80px;\n"
+"    min-height:30px;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                     stop: 0 #74828B, stop: 1 #697378 );\n"
+"    /*background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #dadbde, stop: 1 #f6f7fa);*/\n"
+"}\n"
+"\n"
+"QPushButton:flat {\n"
+"    border: none; /* no border for a flat push button */\n"
+"}\n"
+"\n"
+"QPushButton:default {\n"
+"    border-color: #535a66;\n"
+"}\n"
+"\n"
+"QPushButton:disabled {\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #475156, stop: 1 #74828B);\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: top center; /* position at the top center */\n"
+"    padding: 0 3px;\n"
+"    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+"                                      stop: 0 #FFOECE, stop: 1 #FFFFFF);\n"
+"\n"
+"}\n"
+"\n"
+"QListView::item:selected:active {\n"
+"     background-color: #96A4AD;\n"
+"}\n"
+"\n"
+"QListView::item:hover {\n"
+"     background-color: #96A4AD;\n"
+"}\n"
+"")
         self.gridLayout = QtWidgets.QGridLayout(SemanticEditor)
         self.gridLayout.setObjectName("gridLayout")
         self.gBConnections = QtWidgets.QGroupBox(SemanticEditor)
@@ -75,13 +181,10 @@ class Ui_SemanticEditor(object):
         self.horizontalLayout_3.addWidget(self.pbRemoveOutput)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
-        self.gridLayout.addWidget(self.gBConnections, 0, 1, 1, 1)
-        self.graphicsView = QtWidgets.QGraphicsView(SemanticEditor)
-        self.graphicsView.setObjectName("graphicsView")
-        self.gridLayout.addWidget(self.graphicsView, 0, 0, 1, 1)
-        self.pushButton = QtWidgets.QPushButton(SemanticEditor)
-        self.pushButton.setObjectName("pushButton")
-        self.gridLayout.addWidget(self.pushButton, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 2)
+        self.pbShowPlot = QtWidgets.QPushButton(SemanticEditor)
+        self.pbShowPlot.setObjectName("pbShowPlot")
+        self.gridLayout.addWidget(self.pbShowPlot, 1, 1, 1, 1)
 
         self.retranslateUi(SemanticEditor)
         QtCore.QMetaObject.connectSlotsByName(SemanticEditor)
@@ -96,7 +199,7 @@ class Ui_SemanticEditor(object):
         self.pbRemoveInput.setText(_translate("SemanticEditor", "Remove Input"))
         self.pbAddOutput.setText(_translate("SemanticEditor", "Add Output"))
         self.pbRemoveOutput.setText(_translate("SemanticEditor", "Remove Output"))
-        self.pushButton.setText(_translate("SemanticEditor", "PushButton"))
+        self.pbShowPlot.setText(_translate("SemanticEditor", "Show Plot"))
 
 
 if __name__ == "__main__":

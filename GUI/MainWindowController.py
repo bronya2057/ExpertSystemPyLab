@@ -33,8 +33,6 @@ class MainWindowController(QMainWindow):
         self.set_all_tooltips()
         self.configure_ui_elements()
 
-
-    ###############MENU ACTIONS###################
     def open_action(self):
         options = QFileDialog.Options()
         fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token,
@@ -86,10 +84,6 @@ class MainWindowController(QMainWindow):
         tools = menu_bar.addMenu("Tools")
         help_menu = menu_bar.addMenu("Help")
 
-        # new_action = QAction("New", menu_bar)
-        # new_action.setShortcut("Ctrl+N")
-        # file.addAction(new_action)
-
         open_action = QAction("Open", menu_bar)
         open_action.setShortcut("Ctrl+O");
         file.addAction(open_action)
@@ -118,8 +112,6 @@ class MainWindowController(QMainWindow):
         semantic_editor_action.triggered.connect(self.semantic_editor_action)
         check_box_tooltips.clicked.connect(self.on_check_box_tooltip_checked)
 
-
-    ###############MODELS INIT###################
     def init_es_themes_model(self):
         es_themes_list_view = self.ui.listViewESThemes
 
@@ -230,10 +222,6 @@ class MainWindowController(QMainWindow):
 def init_gui():
     import sys
     app = QApplication(sys.argv)
-    # translator = QTranslator()
-    # print("Translator")
-    # print(translator.load("qt_ru", QLibraryInfo.location(QLibraryInfo.TranslationsPath)))
-    # app.installTranslator(translator)
     uiHandler = MainWindowController()
     app.exec_()
 

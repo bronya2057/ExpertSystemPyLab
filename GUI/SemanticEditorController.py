@@ -1,9 +1,8 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QBrush, QPen
-from PyQt5.QtWidgets import QDialog, QApplication, QMessageBox, QGraphicsScene, QGraphicsEllipseItem, QGraphicsItem
+import os
+
+from PyQt5.QtWidgets import QDialog, QApplication, QMessageBox
 
 from GUI.Common import INVALID_INDEX
-from GUI.CustomElements.ConnectibleEllipse import ConnectibleEllipse
 from GUI.Models.Helpers.SemanticData import SemanticData
 from GUI.Models.SemanticInputTableModel import SemanticInputTableModel
 from GUI.Models.SemanticObjectListModel import SemanticObjectListModel
@@ -60,7 +59,7 @@ class SemanticEditorController(QDialog):
         self.ui.tableViewOutput.setModel(self.out_model)
 
         # TESt
-        self.ui.pushButton.clicked.connect(self.on_TEST_clicked)
+        self.ui.pbShowPlot.clicked.connect(self.on_TEST_clicked)
     def on_pb_add_input_clicked(self):
         if -1 < SemanticData.selected_semantic_object_index:
             self.in_model.insert_new_input()
@@ -202,6 +201,19 @@ class SemanticEditorController(QDialog):
         pos = nx.spring_layout(G, k=10)  # set the positions of the nodes/edges/labels
         nx.draw_networkx(G, pos=pos)  # draw everything but the edge labels
         nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
+
+        if os.path.exists("Plot.png"):
+            os.remove("Plot.png")
+        else:
+            print("The file does not exist")
+
+        # plt.savefig("Plot.png")
+
+        # img = mpimg.imread('Plot.png')
+        # myPixmap = QPixmap(r'C:\Users\ABrodskyi\Dropbox\ProgrammingMaterial\Python\ExpertSystem\GUI\Plot.png')
+        # myLabel = self.ui.lblPlotImage
+        # myScaledPixmap = myPixmap.scaled(myLabel, Qt.KeepAspectRatio)
+        # myLabel.setPixmap(myPixmap)
         plt.show()
 
     def paintEvent(self, *args, **kwargs):

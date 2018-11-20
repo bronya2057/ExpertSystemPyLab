@@ -115,7 +115,7 @@ class SemanticEditorController(QDialog):
 
         import networkx as nx
         import matplotlib.pyplot as plt
-
+        import matplotlib.image as mpimg
 
         options = {
             'node_color': 'White',
@@ -123,20 +123,64 @@ class SemanticEditorController(QDialog):
             'width': 3,
         }
 
-        G = nx.Graph()
+        G = nx.DiGraph()
+        edge_labels = dict()
         # G.add_node('Berea')
         # G.add_edge(5,100)
 
         # for node in all_nodes:
         #     node_name = node.name
-        #     G.add_node(node_name)
+        #     print(node_name)
         #     for index, node_input in enumerate(node.in_objects):
-        #         G.add_node(node_input)
+        #         # G.add_node(node_input)
+        #         length = node.in_interactions[index]
         #         G.add_edge(node_input, node_name, weight = node.in_interactions[index])
+        #         edge_labels[(node_name, node_input)] = length
         #         print(node_input)
         #         print(node.in_interactions[index])
-        #
-        # pos = nx.random_layout(G)
+
+        objects = []
+        connectedObjects = []
+        inputs = []
+
+        connectedObjectsOut = []
+        outputs = []
+
+        for node in all_nodes:
+            objects.append(node.name)
+            connectedObject = []
+            input = []
+            connectedObjects.append(connectedObject)
+            inputs.append(input)
+            for index, node_input in enumerate(node.in_objects):
+                connectedObject.append(node_input)
+                input.append(node.in_interactions[index])
+
+        for index, obj in enumerate(objects):
+            node1 = obj
+            for conObjInd, connectedObject in enumerate(connectedObjects[index]):
+                node2 = connectedObject
+                length = inputs[index][conObjInd]
+                G.add_edge(node2, node1, label=str(length), length=length)
+                edge_labels[(node1, node2)] = length  # store the string version as a label
+
+        for node in all_nodes:
+            connectedObjectOut = []
+            output = []
+            connectedObjectsOut.append(connectedObjectOut)
+            outputs.append(output)
+            for index, node_output in enumerate(node.out_objects):
+                connectedObjectOut.append(node_output)
+                output.append(node.out_interactions[index])
+
+        for index, obj in enumerate(objects):
+            node1 = obj
+            for conObjInd, connectedObjectOut in enumerate(connectedObjectsOut[index]):
+                node2 = connectedObjectOut
+                length = outputs[index][conObjInd]
+                G.add_edge(node1, node2, label=str(length), length=length)
+                edge_labels[(node1, node2)] = length  # store the string version as a label
+
 
         # i = "MyNode"
         # G.add_node(i, pos=(1, 1))
@@ -154,6 +198,11 @@ class SemanticEditorController(QDialog):
         # img = mpimg.imread('Plot.png')
         # plt.imshow(img)
         # plt.show()
+
+        pos = nx.spring_layout(G, k=10)  # set the positions of the nodes/edges/labels
+        nx.draw_networkx(G, pos=pos)  # draw everything but the edge labels
+        nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
+        plt.show()
 
     def paintEvent(self, *args, **kwargs):
         pass

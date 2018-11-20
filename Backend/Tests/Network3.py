@@ -1,20 +1,26 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 
-G = nx.DiGraph()
-G.add_edges_from( [('A', 'B'), ('A', 'C'), ('D', 'B')], weight=1)
-G.add_edges_from([('E', 'C'), ('E', 'F'),('B', 'H'), ('B', 'G'), ('B', 'F'), ('C', 'G')], weight=2)
+node_name = ['Candy']
+in_objects = ["Lion", "Man", "Caramel"]
+in_interactions = ["dont like", "eats", "ingridient of"]
 
+G = nx.DiGraph()
+G.add_edges_from( [('A', 'B'), ('A', 'C'), ('D', 'B'), ('AA','BB')], weight=1)
+G.add_edges_from([('E', 'C'), ('E', 'F'),('B', 'H'), ('B', 'G'), ('B', 'F'), ('C', 'G')], weight=2)
+G.add_edge('Candy', 'Lion', weight="dont like")
+G.add_edge('Candy', 'Man', weight="eats")
+G.add_edge('Candy', 'ingridient of', weight="Caramel")
 val_map = {'A': 1.0,
            'D': 0.5714285714285714,
            'H': 0.0}
 
 values = [val_map.get(node, 0.25) for node in G.nodes()]
-
+print (values)
 # Specify the edges you want here
 red_edges = [('A', 'C'), ('E', 'C')]
-edge_colours = ['black' if not edge in red_edges else 'red'
-                for edge in G.edges()]
+# edge_colours = ['black' if not edge in red_edges else 'red'
+#                 for edge in G.edges()]
 black_edges = [edge for edge in G.edges() if edge not in red_edges]
 
 # Need to create a layout when doing

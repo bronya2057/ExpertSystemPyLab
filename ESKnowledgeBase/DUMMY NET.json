@@ -1,0 +1,62 @@
+{
+  "Candy": {
+    "in_obj": [
+      "Lion",
+      "Man",
+      "Caramel",
+      "My new",
+      "My new",
+      "My new",
+      "My new",
+      "My new",
+      "My new",
+      "My new",
+      "My new"
+    ],
+    "in_interaction": [
+      "don't like",
+      "eats",
+      "Ingredient of",
+      "My new",
+      "My new",
+      "My new",
+      "My new",
+      "My new",
+      "My new",
+      "My new",
+      "My new"
+    ],
+    "out_interactions": [
+      "soup",
+      "woup"
+    ],
+    "out_obj": [
+      "made of",
+      "done with"
+    ]
+  },
+  "Man": {
+    "in_obj": [
+      "Lion",
+      "Flesh"
+    ],
+    "in_interaction": [
+      "like",
+      "Ingredient of"
+    ],
+    "out_interactions": [
+      "soup",
+      "Lion"
+    ],
+    "out_obj": [
+      "made of",
+      "eats"
+    ]
+  },
+  "New semantic object": {
+    "in_obj": [],
+    "in_interaction": [],
+    "out_interactions": [],
+    "out_obj": []
+  }
+}

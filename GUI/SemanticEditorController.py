@@ -2,7 +2,9 @@ import os
 
 from PyQt5.QtWidgets import QDialog, QApplication, QMessageBox
 
-from GUI.Common import INVALID_INDEX
+from Backend import Serializer
+from GUI.Common import INVALID_INDEX, open_file_dialog_desc, es_knowledge_base_str_token, open_file_dialog_label, \
+    semantic_str_token, extention_separator_token, es_extension_token
 from GUI.Models.Helpers.SemanticData import SemanticData
 from GUI.Models.SemanticInputTableModel import SemanticInputTableModel
 from GUI.Models.SemanticObjectListModel import SemanticObjectListModel
@@ -15,21 +17,7 @@ class SemanticEditorController(QDialog):
         super(SemanticEditorController, self).__init__()
         self.ui = Ui_SemanticEditor()
         self.ui.setupUi(self)
-        # self.graphic_scene = QGraphicsScene(self)
-        # self.graphic_ellipse = QGraphicsEllipseItem()
-        #
-        # self.ui.graphicsView.setScene(self.graphic_scene)
-        #
-        # self.brush = QBrush(Qt.red)
-        # self.pen = QPen(Qt.black)
-        # self.pen.setWidth(6)
-        #
-        # self.graphic_ellipse = self.graphic_scene.addEllipse(10,10,100,100,self.pen, self.brush)
-        # self.graphic_ellipse.setFlag(QGraphicsItem.ItemIsMovable)
-        #
-        # self.myEllipse = ConnectibleEllipse()
-        # self.graphic_scene.addItem(self.myEllipse)
-        #
+
         self.semantic_object_model = SemanticObjectListModel(self)
         self.in_model = SemanticInputTableModel(self)
         self.out_model = SemanticOutputTableModel(self)
@@ -58,8 +46,11 @@ class SemanticEditorController(QDialog):
         self.ui.tableViewInput.setModel(self.in_model)
         self.ui.tableViewOutput.setModel(self.out_model)
 
-        # TESt
-        self.ui.pbShowPlot.clicked.connect(self.on_TEST_clicked)
+        self.ui.pbShowPlot.clicked.connect(self.on_show_plot_clicked)
+
+        self.ui.pbSaveNetwork.clicked.connect(self.on_save_clicked)
+        self.ui.pbLoad.clicked.connect(self.on_load_clicked)
+
     def on_pb_add_input_clicked(self):
         if -1 < SemanticData.selected_semantic_object_index:
             self.in_model.insert_new_input()
@@ -81,7 +72,10 @@ class SemanticEditorController(QDialog):
 
     def on_pb_remove_object_clicked(self):
         row = self.ui.listViewObjects.currentIndex().row()
+        self.out_model.clear_all_inputs()
+        self.in_model.clear_all_inputs()
         self.semantic_object_model.remove_semantic_object(row)
+        self.ui.listViewObjects.clearSelection()
 
     def on_list_view_objects_clicked(self):
         row = self.ui.listViewObjects.currentIndex().row()
@@ -105,16 +99,15 @@ class SemanticEditorController(QDialog):
     def on_table_view_output_clicked(self):
         print("clicked")
 
-    def on_TEST_clicked(self):
+    def on_show_plot_clicked(self):
         all_nodes = SemanticData.semantic_nodes
 
-        import warnings
-        import matplotlib.cbook
-        warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
+        # import warnings
+        # import matplotlib.cbook
+        # warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation)
 
         import networkx as nx
         import matplotlib.pyplot as plt
-        import matplotlib.image as mpimg
 
         options = {
             'node_color': 'White',
@@ -124,19 +117,6 @@ class SemanticEditorController(QDialog):
 
         G = nx.DiGraph()
         edge_labels = dict()
-        # G.add_node('Berea')
-        # G.add_edge(5,100)
-
-        # for node in all_nodes:
-        #     node_name = node.name
-        #     print(node_name)
-        #     for index, node_input in enumerate(node.in_objects):
-        #         # G.add_node(node_input)
-        #         length = node.in_interactions[index]
-        #         G.add_edge(node_input, node_name, weight = node.in_interactions[index])
-        #         edge_labels[(node_name, node_input)] = length
-        #         print(node_input)
-        #         print(node.in_interactions[index])
 
         objects = []
         connectedObjects = []
@@ -180,24 +160,6 @@ class SemanticEditorController(QDialog):
                 G.add_edge(node1, node2, label=str(length), length=length)
                 edge_labels[(node1, node2)] = length  # store the string version as a label
 
-
-        # i = "MyNode"
-        # G.add_node(i, pos=(1, 1))
-        # G.add_node(2, pos=(2, 2))
-        # G.add_node(3, pos=(1, 0))
-        # G.add_edge(i, 2, weight=0.5)
-        # G.add_edge(i, 3, weight="has")
-        # pos = nx.get_node_attributes(G, 'pos')
-        # pos = nx.random_layout(G)
-        # nx.draw(G, pos, with_labels=True, font_weight='bold', **options)
-        # labels = nx.get_edge_attributes(G, 'weight')
-        # nx.draw_networkx_edge_labels(G, pos, with_labels=True, edge_labels=labels)
-        # plt.savefig("Plot.png")
-        #
-        # img = mpimg.imread('Plot.png')
-        # plt.imshow(img)
-        # plt.show()
-
         pos = nx.spring_layout(G, k=10)  # set the positions of the nodes/edges/labels
         nx.draw_networkx(G, pos=pos)  # draw everything but the edge labels
         nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
@@ -207,17 +169,53 @@ class SemanticEditorController(QDialog):
         else:
             print("The file does not exist")
 
-        # plt.savefig("Plot.png")
-
-        # img = mpimg.imread('Plot.png')
-        # myPixmap = QPixmap(r'C:\Users\ABrodskyi\Dropbox\ProgrammingMaterial\Python\ExpertSystem\GUI\Plot.png')
-        # myLabel = self.ui.lblPlotImage
-        # myScaledPixmap = myPixmap.scaled(myLabel, Qt.KeepAspectRatio)
-        # myLabel.setPixmap(myPixmap)
         plt.show()
 
     def paintEvent(self, *args, **kwargs):
         pass
+
+    def on_save_clicked(self):
+        from PyQt5.QtWidgets import QFileDialog
+
+        data = Serializer.get_json_ready_semantic_data()
+
+        import json
+        json_str = json.dumps(data, indent=2)
+        print(json_str)
+
+        options = QFileDialog.Options()
+        file_name, _ = QFileDialog.getSaveFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token + "/" + semantic_str_token,
+                                                  open_file_dialog_label, options=options)
+
+        file_path = os.path.join(os.path.dirname(os.getcwd()), es_knowledge_base_str_token + "/" + semantic_str_token)
+        full_file_path = os.path.join(file_path, file_name)
+        print(full_file_path)
+
+        try:
+            with open(full_file_path, "w") as write_file:
+                json.dump(data, write_file, indent=2)
+        except OSError as e:
+            SemanticEditorController.prompt_error("File name too big")
+
+    def on_load_clicked(self):
+        from PyQt5.QtWidgets import QFileDialog
+
+        options = QFileDialog.Options()
+        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token + "/" + semantic_str_token,
+                                                  open_file_dialog_label, options=options)
+        if fileName:
+            print(fileName)
+            semantic_net_struct = Serializer.de_serialize_semantic_to_internal_data(fileName)
+            if semantic_net_struct:
+                print("not empty")
+                self.clear_all()
+                self.semantic_object_model.add_net_from_file(semantic_net_struct)
+
+    def clear_all(self):
+        self.out_model.clear_all_inputs()
+        self.in_model.clear_all_inputs()
+        self.semantic_object_model.clear_all_objects()
+        self.ui.listViewObjects.clearSelection()
 
     @staticmethod
     def prompt_error(error_text):

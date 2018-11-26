@@ -96,7 +96,6 @@ class AnswersListModel(QAbstractListModel):
                 self.set_rule_combo_box_at_index(index, index)
                 self.dataChanged.emit(self.index(answer_in_question_index, 0), self.index(answer_in_question_index, 0), [])
 
-
     def remove_variable(self, selected_answer_index, data_resetting=False):
         if selected_answer_index > 0 or data_resetting:
             self.removeRow(selected_answer_index)

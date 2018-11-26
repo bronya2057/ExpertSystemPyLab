@@ -146,3 +146,4 @@ class SemanticData:
             elif data_type == SemanticDataType.OUT:
                 current_semantic_object.out_objects.append("My new")
                 current_semantic_object.out_interactions.append("My new")
+

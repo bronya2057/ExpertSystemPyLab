@@ -2,7 +2,8 @@
   "PersonalDetention": {
     "Questions": [
       "What is your calories?",
-      "Vegan?"
+      "Vegan?",
+      "New question"
     ],
     "Variables": [
       [
@@ -12,13 +13,16 @@
       [
         "Veg",
         "NotVeg"
+      ],
+      [
+        "New answer"
       ]
     ],
     "Rules": {
-      "1000-2000, Veg": "Not so fat",
-      "3000-4000, NotVeg": "FAT",
-      "1000-2000, NotVeg": "You are not fat at all",
-      "3000-4000, Veg": "Very fat"
+      "1000-2000, Veg, New answer": "Your weight is below the critical measurement",
+      "3000-4000, NotVeg, New answer": "FAT",
+      "1000-2000, NotVeg, New answer": "You are not fat at all",
+      "3000-4000, Veg, New answer": "You should regulate your weight.\nAssumption made because of high calories and that you're vegan."
     },
     "RulesNames": [
       "1",

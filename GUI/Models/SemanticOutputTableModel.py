@@ -31,9 +31,9 @@ class SemanticOutputTableModel(QAbstractTableModel):
         else:
             if orientation == Qt.Horizontal:
                 if section == 0:
-                    return "Object"
+                    return "Interactions"
                 elif section == 1:
-                    return "Interaction"
+                    return "Object"
 
     def flags(self, index):
             return Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsEditable

@@ -51,7 +51,7 @@ class SemanticObjectListModel(QAbstractListModel):
 
     def add_semantic_object(self):
         if not (self.NEW_OBJECT_STR in SemanticData.get_names_list()):
-            new_node = SemanticNode(self.NEW_OBJECT_STR)
+            new_node = SemanticNode(self.NEW_OBJECT_STR, [], [], [], [])
             SemanticData.add_semantic_node(new_node)
             self.insertRow(SemanticData.get_len())
 
@@ -73,5 +73,16 @@ class SemanticObjectListModel(QAbstractListModel):
         #     print(rules_names_list)
         #     print(rules_list)
 
+    def add_net_from_file(self, semantic_net_struct):
+        for index, node in enumerate(semantic_net_struct):
+            self.insertRow(index)
+            SemanticData.add_semantic_node(node)
+
+    def clear_all_objects(self):
+        obj_count = SemanticData.get_len()
+
+        if obj_count > 0:
+            for index in range(obj_count):
+                self.remove_semantic_object(0)
 
 

@@ -172,6 +172,7 @@ class RuleEditorController(QDialog):
         self.variables_model.remove_all_variables_in_all_questions()
         self.questions_model.remove_all_questions()
         self.rules_model.remove_all_rules()
+        self.ui.textEditOutput.setText("")
         ColumnButtonDelegate.clear_editors_list()
 
     @staticmethod

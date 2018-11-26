@@ -21,7 +21,7 @@ class RulesContainer:
 
 
 class SemanticNode:
-    def __init__(self, name="DummyName", in_objects=[], in_interactions=[], out_objects=[], out_interactions=[]):
+    def __init__(self, name="DummyName", in_objects=[], in_interactions=[], out_interactions=[], out_objects=[]):
         self.name = name
         self.in_objects = in_objects
         self.in_interactions = in_interactions

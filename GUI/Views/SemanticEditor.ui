@@ -131,7 +131,21 @@ QListView::item:hover {
 </string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+   <item row="1" column="2">
+    <widget class="QPushButton" name="pbShowPlot">
+     <property name="text">
+      <string>Show Plot</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="pbLoad">
+     <property name="text">
+      <string>Load Network</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="3">
     <widget class="QGroupBox" name="gBConnections">
      <property name="title">
       <string>Semantic objects Editor</string>
@@ -234,9 +248,9 @@ QListView::item:hover {
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QPushButton" name="pbShowPlot">
+    <widget class="QPushButton" name="pbSaveNetwork">
      <property name="text">
-      <string>Show Plot</string>
+      <string>Save Network</string>
      </property>
     </widget>
    </item>

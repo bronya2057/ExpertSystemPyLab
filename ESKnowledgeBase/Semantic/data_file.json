@@ -1,0 +1,41 @@
+{
+  "Candy": {
+    "in_obj": [
+      "Lion",
+      "Man",
+      "Caramel"
+    ],
+    "in_interaction": [
+        "don't like",
+        "eats",
+        "Ingredient of"
+    ],
+    "out_interactions": [
+      "made of",
+      "done with"
+    ],
+    "out_obj": [
+      "soup",
+      "woup"
+    ]
+  },
+    "Man": {
+    "in_obj": [
+      "Lion",
+      "Flesh"
+    ],
+    "in_interaction": [
+        "like",
+        "Ingredient of"
+    ],
+    "out_interactions": [
+      "made of",
+      "eats"
+    ],
+    "out_obj": [
+      "soup",
+      "Lion"
+    ]
+  }
+  
+}

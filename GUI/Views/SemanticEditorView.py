@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 class Ui_SemanticEditor(object):
     def setupUi(self, SemanticEditor):
@@ -126,6 +126,12 @@ class Ui_SemanticEditor(object):
 "")
         self.gridLayout = QtWidgets.QGridLayout(SemanticEditor)
         self.gridLayout.setObjectName("gridLayout")
+        self.pbShowPlot = QtWidgets.QPushButton(SemanticEditor)
+        self.pbShowPlot.setObjectName("pbShowPlot")
+        self.gridLayout.addWidget(self.pbShowPlot, 1, 2, 1, 1)
+        self.pbLoad = QtWidgets.QPushButton(SemanticEditor)
+        self.pbLoad.setObjectName("pbLoad")
+        self.gridLayout.addWidget(self.pbLoad, 1, 0, 1, 1)
         self.gBConnections = QtWidgets.QGroupBox(SemanticEditor)
         self.gBConnections.setObjectName("gBConnections")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.gBConnections)
@@ -181,10 +187,10 @@ class Ui_SemanticEditor(object):
         self.horizontalLayout_3.addWidget(self.pbRemoveOutput)
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_2.addLayout(self.verticalLayout_2)
-        self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 2)
-        self.pbShowPlot = QtWidgets.QPushButton(SemanticEditor)
-        self.pbShowPlot.setObjectName("pbShowPlot")
-        self.gridLayout.addWidget(self.pbShowPlot, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 3)
+        self.pbSaveNetwork = QtWidgets.QPushButton(SemanticEditor)
+        self.pbSaveNetwork.setObjectName("pbSaveNetwork")
+        self.gridLayout.addWidget(self.pbSaveNetwork, 1, 1, 1, 1)
 
         self.retranslateUi(SemanticEditor)
         QtCore.QMetaObject.connectSlotsByName(SemanticEditor)
@@ -192,6 +198,8 @@ class Ui_SemanticEditor(object):
     def retranslateUi(self, SemanticEditor):
         _translate = QtCore.QCoreApplication.translate
         SemanticEditor.setWindowTitle(_translate("SemanticEditor", "RuleEditor"))
+        self.pbShowPlot.setText(_translate("SemanticEditor", "Show Plot"))
+        self.pbLoad.setText(_translate("SemanticEditor", "Load Network"))
         self.gBConnections.setTitle(_translate("SemanticEditor", "Semantic objects Editor"))
         self.pbAddObject.setText(_translate("SemanticEditor", "Add Object"))
         self.pbRemoveObject.setText(_translate("SemanticEditor", "Remove Object"))
@@ -199,7 +207,7 @@ class Ui_SemanticEditor(object):
         self.pbRemoveInput.setText(_translate("SemanticEditor", "Remove Input"))
         self.pbAddOutput.setText(_translate("SemanticEditor", "Add Output"))
         self.pbRemoveOutput.setText(_translate("SemanticEditor", "Remove Output"))
-        self.pbShowPlot.setText(_translate("SemanticEditor", "Show Plot"))
+        self.pbSaveNetwork.setText(_translate("SemanticEditor", "Save Network"))
 
 
 if __name__ == "__main__":

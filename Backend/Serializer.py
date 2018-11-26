@@ -1,7 +1,8 @@
 from collections import OrderedDict
 from json import JSONDecodeError
 
-from GUI.Models.Helpers.ESTheme import ESThemeSimple
+from GUI.Models.Helpers.SemanticData import SemanticData
+from GUI.Models.Helpers.ESTheme import ESThemeSimple, SemanticNode
 from GUI.Models.Helpers.CommonSerializedData import CommonSerializedData
 
 def get_json_ready_data():
@@ -32,6 +33,29 @@ def get_json_ready_data():
                 "RulesNames": rules_names}}
 
     return data
+
+def get_json_ready_semantic_data():
+    all_nodes = SemanticData.semantic_nodes
+
+    result = []
+    node_dict = {}
+    data ={}
+
+    for node in all_nodes:
+        name = node.name
+        in_objects = node.in_objects
+        in_interactions = node.in_interactions
+        out_objects = node.out_objects
+        out_interactions = node.out_interactions
+
+        data = {name: {"in_obj": in_objects,
+                       "in_interaction": in_interactions,
+                       "out_interactions": out_objects,
+                       "out_obj": out_interactions}}
+        node_dict.update(data)
+
+    return node_dict
+
 
 def de_serialize_to_internal_data(file_path):
     import json
@@ -79,5 +103,33 @@ def de_serialize_to_internal_data(file_path):
 
     return theme
 
+def de_serialize_semantic_to_internal_data(file_path):
+    import json
+
+    semantic_net = []
+
+    with open(file_path) as f:
+        try:
+            data = json.load(f)
+            print(data)
+
+            for index, data_value in enumerate(data):
+                obj = list(data.keys())[index]
+                values = list(data.values())[index]
+
+
+                in_obj = values["in_obj"]
+                in_interaction = values["in_interaction"]
+                out_interactions = values["out_interactions"]
+                out_obj = values["out_obj"]
+
+                if (len(in_obj) == len(in_interaction) and len(out_interactions) == len(out_obj)):
+                    semantic_net.append(SemanticNode(obj, in_obj, in_interaction, out_interactions, out_obj))
+        except JSONDecodeError:
+            print("JSON file contains malicious content")
+
+    return semantic_net
+
 if __name__ == "__main__":
-    de_serialize_to_internal_data("c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/GUI/data_file.json")
+    de_serialize_semantic_to_internal_data("C:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Semantic/data_file.json")
+    de_serialize_semantic_to_internal_data("C:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/DUMMY NET.json")

@@ -3,7 +3,7 @@
     "Questions": [
       "What is your calories?",
       "Vegan?",
-      "New question"
+      "Who are you?"
     ],
     "Variables": [
       [
@@ -15,14 +15,15 @@
         "NotVeg"
       ],
       [
-        "New answer"
+        "Boy",
+        "Girl"
       ]
     ],
     "Rules": {
-      "1000-2000, Veg, New answer": "Your weight is below the critical measurement",
-      "3000-4000, NotVeg, New answer": "FAT",
-      "1000-2000, NotVeg, New answer": "You are not fat at all",
-      "3000-4000, Veg, New answer": "You should regulate your weight.\nAssumption made because of high calories and that you're vegan."
+      "1000-2000, Veg, Boy": "Not so fat",
+      "3000-4000, NotVeg, Boy": "FAT",
+      "1000-2000, NotVeg, Boy": "You are not fat at all",
+      "3000-4000, Veg, Girl": "Very fat"
     },
     "RulesNames": [
       "1",

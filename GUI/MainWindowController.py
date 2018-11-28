@@ -33,6 +33,10 @@ class MainWindowController(QMainWindow):
         self.set_all_tooltips()
         self.configure_ui_elements()
 
+        #TEST
+        self.esThemesListModel.load_theme("c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/PersonalDetention.json")
+        #self.esThemesListModel.load_theme("c:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/PersonalDetention.json")
+
     def open_action(self):
         options = QFileDialog.Options()
         fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token,
@@ -142,6 +146,7 @@ class MainWindowController(QMainWindow):
         if self.selected_question < self.esThemesListModel.get_current_theme_questions_number():
             self.set_next_question()
         else:
+            self.build_decision_graph()
             self.prepare_theme_output()
 
     def set_next_question(self):
@@ -218,6 +223,96 @@ class MainWindowController(QMainWindow):
         self.ui.listViewESThemes.clearSelection()
         self.ui.gBMain.setTitle("Please choose one theme from the list")
 
+    def build_decision_graph(self):
+        import pydotplus
+        import matplotlib.pyplot as plt
+        import matplotlib.image as mpimg
+
+        graph = pydotplus.Dot(graph_type='digraph')
+        node_a = pydotplus.Node("Node A", style="filled", fillcolor="red")
+        node_b = pydotplus.Node("Node B", style="filled", fillcolor="green")
+        node_c = pydotplus.Node("Node C", style="filled", fillcolor="#0000ff")
+        node_d = pydotplus.Node("Node D", style="filled", fillcolor="#976856")
+
+        graph.add_node(node_a)
+        graph.add_node(node_b)
+        graph.add_node(node_c)
+        graph.add_node(node_d)
+
+        graph.add_edge(pydotplus.Edge(node_a, node_b, label="Yes"))
+        graph.add_edge(pydotplus.Edge(node_a, node_c, label="No"))
+        graph.add_edge(pydotplus.Edge(node_b, node_c, label="No"))
+        graph.add_edge(pydotplus.Edge(node_c, node_d, label="Maybe"))
+
+        graph.add_edge(pydotplus.Edge(node_d, node_a, label="and back we go again", labelfontcolor="#009933", fontsize="10.0", color="blue"))
+
+        questions_graph = pydotplus.Dot(graph_type='digraph')
+
+        questions = self.esThemesListModel.get_current_questions_and_answers()
+        # for question, answers in questions.items():
+        #     # question = self.esThemesListModel.get_current_theme_question(question_index)
+        #     print("GEW")
+
+        # prev_node = pydotplus.Node()
+        # prev_key = ""
+
+        selected_prev_node = pydotplus.Node()
+        ultimate_prev_node = pydotplus.Node()
+        rootNode = pydotplus.Node("ROOT", style="filled", fillcolor="green")
+        questions_graph.add_node(rootNode)
+
+        facts = self.current_theme_facts
+        questions_and_selected_answer = {}
+
+        for fact, value in facts.items():
+            questions_and_selected_answer[fact] = value
+            print(fact)
+
+        for index, key in enumerate(questions):
+            for answer in questions[key]:
+
+                node = pydotplus.Node(answer, style="filled", fillcolor="green")
+                questions_graph.add_node(node)
+
+                if index > 0:
+                    if answer == facts[key] and selected_prev_node.get_name() != '""':
+                        questions_graph.add_edge(pydotplus.Edge(ultimate_prev_node, node, label=key, labelfontcolor="#009933", fontsize="10.0", color="blue"))
+                        print()
+                    else:
+                        questions_graph.add_edge(pydotplus.Edge(ultimate_prev_node, node, label="", labelfontcolor="#009933", fontsize="10.0", color="white"))
+
+                elif index == 0 and answer == facts[key]:
+                    questions_graph.add_edge(pydotplus.Edge(rootNode, node, label=key, labelfontcolor="#009933", fontsize="10.0",color="blue"))
+                else:
+                    rootNode = pydotplus.Node("ROOT", style="filled", fillcolor="green")
+                    questions_graph.add_edge(pydotplus.Edge(rootNode, node, label="", labelfontcolor="#009933", fontsize="10.0",color="white"))
+
+                if answer == facts[key]:
+                    selected_prev_node = node
+
+            ultimate_prev_node = selected_prev_node
+
+
+        # for index, key in enumerate(questions):
+        #     node = pydotplus.Node(key, style="filled", fillcolor="green")
+        #     questions_graph.add_node(node)
+        #     print(index, key)
+        #     if index > 0:
+        #         for index, answer in enumerate(questions[prev_key]):
+        #             new_node_text = str(index + 1) + ". " + key
+        #             new_node = pydotplus.Node(new_node_text, style="filled", fillcolor="green")
+        #             questions_graph.add_edge(pydotplus.Edge(prev_node, new_node, label=answer, labelfontcolor="#009933",fontsize="10.0", color="blue"))
+        #             # questions_graph.add_edge(pydotplus.Edge(prev_node, node, label=answer))
+        #     prev_node = node
+        #     prev_key = key
+
+        facts = self.current_theme_facts
+        for fact, value in facts.items():
+            print(fact)
+        questions_graph.write_png('example2_graph.png')
+        img = mpimg.imread('example2_graph.png')
+        plt.imshow(img)
+        plt.show()
 
 def init_gui():
     import sys

@@ -100,6 +100,9 @@ class ESThemesListModel(QAbstractListModel):
     def get_current_theme_questions(self):
         return list(self.es_themes[self.selected_theme_index].questions)
 
+    def get_current_questions_and_answers(self):
+        return self.es_themes[self.selected_theme_index].questions
+
     def get_current_theme_questions_number(self):
         return len(list(self.es_themes[self.selected_theme_index].questions))
 

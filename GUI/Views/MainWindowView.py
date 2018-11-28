@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -189,6 +189,14 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.gBAnswers)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
+        self.pbGraph = QtWidgets.QPushButton(self.gBMain)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pbGraph.sizePolicy().hasHeightForWidth())
+        self.pbGraph.setSizePolicy(sizePolicy)
+        self.pbGraph.setObjectName("pbGraph")
+        self.horizontalLayout.addWidget(self.pbGraph)
         self.pBNextQuestion = QtWidgets.QPushButton(self.gBMain)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -223,6 +231,7 @@ class Ui_MainWindow(object):
         self.gBMain.setTitle(_translate("MainWindow", "Please choose one theme from the list"))
         self.gbQuestions.setTitle(_translate("MainWindow", "Questions"))
         self.gBAnswers.setTitle(_translate("MainWindow", "Answers"))
+        self.pbGraph.setText(_translate("MainWindow", "Show Graph"))
         self.pBNextQuestion.setText(_translate("MainWindow", "Next\n"
 "Question"))
         self.lblThemes.setText(_translate("MainWindow", "EXPERT SYSTEM THEMES"))

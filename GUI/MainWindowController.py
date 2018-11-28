@@ -24,6 +24,7 @@ class MainWindowController(QMainWindow):
         self.fill_menu_bar()
         self.esThemesListModel = ESThemesListModel(self)
         self.themes_list_menu = QMenu("Themes list menu", self)
+        self.current_theme_output = ""
         self.init_es_themes_model()
         self.show()
         self.selected_question = INVALID_INDEX
@@ -55,7 +56,9 @@ class MainWindowController(QMainWindow):
     def configure_ui_elements(self):
         self.ui.lblQuestion.setWordWrap(True)
         self.ui.pBNextQuestion.setEnabled(False)
+        self.ui.pbGraph.setEnabled(False)
         self.ui.pBNextQuestion.clicked.connect(self.enable_next_question)
+        self.ui.pbGraph.clicked.connect(self.build_decision_graph)
 
     def rule_editor_action(self):
         rule_editor_controller = RuleEditorController()
@@ -132,9 +135,11 @@ class MainWindowController(QMainWindow):
         remove_action.triggered.connect(self.remove_menu_action_triggered)
 
     def set_initial_question(self):
+        self.current_theme_facts = Fact()
         self.ui.gbQuestions.setTitle("QUESTIONS")
         self.ui.gBAnswers.setTitle("ANSWERS")
         self.ui.gBMain.setTitle("Expert system theme is chosen, please answer all questions")
+        self.ui.pbGraph.setEnabled(False)
         self.ui.pBNextQuestion.setEnabled(True)
         self.selected_question = self.INITIAL_QUESTION_INDEX
         self.set_next_question()
@@ -146,7 +151,6 @@ class MainWindowController(QMainWindow):
         if self.selected_question < self.esThemesListModel.get_current_theme_questions_number():
             self.set_next_question()
         else:
-            self.build_decision_graph()
             self.prepare_theme_output()
 
     def set_next_question(self):
@@ -194,6 +198,7 @@ class MainWindowController(QMainWindow):
         self.esThemesListModel.remove_theme_at(selected_theme_index)
         self.clear_answers_and_questions()
         self.ui.pBNextQuestion.setEnabled(False)
+        self.ui.pbGraph.setEnabled(False)
 
     def on_check_box_tooltip_checked(self, checked):
         self.is_tooltip_needed = checked
@@ -214,7 +219,7 @@ class MainWindowController(QMainWindow):
         main_expert_engine.reset()
         main_expert_engine.declare(self.current_theme_facts)
         main_expert_engine.run()
-        self.current_theme_facts = Fact()
+        self.current_theme_output = main_expert_engine.get_output()
 
         self.ui.lblQuestion.setText(main_expert_engine.get_output())
         self.ui.gbQuestions.setTitle("Your output:")
@@ -222,6 +227,7 @@ class MainWindowController(QMainWindow):
         self.ui.pBNextQuestion.setEnabled(False)
         self.ui.listViewESThemes.clearSelection()
         self.ui.gBMain.setTitle("Please choose one theme from the list")
+        self.ui.pbGraph.setEnabled(True)
 
     def build_decision_graph(self):
         import pydotplus
@@ -259,6 +265,7 @@ class MainWindowController(QMainWindow):
         selected_prev_node = pydotplus.Node()
         ultimate_prev_node = pydotplus.Node()
         rootNode = pydotplus.Node("ROOT", style="filled", fillcolor="green")
+        node_to_attach = rootNode
         questions_graph.add_node(rootNode)
 
         facts = self.current_theme_facts
@@ -274,37 +281,41 @@ class MainWindowController(QMainWindow):
                 node = pydotplus.Node(answer, style="filled", fillcolor="green")
                 questions_graph.add_node(node)
 
-                if index > 0:
-                    if answer == facts[key] and selected_prev_node.get_name() != '""':
-                        questions_graph.add_edge(pydotplus.Edge(ultimate_prev_node, node, label=key, labelfontcolor="#009933", fontsize="10.0", color="blue"))
-                        print()
-                    else:
-                        questions_graph.add_edge(pydotplus.Edge(ultimate_prev_node, node, label="", labelfontcolor="#009933", fontsize="10.0", color="white"))
+                fill_color = ""
+                label_str = ""
+                edge_color = ""
 
-                elif index == 0 and answer == facts[key]:
-                    questions_graph.add_edge(pydotplus.Edge(rootNode, node, label=key, labelfontcolor="#009933", fontsize="10.0",color="blue"))
+                if index > 0:
+                    node_to_attach = ultimate_prev_node
+                    if answer == facts[key] and selected_prev_node.get_name() != '""':
+                        label_str = key
+                        edge_color = "blue"
+                        fill_color = "green"
+                    else:
+                        label_str = ""
+                        edge_color = "white"
                 else:
-                    rootNode = pydotplus.Node("ROOT", style="filled", fillcolor="green")
-                    questions_graph.add_edge(pydotplus.Edge(rootNode, node, label="", labelfontcolor="#009933", fontsize="10.0",color="white"))
+                    node_to_attach = rootNode
+                    if answer == facts[key]:
+                        edge_color = "blue"
+                        label_str = key
+                        fill_color = "green"
+                    else:
+                        label_str = ""
+                        edge_color = "white"
 
                 if answer == facts[key]:
                     selected_prev_node = node
 
+                node = pydotplus.Node(answer, style="filled", fillcolor=fill_color)
+                questions_graph.add_node(node)
+                questions_graph.add_edge(pydotplus.Edge(node_to_attach, node, label=label_str, labelfontcolor="#009933", fontsize="10.0",color=edge_color))
+
             ultimate_prev_node = selected_prev_node
 
-
-        # for index, key in enumerate(questions):
-        #     node = pydotplus.Node(key, style="filled", fillcolor="green")
-        #     questions_graph.add_node(node)
-        #     print(index, key)
-        #     if index > 0:
-        #         for index, answer in enumerate(questions[prev_key]):
-        #             new_node_text = str(index + 1) + ". " + key
-        #             new_node = pydotplus.Node(new_node_text, style="filled", fillcolor="green")
-        #             questions_graph.add_edge(pydotplus.Edge(prev_node, new_node, label=answer, labelfontcolor="#009933",fontsize="10.0", color="blue"))
-        #             # questions_graph.add_edge(pydotplus.Edge(prev_node, node, label=answer))
-        #     prev_node = node
-        #     prev_key = key
+        node = pydotplus.Node(self.ui.lblQuestion.text(), style="filled", fillcolor="Grey")
+        questions_graph.add_node(node)
+        questions_graph.add_edge(pydotplus.Edge(ultimate_prev_node, node, label="RESULT", labelfontcolor="#009933", fontsize="10.0",color="blue"))
 
         facts = self.current_theme_facts
         for fact, value in facts.items():

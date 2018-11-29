@@ -8,15 +8,23 @@
     "Variables": [
       [
         "1000-2000",
-        "3000-4000"
+        "3000-4000",
+        "5000",
+        "6000",
+        "2353235",
+        "32552323"
       ],
       [
         "Veg",
-        "NotVeg"
+        "NotVeg",
+        "Didn't decide"
       ],
       [
         "Boy",
-        "Girl"
+        "Girl",
+        "New man",
+        "New girl",
+        "Other Answer"
       ]
     ],
     "Rules": {

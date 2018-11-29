@@ -35,7 +35,7 @@ class MainWindowController(QMainWindow):
         self.configure_ui_elements()
 
         #TEST
-        self.esThemesListModel.load_theme("c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/PersonalDetention.json")
+        # self.esThemesListModel.load_theme("c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/PersonalDetention.json")
         #self.esThemesListModel.load_theme("c:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/PersonalDetention.json")
 
     def open_action(self):

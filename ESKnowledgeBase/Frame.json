@@ -1,0 +1,6 @@
+{
+    "ROOT": {
+      "Document": {"slots":{"Name":"Funds", "Theme":"People", "Author":{"slots":{"Name":"Alex", "Age":"24"}}}},
+      "TechDoc": {"slots":{"SerialN0":"3322"},"rel":"Document"}
+    }
+}

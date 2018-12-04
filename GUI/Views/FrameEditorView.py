@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\SemanticEditor.ui'
+# Form implementation generated from reading ui file '.\FrameEditor.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.2
 #
@@ -8,17 +8,17 @@
 
 from PyQt5 import QtCore, QtWidgets
 
-class Ui_SemanticEditor(object):
-    def setupUi(self, SemanticEditor):
-        SemanticEditor.setObjectName("SemanticEditor")
-        SemanticEditor.setEnabled(True)
-        SemanticEditor.resize(1175, 624)
+class Ui_FrameEditor(object):
+    def setupUi(self, FrameEditor):
+        FrameEditor.setObjectName("FrameEditor")
+        FrameEditor.setEnabled(True)
+        FrameEditor.resize(1175, 624)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(SemanticEditor.sizePolicy().hasHeightForWidth())
-        SemanticEditor.setSizePolicy(sizePolicy)
-        SemanticEditor.setStyleSheet("QListView {\n"
+        sizePolicy.setHeightForWidth(FrameEditor.sizePolicy().hasHeightForWidth())
+        FrameEditor.setSizePolicy(sizePolicy)
+        FrameEditor.setStyleSheet("QListView {\n"
 "    alternate-background-color: yellow;\n"
 "    background-color: #697378;\n"
 "    margin-right:10px\n"
@@ -124,24 +124,18 @@ class Ui_SemanticEditor(object):
 "     background-color: #96A4AD;\n"
 "}\n"
 "")
-        self.gridLayout = QtWidgets.QGridLayout(SemanticEditor)
+        self.gridLayout = QtWidgets.QGridLayout(FrameEditor)
         self.gridLayout.setObjectName("gridLayout")
-        self.pbShowPlot = QtWidgets.QPushButton(SemanticEditor)
-        self.pbShowPlot.setObjectName("pbShowPlot")
-        self.gridLayout.addWidget(self.pbShowPlot, 1, 2, 1, 1)
-        self.pbLoad = QtWidgets.QPushButton(SemanticEditor)
-        self.pbLoad.setObjectName("pbLoad")
-        self.gridLayout.addWidget(self.pbLoad, 1, 0, 1, 1)
-        self.gBConnections = QtWidgets.QGroupBox(SemanticEditor)
+        self.gBConnections = QtWidgets.QGroupBox(FrameEditor)
         self.gBConnections.setObjectName("gBConnections")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.gBConnections)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setContentsMargins(0, -1, -1, -1)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.listViewObjects = QtWidgets.QListView(self.gBConnections)
-        self.listViewObjects.setObjectName("listViewObjects")
-        self.verticalLayout_3.addWidget(self.listViewObjects)
+        self.treeViewFrames = QtWidgets.QTreeView(self.gBConnections)
+        self.treeViewFrames.setObjectName("treeViewFrames")
+        self.verticalLayout_3.addWidget(self.treeViewFrames)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
@@ -156,66 +150,41 @@ class Ui_SemanticEditor(object):
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setContentsMargins(0, -1, -1, -1)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.tableViewInput = QtWidgets.QTableView(self.gBConnections)
-        self.tableViewInput.setObjectName("tableViewInput")
-        self.verticalLayout.addWidget(self.tableViewInput)
+        self.tableViewSlots = QtWidgets.QTableView(self.gBConnections)
+        self.tableViewSlots.setObjectName("tableViewSlots")
+        self.verticalLayout.addWidget(self.tableViewSlots)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pbAddInput = QtWidgets.QPushButton(self.gBConnections)
-        self.pbAddInput.setObjectName("pbAddInput")
-        self.horizontalLayout.addWidget(self.pbAddInput)
-        self.pbRemoveInput = QtWidgets.QPushButton(self.gBConnections)
-        self.pbRemoveInput.setObjectName("pbRemoveInput")
-        self.horizontalLayout.addWidget(self.pbRemoveInput)
+        self.pbUpdate = QtWidgets.QPushButton(self.gBConnections)
+        self.pbUpdate.setObjectName("pbUpdate")
+        self.horizontalLayout.addWidget(self.pbUpdate)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setContentsMargins(0, -1, -1, -1)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.tableViewOutput = QtWidgets.QTableView(self.gBConnections)
-        self.tableViewOutput.setObjectName("tableViewOutput")
-        self.verticalLayout_2.addWidget(self.tableViewOutput)
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setContentsMargins(-1, 0, -1, -1)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.pbAddOutput = QtWidgets.QPushButton(self.gBConnections)
-        self.pbAddOutput.setObjectName("pbAddOutput")
-        self.horizontalLayout_3.addWidget(self.pbAddOutput)
-        self.pbRemoveOutput = QtWidgets.QPushButton(self.gBConnections)
-        self.pbRemoveOutput.setObjectName("pbRemoveOutput")
-        self.horizontalLayout_3.addWidget(self.pbRemoveOutput)
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
-        self.horizontalLayout_2.addLayout(self.verticalLayout_2)
-        self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 3)
-        self.pbSaveNetwork = QtWidgets.QPushButton(SemanticEditor)
-        self.pbSaveNetwork.setObjectName("pbSaveNetwork")
-        self.gridLayout.addWidget(self.pbSaveNetwork, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 2)
+        self.pbLoad = QtWidgets.QPushButton(FrameEditor)
+        self.pbLoad.setObjectName("pbLoad")
+        self.gridLayout.addWidget(self.pbLoad, 1, 0, 1, 1)
 
-        self.retranslateUi(SemanticEditor)
-        QtCore.QMetaObject.connectSlotsByName(SemanticEditor)
+        self.retranslateUi(FrameEditor)
+        QtCore.QMetaObject.connectSlotsByName(FrameEditor)
 
-    def retranslateUi(self, SemanticEditor):
+    def retranslateUi(self, FrameEditor):
         _translate = QtCore.QCoreApplication.translate
-        SemanticEditor.setWindowTitle(_translate("SemanticEditor", "RuleEditor"))
-        self.pbShowPlot.setText(_translate("SemanticEditor", "Show Plot"))
-        self.pbLoad.setText(_translate("SemanticEditor", "Load Network"))
-        self.gBConnections.setTitle(_translate("SemanticEditor", "Semantic objects Editor"))
-        self.pbAddObject.setText(_translate("SemanticEditor", "Add Object"))
-        self.pbRemoveObject.setText(_translate("SemanticEditor", "Remove Object"))
-        self.pbAddInput.setText(_translate("SemanticEditor", "Add Input"))
-        self.pbRemoveInput.setText(_translate("SemanticEditor", "Remove Input"))
-        self.pbAddOutput.setText(_translate("SemanticEditor", "Add Output"))
-        self.pbRemoveOutput.setText(_translate("SemanticEditor", "Remove Output"))
-        self.pbSaveNetwork.setText(_translate("SemanticEditor", "Save Network"))
+        FrameEditor.setWindowTitle(_translate("FrameEditor", "RuleEditor"))
+        self.gBConnections.setTitle(_translate("FrameEditor", "Frame objects Editor"))
+        self.pbAddObject.setText(_translate("FrameEditor", "Add Object"))
+        self.pbRemoveObject.setText(_translate("FrameEditor", "Remove Object"))
+        self.pbUpdate.setText(_translate("FrameEditor", "Update Slots"))
+        self.pbLoad.setText(_translate("FrameEditor", "Load Frame Model"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    SemanticEditor = QtWidgets.QDialog()
-    ui = Ui_SemanticEditor()
-    ui.setupUi(SemanticEditor)
-    SemanticEditor.show()
+    FrameEditor = QtWidgets.QDialog()
+    ui = Ui_FrameEditor()
+    ui.setupUi(FrameEditor)
+    FrameEditor.show()
     sys.exit(app.exec_())
 

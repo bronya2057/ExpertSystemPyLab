@@ -4,6 +4,7 @@ INVALID_INDEX = -1
 # FILE DIALOG
 es_knowledge_base_str_token = "ESKnowledgeBase"
 semantic_str_token = "Semantic"
+frame_str_token = "Frame"
 open_file_dialog_desc = "Select JSON ES base"
 extension_description_token = "Json Files"
 extention_separator_token = "."

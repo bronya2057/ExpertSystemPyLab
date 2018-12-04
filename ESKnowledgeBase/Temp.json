@@ -1,0 +1,19 @@
+{
+
+    "ROOT": [
+      {"name":"family","val":"Members", 
+                       "ch" : {"Boy" : {"val":"props",
+                                        "ch":{"Weight":{"val":"20", 
+                                                        "ch":""}}}}},
+      {"name":"family","val":"pets", 
+                "ch" : {"Dog" : {"val":"props",
+                                 "ch":{"Weight":{"val":"44", 
+                                                 "ch":""}}}}},
+      
+      {"name":"Empty","val":"Test",
+                   "ch":{"AnotherEmpty":{"val":"so lonely",
+                                         "ch":{"Annnother":{"val":"lastEmpty","ch":""}}}}}
+
+    ]
+ 
+}

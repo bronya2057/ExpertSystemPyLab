@@ -21,8 +21,9 @@ class FrameEditorController(QDialog):
         # self.ui.listViewESThemes.clearSelection()
         # self.clear_answers_and_questions()
         self.ui.pbLoad.clicked.connect(self.on_pb_load_clicked)
-        self.ui.pbAddObject.clicked.connect(self.on_pb_add_new_item_clicked)
+        self.ui.pbAddChild.clicked.connect(self.on_pb_add_child_clicked)
         self.ui.pbRemoveObject.clicked.connect(self.on_pb_remove_item_clicked)
+        self.ui.pbAddNode.clicked.connect(self.on_pb_add_node_clicked)
 
     def on_pb_load_clicked(self):
         options = QFileDialog.Options()
@@ -30,10 +31,15 @@ class FrameEditorController(QDialog):
                                                   open_file_dialog_label, options=options)
         if fileName:
             print(fileName)
+            self.clear_all()
             self.frame_model.load_frame_file(fileName)
             self.ui.treeViewFrames.setModel(self.frame_model)
 
-    def on_pb_add_new_item_clicked(self):
+    def on_pb_add_child_clicked(self):
+        index = self.ui.treeViewFrames.currentIndex()
+        self.frame_model.add_child_at(index)
+
+    def on_pb_add_node_clicked(self):
         index = self.ui.treeViewFrames.currentIndex()
         self.frame_model.add_item_at(index)
 
@@ -42,6 +48,8 @@ class FrameEditorController(QDialog):
         self.frame_model.remove_item_at(index)
 
     def clear_all(self):
+    #        self.ui.treeViewFrames.setModel()
+        self.frame_model.clear_all()
         pass
 
     @staticmethod

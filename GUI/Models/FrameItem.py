@@ -22,6 +22,17 @@ class FrameItem(object):
         # self.slots.update({name:item})
         self.frame_items.append(item)
 
+    def insertChildren(self, position, count = 1):
+        if position < 0 or position > len(self.frame_items):
+            return False
+
+        # for row in range(count):
+            # data = [None for v in range(columns)]
+        item = FrameItem("NewFrame", {}, self)
+        self.frame_items.append(item)
+
+        return True
+
     def child(self, row):
         return self.frame_items[row]
 
@@ -75,3 +86,16 @@ class FrameItem(object):
 
     def remove_parent(self):
         self.parentItem = None
+
+    def childNumber(self):
+        if self.parentItem != None:
+            return self.parentItem.frame_items.index(self)
+        return 0
+
+    def removeChildren(self, position, count):
+        if position < 0 or position + count > len(self.frame_items):
+            return False
+
+        for row in range(count):
+            self.frame_items.pop(position)
+        return True

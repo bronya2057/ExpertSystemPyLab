@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_FrameEditor(object):
     def setupUi(self, FrameEditor):
@@ -139,9 +139,12 @@ class Ui_FrameEditor(object):
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setContentsMargins(-1, 0, -1, -1)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.pbAddObject = QtWidgets.QPushButton(self.gBConnections)
-        self.pbAddObject.setObjectName("pbAddObject")
-        self.horizontalLayout_4.addWidget(self.pbAddObject)
+        self.pbAddNode = QtWidgets.QPushButton(self.gBConnections)
+        self.pbAddNode.setObjectName("pbAddNode")
+        self.horizontalLayout_4.addWidget(self.pbAddNode)
+        self.pbAddChild = QtWidgets.QPushButton(self.gBConnections)
+        self.pbAddChild.setObjectName("pbAddChild")
+        self.horizontalLayout_4.addWidget(self.pbAddChild)
         self.pbRemoveObject = QtWidgets.QPushButton(self.gBConnections)
         self.pbRemoveObject.setObjectName("pbRemoveObject")
         self.horizontalLayout_4.addWidget(self.pbRemoveObject)
@@ -173,7 +176,8 @@ class Ui_FrameEditor(object):
         _translate = QtCore.QCoreApplication.translate
         FrameEditor.setWindowTitle(_translate("FrameEditor", "RuleEditor"))
         self.gBConnections.setTitle(_translate("FrameEditor", "Frame objects Editor"))
-        self.pbAddObject.setText(_translate("FrameEditor", "Add Object"))
+        self.pbAddNode.setText(_translate("FrameEditor", "Add Node"))
+        self.pbAddChild.setText(_translate("FrameEditor", "Add Child"))
         self.pbRemoveObject.setText(_translate("FrameEditor", "Remove Object"))
         self.pbUpdate.setText(_translate("FrameEditor", "Update Slots"))
         self.pbLoad.setText(_translate("FrameEditor", "Load Frame Model"))

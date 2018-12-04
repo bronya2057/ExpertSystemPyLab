@@ -151,9 +151,16 @@ QListView::item:hover {
            <number>0</number>
           </property>
           <item>
-           <widget class="QPushButton" name="pbAddObject">
+           <widget class="QPushButton" name="pbAddNode">
             <property name="text">
-             <string>Add Object</string>
+             <string>Add Node</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbAddChild">
+            <property name="text">
+             <string>Add Child</string>
             </property>
            </widget>
           </item>

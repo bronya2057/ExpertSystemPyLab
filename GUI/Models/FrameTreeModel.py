@@ -51,10 +51,11 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         # self.root_node = FrameItem(QModelIndex(), "ROOT")
 
     def getItem(self, index):
-        if index.isValid():
-            item = index.internalPointer()
-            if item:
-                return item
+        if not index is None:
+            if index.isValid():
+                item = index.internalPointer()
+                if item:
+                    return item
 
         return self.rootItem
 
@@ -93,7 +94,6 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
     def index(self, row, column, parent):
         print("index:")
         if not self.hasIndex(row, column, parent):
-
             return QtCore.QModelIndex()
         if not parent.isValid():
 
@@ -108,20 +108,16 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
             return QtCore.QModelIndex()
 
     def parent(self, index):
-        print("parent1:")
         if not index.isValid():
-            print("parent2:")
-            return QtCore.QModelIndex()
+            return QModelIndex()
 
-        print("parent3:")
-        childItem = index.internalPointer()
-        print("parent4:")
+        childItem = self.getItem(index)
         parentItem = childItem.parent()
-        print("parent5:")
+
         if parentItem == self.rootItem:
-            print("parent6:")
-            return QtCore.QModelIndex()
-        return self.createIndex(parentItem.row(), 0, parentItem)
+            return QModelIndex()
+
+        return self.createIndex(parentItem.childNumber(), 0, parentItem)
 
     def rowCount(self, parent):
         print("rowCount:")
@@ -144,41 +140,60 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         else:
             return False
 
-    def add_item_at(self, index):
+    def add_child_at(self, index):
         if index.isValid():
             node = index.internalPointer()
-            self.insertRow(index.row()+1, index)
+            self.insertRow(0, index)
             print()
         pass
 
-    def remove_item_at(self, index):
+    def add_item_at(self, index):
         if index.isValid():
-            self.removeRow(index.row(), index)
+            node = index.internalPointer()
+            self.insertRow(index.row() + 1, index.parent())
             print()
 
+    def remove_item_at(self, index):
+        self.removeRow(index.row(), index.parent())
+
     def insertRows(self, position, rows, parent=None, *args, **kwargs):
-        parent_item = parent.internalPointer()
+        parent_item = self.getItem(parent)
 
         self.beginInsertRows(parent, position, position + rows - 1)
-        success = parent_item.appendChild(FrameItem("NewFrame", {}, parent_item))
+        success = parent_item.insertChildren(position, 1)
         self.endInsertRows()
 
         return True
 
     def removeRows(self, position, rows, parent=None, *args, **kwargs):
-        if parent.isValid():
-            this_item = parent.internalPointer()
-            this_parent = this_item.parent()
-            self.beginRemoveRows(parent, position, position + rows - 1)
-            this_parent.remove_children_at(position)
-            print("REMOVE CHILDREN:")
-            self.endRemoveRows()
-            return True
+        parentItem = self.getItem(parent)
+
+        self.beginRemoveRows(parent, position, position + rows - 1)
+        success = parentItem.removeChildren(position, rows)
+        self.endRemoveRows()
+
+        return success
+
+        # if parent.isValid():
+        #     this_item = parent.internalPointer()
+        #     this_parent = this_item.parent()
+        #     self.beginRemoveRows(parent, position, position + rows - 1)
+        #     this_parent.remove_children_at(position)
+        #     print("REMOVE CHILDREN:")
+        #     self.endRemoveRows()
+        #     return True
+
+    def clear_all(self):
+        if len(self.rootItem.frame_items) > 0:
+            self.removeRows(0, len(self.rootItem.frame_items))
+            # self.rootItem.removeChildren(0, len(self.rootItem.frame_items))
+            self.all_items = []
 
 
 def getLineInfo():
     print(inspect.stack()[1][1], ":", inspect.stack()[1][2], ":",
           inspect.stack()[1][3])
+
 
 if __name__ == '__main__':
     import sys
@@ -186,7 +201,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     'c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame.json'
-    folder ='C:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame.json'
+    folder = 'C:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame.json'
     # with open(folder) as f:
     #     data = json.load(f)
 

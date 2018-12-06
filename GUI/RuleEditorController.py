@@ -137,7 +137,8 @@ class RuleEditorController(QDialog):
 
         file_name = self.ui.textEditThemeName.text()
         file_path = os.path.join(os.path.dirname(os.getcwd()), es_knowledge_base_str_token)
-        full_file_path = os.path.join(file_path, file_name + extention_separator_token + es_extension_token)
+        file_path = os.path.join(file_path, production_str_token)
+        full_file_path = os.path.join(file_path, file_name  + extention_separator_token + es_extension_token)
         print(full_file_path)
 
         try:
@@ -150,7 +151,7 @@ class RuleEditorController(QDialog):
         from PyQt5.QtWidgets import QFileDialog
 
         options = QFileDialog.Options()
-        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token,
+        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token + "/" + production_str_token,
                                                   open_file_dialog_label, options=options)
         if fileName:
             print(fileName)

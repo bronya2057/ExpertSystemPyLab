@@ -19,12 +19,16 @@
     },
     "TechDoc": {
       "slots": {
-        "SerialN0": {
+        "Document Info": {
           "slots": {
-            "FrameName": "FEWFewfew"
+            "Number": "555",
+            "Series": "3",
+            "Language": "English",
+            "References": "None"
           }
         }
       }
     }
-  }
+  },
+  "TYPE": "Frame"
 }

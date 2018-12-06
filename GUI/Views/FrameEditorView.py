@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_FrameEditor(object):
     def setupUi(self, FrameEditor):
@@ -150,20 +150,6 @@ class Ui_FrameEditor(object):
         self.horizontalLayout_4.addWidget(self.pbRemoveObject)
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_2.addLayout(self.verticalLayout_3)
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setContentsMargins(0, -1, -1, -1)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.tableViewSlots = QtWidgets.QTableView(self.gBConnections)
-        self.tableViewSlots.setObjectName("tableViewSlots")
-        self.verticalLayout.addWidget(self.tableViewSlots)
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.pbUpdate = QtWidgets.QPushButton(self.gBConnections)
-        self.pbUpdate.setObjectName("pbUpdate")
-        self.horizontalLayout.addWidget(self.pbUpdate)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        self.horizontalLayout_2.addLayout(self.verticalLayout)
         self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 3)
         self.pbLoad = QtWidgets.QPushButton(FrameEditor)
         self.pbLoad.setObjectName("pbLoad")
@@ -185,7 +171,6 @@ class Ui_FrameEditor(object):
         self.pbAddNode.setText(_translate("FrameEditor", "Add Node"))
         self.pbAddChild.setText(_translate("FrameEditor", "Add Child"))
         self.pbRemoveObject.setText(_translate("FrameEditor", "Remove Object"))
-        self.pbUpdate.setText(_translate("FrameEditor", "Update Slots"))
         self.pbLoad.setText(_translate("FrameEditor", "Load Frame Model"))
         self.pbGraph.setText(_translate("FrameEditor", "Draw Frame Graph"))
         self.pbSave.setText(_translate("FrameEditor", "Save Frame Model"))

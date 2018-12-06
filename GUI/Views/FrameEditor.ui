@@ -175,30 +175,6 @@ QListView::item:hover {
         </item>
        </layout>
       </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QTableView" name="tableViewSlots"/>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QPushButton" name="pbUpdate">
-            <property name="text">
-             <string>Update Slots</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
      </layout>
     </widget>
    </item>

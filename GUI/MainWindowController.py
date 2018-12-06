@@ -5,6 +5,7 @@ from pyknow import Fact
 
 from Backend.EmptyExpertEngine import ExpertEngine
 from GUI.Common import *
+from GUI.FrameEditorController import FrameEditorController
 from GUI.SemanticEditorController import SemanticEditorController
 from GUI.Views.MainWindowView import Ui_MainWindow
 from GUI.Models.Helpers.ColumnButtonDelegate import ColumnButtonDelegate
@@ -84,6 +85,16 @@ class MainWindowController(QMainWindow):
             semantic_editor_controller.deleteLater()
             print("Cancel Button")
 
+    def frame_editor_action(self):
+        frame_editor_controller = FrameEditorController()
+        response = frame_editor_controller.exec()
+        frame_editor_controller.setAttribute(Qt.WA_DeleteOnClose)
+        if response == QDialog.Accepted:
+            print("The Ok button clicked")
+        else:
+            frame_editor_controller.deleteLater()
+            print("Cancel Button")
+
     def fill_menu_bar(self):
         menu_bar = self.ui.menubar
 
@@ -107,6 +118,10 @@ class MainWindowController(QMainWindow):
         semantic_editor_action.setShortcut("Ctrl+Alt+S")
         tools.addAction(semantic_editor_action)
 
+        frame_editor_action = QAction("Frame Editor", menu_bar)
+        frame_editor_action.setShortcut("Ctrl+Alt+F")
+        tools.addAction(frame_editor_action)
+
         check_box_tooltips = QCheckBox(help_menu)
         check_box_tooltips.setText("Tooltips Enabled")
         chk_box_action = QWidgetAction(help_menu)
@@ -117,6 +132,7 @@ class MainWindowController(QMainWindow):
         exit_action.triggered.connect(self.exit_action)
         rule_editor_action.triggered.connect(self.rule_editor_action)
         semantic_editor_action.triggered.connect(self.semantic_editor_action)
+        frame_editor_action.triggered.connect(self.frame_editor_action)
         check_box_tooltips.clicked.connect(self.on_check_box_tooltip_checked)
 
     def init_es_themes_model(self):

@@ -6,7 +6,7 @@ class FrameItem(object):
         self.slot_value = slot_value
         self.frame_items = []
         self.itemData = ["Frame Name", "Value", "Rel"]
-        self.header_data = ["Frame hierarchy", "Value", "Relationship"]
+        self.header_data = ["Frame hierarchy", "Value"]#, "Relationship"]
         self.parse_slots()
 
     def parse_slots(self):

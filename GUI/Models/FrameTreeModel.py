@@ -6,6 +6,7 @@ from PyQt5.QtCore import QModelIndex, Qt
 from PyQt5.QtWidgets import QApplication, QTreeView, QMessageBox
 import inspect
 
+from GUI import Common
 from GUI.Models.FrameItem import FrameItem
 
 FRAME_TOKEN = "Frame"
@@ -25,11 +26,26 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
     def load_frame_file(self, full_path):
         with open(full_path) as f:
             try:
-                self.data = json.load(f)
-                self.parse_data()
+                temp_data = json.load(f)
+                result = False
+                lst = list(temp_data.keys())
+                if "TYPE" in list(temp_data.keys()):
+                    if temp_data[Common.TYPE_TOKEN] == Common.frame_str_token:
+                        self.data = temp_data
+                        self.parse_data()
+                        result = True
+                if not result:
+                    msg = QMessageBox()
+                    msg.setStyleSheet("QLabel{min-width: 150px;}")
+                    msg.setWindowTitle("File extension error")
+                    msg.setText("Not a Frame file")
+                    retval = msg.exec_()
+
             except JSONDecodeError:
                 msg = QMessageBox()
                 msg.setText("Serialization failed due to file corruption")
+                msg.setStyleSheet("QLabel{min-width: 150px;}")
+                msg.setWindowTitle("JSON serialization fail")
                 retval = msg.exec_()
                 print("JSON file contains malicious content")
 
@@ -200,6 +216,10 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
 
     def clear_all(self):
         if len(self.rootItem.frame_items) > 0:
+            self.rootItem = FrameItem(ROOT_TOKEN)
+            self.data = {}
+            self.all_items = []
+            self.dataChanged.emit(QModelIndex(), QModelIndex(), [])
             # TODO HOW to remove all?
             # self.removeRows(0, len(self.rootItem.frame_items), QModelIndex(0,0))
             # self.rootItem.removeChildren(0, len(self.rootItem.frame_items))
@@ -217,6 +237,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
                 self.construct_json_frame(current_dict_item, current_item)
             else:
                 json_data[ROOT_TOKEN][frame.name] = frame.slot_value()
+        json_data[Common.TYPE_TOKEN] = FRAME_TOKEN
         return json_data
 
     def construct_json_frame(self,current_dict_item, node):

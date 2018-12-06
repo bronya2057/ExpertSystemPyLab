@@ -27,9 +27,11 @@ class FrameEditorController(QDialog):
         if fileName:
             print(fileName)
             self.clear_all()
+            self.frame_model = FrameTreeModel()
             self.frame_model.load_frame_file(fileName)
             self.ui.treeViewFrames.setModel(self.frame_model)
             self.ui.treeViewFrames.resizeColumnToContents(0)
+            self.ui.treeViewFrames.setColumnWidth(0, 400)
 
     def on_pb_save_clicked(self):
         import json
@@ -67,9 +69,7 @@ class FrameEditorController(QDialog):
         self.frame_model.remove_item_at(index)
 
     def clear_all(self):
-    #        self.ui.treeViewFrames.setModel()
-        self.frame_model.clear_all()
-        pass
+        del self.frame_model
 
     def draw_graph(self):
         root_item = self.frame_model.rootItem
@@ -111,7 +111,19 @@ class FrameEditorController(QDialog):
                     g.edge(node.frame_name, slot_full_description, lhead="cluster_" + node.frame_name)
                     self.frame_model.connected_subgraph_names.append(node.frame_name)
 
-        g.view()
+        import os
+
+        f = os.path.join(os.getcwd(), "cluster.gv.pdf")
+        if os.path.exists(f):
+            try:
+                os.rename(f, f)
+                print('Access on file "' + f + '" is available!')
+                g.view()
+            except OSError as e:
+                print('Access-error on file "' + f + '"! \n' + str(e))
+                FrameEditorController.prompt_error("File is used by another process", "File Open Fail")
+
+
         # import pydotplus
         # import matplotlib.pyplot as plt
         # import matplotlib.image as mpimg
@@ -142,9 +154,10 @@ class FrameEditorController(QDialog):
         # plt.show()
 
     @staticmethod
-    def prompt_error(error_text):
+    def prompt_error(error_text, title_text="Frame Editor"):
         msg = QMessageBox()
         msg.setText(error_text)
+        msg.setWindowTitle(title_text)
         retval = msg.exec_()
 
     def __init__(self):

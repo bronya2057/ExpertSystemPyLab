@@ -15,9 +15,24 @@ digraph G {
 		color=lightgrey
 		label=Author
 	}
+	Age -> "Dads age_45" [lhead=cluster_Age]
+	subgraph cluster_Age {
+		node [color=white style=filled]
+		"Dads age_45"
+		style=filled
+		color=lightgrey
+		label=Age
+	}
+	subgraph cluster_Age {
+		node [color=white style=filled]
+		"Your Age_22"
+		style=filled
+		color=lightgrey
+		label=Age
+	}
 	subgraph cluster_Author {
 		node [color=white style=filled]
-		Age_24
+		Age
 		style=filled
 		color=lightgrey
 		label=Author
@@ -36,9 +51,46 @@ digraph G {
 		color=lightgrey
 		label=Document
 	}
+	SerialN0 -> Info1_25 [lhead=cluster_SerialN0]
+	subgraph cluster_SerialN0 {
+		node [color=white style=filled]
+		Info1_25
+		style=filled
+		color=lightgrey
+		label=SerialN0
+	}
+	"Folders Pack" -> Folder1_Folder1 [lhead="cluster_Folders Pack"]
+	subgraph "cluster_Folders Pack" {
+		node [color=white style=filled]
+		Folder1_Folder1
+		style=filled
+		color=lightgrey
+		label="Folders Pack"
+	}
+	subgraph "cluster_Folders Pack" {
+		node [color=white style=filled]
+		Folder2_Folder2
+		style=filled
+		color=lightgrey
+		label="Folders Pack"
+	}
+	subgraph cluster_SerialN0 {
+		node [color=white style=filled]
+		"Folders Pack"
+		style=filled
+		color=lightgrey
+		label=SerialN0
+	}
+	subgraph cluster_SerialN0 {
+		node [color=white style=filled]
+		Info2_43
+		style=filled
+		color=lightgrey
+		label=SerialN0
+	}
 	subgraph cluster_TechDoc {
 		node [color=white style=filled]
-		SerialN0_3322
+		SerialN0
 		style=filled
 		color=lightgrey
 		label=TechDoc

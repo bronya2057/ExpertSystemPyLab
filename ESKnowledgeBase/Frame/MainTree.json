@@ -1,0 +1,37 @@
+{
+  "ROOT": {
+    "Document": {
+      "slots": {
+        "Name": "Funds",
+        "Theme": "People",
+        "Author": {
+          "slots": {
+            "Name": "Alex",
+            "Age": {
+              "slots": {
+                "Dads age": "45",
+                "Your Age": "22"
+              }
+            }
+          }
+        }
+      }
+    },
+    "TechDoc": {
+      "slots": {
+        "SerialN0": {
+          "slots": {
+            "Info1": "25",
+            "Info2": "43",
+            "Folders Pack": {
+              "slots": {
+                "Folder1": "Folder1",
+                "Folder2": "Folder2"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

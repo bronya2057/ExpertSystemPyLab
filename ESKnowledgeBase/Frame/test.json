@@ -1,0 +1,37 @@
+{
+  "ROOT": {
+    "NEWFr": {
+      "slots": {
+        "Fame": "Funds",
+        "Bame": "People",
+        "Author": {
+          "slots": {
+            "Name": "Alex",
+            "Age": "24",
+            "MyFrame": {
+              "slots": {
+                "NewFrame": {
+                  "slots": {
+                    "NewFrame": {
+                      "slots": {
+                        "NewFrame": {
+                          "slots": {
+                            "NewFrame": {
+                              "slots": {
+                                "NewFrame": "SLOT value"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

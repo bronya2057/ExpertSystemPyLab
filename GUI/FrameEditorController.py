@@ -77,6 +77,41 @@ class FrameEditorController(QDialog):
         for node in root_item.frame_items:
             print(node.name)
 
+        root_frames = []
+        self.frame_model.all_graph_frames.clear()
+        self.frame_model.connected_subgraph_names.clear()
+        for node in root_item.frame_items:
+            root_frames.append(node.name)
+            self.frame_model.construct_graph_frame(node)
+
+        from graphviz import Digraph
+
+        g = Digraph('G', filename='cluster.gv')
+        g.attr(compound='true')
+        # NOTE: the subgraph name needs to begin with 'cluster' (all lowercase)
+        #       so that Graphviz recognizes it as a special cluster subgraph
+
+        for node in self.frame_model.all_graph_frames:
+            with g.subgraph(name="cluster_" + node.frame_name) as c:
+                slot_full_description = ""
+                if node.value == "Connect":
+                    slot_full_description = node.name
+                else:
+                    slot_full_description = node.name + "_" + node.value
+
+                c.node(slot_full_description)
+                c.attr(style='filled')
+                c.attr(color='lightgrey')
+                c.node_attr.update(style='filled', color='white')
+                # c.edges([('a0', 'a1'), ('a1', 'a2'), ('a2', 'a3')])
+                c.attr(label=node.frame_name)
+                # g.edge(slot_full_description, 'b0', lhead="cluster_" + slot_full_description)
+
+                if not node.frame_name == "Connect" and node.frame_name not in self.frame_model.connected_subgraph_names and node.frame_name not in root_frames:
+                    g.edge(node.frame_name, slot_full_description, lhead="cluster_" + node.frame_name)
+                    self.frame_model.connected_subgraph_names.append(node.frame_name)
+
+        g.view()
         # import pydotplus
         # import matplotlib.pyplot as plt
         # import matplotlib.image as mpimg

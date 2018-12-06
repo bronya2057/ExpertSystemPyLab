@@ -19,6 +19,9 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         self.all_items = []
         self.full_path = ""
 
+        self.all_graph_frames = []
+        self.connected_subgraph_names = []
+
     def load_frame_file(self, full_path):
         with open(full_path) as f:
             try:
@@ -85,7 +88,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
             return QtCore.Qt.NoItemFlags
 
         flags_result = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-        if index.column() < 2 and index.internalPointer().childCount() == 0:
+        if index.column() == 1 and index.internalPointer().childCount() == 0 or index.column() == 0:
             flags_result = flags_result | QtCore.Qt.ItemIsEditable
         return flags_result
 
@@ -208,18 +211,35 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         json_data[ROOT_TOKEN] = {}
         for frame in self.rootItem.frame_items:
             current_item = frame
-            json_data[ROOT_TOKEN][frame.name]={"slots":{}}
-            current_dict_item = json_data[ROOT_TOKEN][frame.name]
-            self.construct_json_frame(current_dict_item, current_item)
+            if len(frame.frame_items) > 0:
+                json_data[ROOT_TOKEN][frame.name]={"slots":{}}
+                current_dict_item = json_data[ROOT_TOKEN][frame.name]
+                self.construct_json_frame(current_dict_item, current_item)
+            else:
+                json_data[ROOT_TOKEN][frame.name] = frame.slot_value()
         return json_data
 
     def construct_json_frame(self,current_dict_item, node):
         for child in node.frame_items:
-            if isinstance(child.slots, dict) and len(child.slots.keys()) > 0:
+            if (len(child.frame_items) > 0):
                 new_dict_item = current_dict_item["slots"][child.name]={"slots":{}}
                 self.construct_json_frame(new_dict_item, child)
             else:
                 current_dict_item["slots"][child.name] = child.slot_value
+
+    def construct_graph_frame(self, node):
+        # while (len(node.frame_items) > 0):
+        for frame_item in node.frame_items:
+            self.construct_graph_frame(frame_item)
+
+            if len(frame_item.frame_items) > 0:
+                slot_val = "Connect"
+                # if frame_item.parentItem.parentItem.name == "ROOT":
+                #     slot_val = ""
+            else:
+                slot_val = frame_item.slot_value
+            self.all_graph_frames.append(GraphNodeData(frame_item.name, slot_val, node.name))
+                # node.remove_child_by_val(frame_item.name)
 
 def getLineInfo():
     print(inspect.stack()[1][1], ":", inspect.stack()[1][2], ":",
@@ -231,33 +251,12 @@ class GraphNodeData:
         self.value = val
         self.frame_name = frame_name
 
-
-all_frames = []
-connected_subgraph_names = []
-
-def construct_frame(node):
-    global all_frames
-
-    while(len(node.frame_items)>0):
-        for frame_item in node.frame_items:
-            construct_frame(frame_item)
-
-            if isinstance(frame_item.slot_value, dict):
-                slot_val = "Connect"
-                # if frame_item.parentItem.parentItem.name == "ROOT":
-                #     slot_val = ""
-            else:
-                slot_val = frame_item.slot_value
-            all_frames.append(GraphNodeData(frame_item.name, slot_val, node.name))
-            node.remove_child_by_val(frame_item.name)
-
-
 if __name__ == '__main__':
     import sys
 
     app = QApplication(sys.argv)
 
-    folder = 'c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame/Frame.json'
+    folder = 'c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame/MainTree.json'
     'C:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame.json'
     # with open(folder) as f:
     #     data = json.load(f)
@@ -273,9 +272,7 @@ if __name__ == '__main__':
     data = model.get_json_ready_data()
     for node in root_item.frame_items:
         root_frames.append(node.name)
-        construct_frame(node)
-
-    print(all_frames)
+        model.construct_graph_frame(node)
 
     from graphviz import Digraph
 
@@ -284,7 +281,7 @@ if __name__ == '__main__':
     # NOTE: the subgraph name needs to begin with 'cluster' (all lowercase)
     #       so that Graphviz recognizes it as a special cluster subgraph
 
-    for node in all_frames:
+    for node in model.all_graph_frames:
         with g.subgraph(name="cluster_" + node.frame_name) as c:
             slot_full_description = ""
             if node.value == "Connect":
@@ -300,9 +297,9 @@ if __name__ == '__main__':
             c.attr(label=node.frame_name)
             # g.edge(slot_full_description, 'b0', lhead="cluster_" + slot_full_description)
 
-            if not node.frame_name == "Connect" and node.frame_name not in connected_subgraph_names and node.frame_name not in root_frames:
+            if not node.frame_name == "Connect" and node.frame_name not in model.connected_subgraph_names and node.frame_name not in root_frames:
                 g.edge(node.frame_name, slot_full_description, lhead="cluster_" + node.frame_name)
-                connected_subgraph_names.append(node.frame_name)
+                model.connected_subgraph_names.append(node.frame_name)
 
 
     # with g.subgraph(name='cluster_0') as c:
@@ -342,7 +339,7 @@ if __name__ == '__main__':
     # g.node('end', shape='Msquare')
 
     #data = model.get_json_ready_data()
-    #g.view()
+    g.view()
 
 
 

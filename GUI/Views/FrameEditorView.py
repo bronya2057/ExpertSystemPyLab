@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 class Ui_FrameEditor(object):
     def setupUi(self, FrameEditor):
@@ -164,10 +164,16 @@ class Ui_FrameEditor(object):
         self.horizontalLayout.addWidget(self.pbUpdate)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
-        self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 2)
+        self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 3)
         self.pbLoad = QtWidgets.QPushButton(FrameEditor)
         self.pbLoad.setObjectName("pbLoad")
         self.gridLayout.addWidget(self.pbLoad, 1, 0, 1, 1)
+        self.pbGraph = QtWidgets.QPushButton(FrameEditor)
+        self.pbGraph.setObjectName("pbGraph")
+        self.gridLayout.addWidget(self.pbGraph, 1, 2, 1, 1)
+        self.pbSave = QtWidgets.QPushButton(FrameEditor)
+        self.pbSave.setObjectName("pbSave")
+        self.gridLayout.addWidget(self.pbSave, 1, 1, 1, 1)
 
         self.retranslateUi(FrameEditor)
         QtCore.QMetaObject.connectSlotsByName(FrameEditor)
@@ -181,6 +187,8 @@ class Ui_FrameEditor(object):
         self.pbRemoveObject.setText(_translate("FrameEditor", "Remove Object"))
         self.pbUpdate.setText(_translate("FrameEditor", "Update Slots"))
         self.pbLoad.setText(_translate("FrameEditor", "Load Frame Model"))
+        self.pbGraph.setText(_translate("FrameEditor", "Draw Frame Graph"))
+        self.pbSave.setText(_translate("FrameEditor", "Save Frame Model"))
 
 
 if __name__ == "__main__":

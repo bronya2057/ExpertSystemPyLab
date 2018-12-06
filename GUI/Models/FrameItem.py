@@ -1,5 +1,5 @@
 class FrameItem(object):
-    def __init__(self, frame_name, slots={}, parent=None, slot_value="Frame"):
+    def __init__(self, frame_name, slots={}, parent=None, slot_value="SLOT value"):
         self.parentItem = parent
         self.name = frame_name
         self.slots = slots
@@ -79,6 +79,9 @@ class FrameItem(object):
     def set_name(self, name):
         self.name = name
 
+    def set_value(self, value):
+        self.slot_value = value
+
     def remove_children_at(self, pos):
         if pos < len(self.frame_items):
             del self.frame_items[pos]
@@ -99,3 +102,10 @@ class FrameItem(object):
         for row in range(count):
             self.frame_items.pop(position)
         return True
+
+    def remove_child_by_val(self, val):
+        for index, frame_item in enumerate(self.frame_items):
+            if val == frame_item.name:
+                del self.frame_items[index]
+                break
+

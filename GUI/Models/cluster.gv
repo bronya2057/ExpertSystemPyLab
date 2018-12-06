@@ -1,0 +1,46 @@
+digraph G {
+	compound=true
+	subgraph cluster_Document {
+		node [color=white style=filled]
+		Name_Funds
+		style=filled
+		color=lightgrey
+		label=Document
+	}
+	Author -> Name_Alex [lhead=cluster_Author]
+	subgraph cluster_Author {
+		node [color=white style=filled]
+		Name_Alex
+		style=filled
+		color=lightgrey
+		label=Author
+	}
+	subgraph cluster_Author {
+		node [color=white style=filled]
+		Age_24
+		style=filled
+		color=lightgrey
+		label=Author
+	}
+	subgraph cluster_Document {
+		node [color=white style=filled]
+		Author
+		style=filled
+		color=lightgrey
+		label=Document
+	}
+	subgraph cluster_Document {
+		node [color=white style=filled]
+		Theme_People
+		style=filled
+		color=lightgrey
+		label=Document
+	}
+	subgraph cluster_TechDoc {
+		node [color=white style=filled]
+		SerialN0_3322
+		style=filled
+		color=lightgrey
+		label=TechDoc
+	}
+}

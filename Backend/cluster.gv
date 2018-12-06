@@ -1,0 +1,29 @@
+digraph G {
+	compound=true
+	subgraph cluster_0 {
+		node [color=white style=filled]
+		GEw
+		GEw2
+		style=filled
+		color=lightgrey
+		label="process #1"
+	}
+	subgraph cluster_1 {
+		node [style=filled]
+		b0 -> b1
+		b1 -> b2
+		b2 -> b3
+		label="process #2"
+		color=blue
+	}
+	GEw -> b0 [lhead=cluster_1 ltail=cluster_0]
+	GEw -> b0 [lhead=cluster_1]
+	start -> b0
+	a1 -> b3
+	b2 -> a3
+	a3 -> a0
+	a3 -> end
+	b3 -> end
+	start [shape=Mdiamond]
+	end [shape=Msquare]
+}

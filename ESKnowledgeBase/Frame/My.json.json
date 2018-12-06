@@ -1,0 +1,16 @@
+{
+  "ROOT": {
+    "Document": {
+      "slots": {
+        "Name": "Funds",
+        "Theme": "People",
+        "Author": "Frame"
+      }
+    },
+    "TechDoc": {
+      "slots": {
+        "SerialN0": "3322"
+      }
+    }
+  }
+}

@@ -8,11 +8,13 @@ import inspect
 
 from GUI.Models.FrameItem import FrameItem
 
+FRAME_TOKEN = "Frame"
+ROOT_TOKEN = "ROOT"
 
 class FrameTreeModel(QtCore.QAbstractItemModel):
     def __init__(self, parent=None):
         super(FrameTreeModel, self).__init__(parent)
-        self.rootItem = FrameItem("ROOT")
+        self.rootItem = FrameItem(ROOT_TOKEN)
         # self.data = {}
         self.all_items = []
         self.full_path = ""
@@ -29,7 +31,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
                 print("JSON file contains malicious content")
 
     def parse_data(self):
-        all_root_nodes = self.data["ROOT"]
+        all_root_nodes = self.data[ROOT_TOKEN]
         self.all_items.append(self.rootItem)
 
         current_node = self.rootItem
@@ -38,6 +40,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
             new_node = FrameItem(key, all_root_nodes[key]["slots"], current_node)
             self.rootItem.appendChild(new_node)
             print()
+        print()
 
             # current_node = all_root_nodes[key]
             # node_slots = list(current_node["slots"])
@@ -74,6 +77,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
             return None
 
         item = self.getItem(index)
+
         return item.data(index.column())
 
     def flags(self, index):
@@ -81,7 +85,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
             return QtCore.Qt.NoItemFlags
 
         flags_result = QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-        if index.column() == 0:
+        if index.column() < 2 and index.internalPointer().childCount() == 0:
             flags_result = flags_result | QtCore.Qt.ItemIsEditable
         return flags_result
 
@@ -96,12 +100,15 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         if not self.hasIndex(row, column, parent):
             return QtCore.QModelIndex()
         if not parent.isValid():
-
             parentItem = self.rootItem
         else:
             parentItem = parent.internalPointer()
 
         childItem = parentItem.child(row)
+
+        if childItem.childCount() > 0:
+            childItem.set_value(FRAME_TOKEN)
+
         if childItem:
             return self.createIndex(row, column, childItem)
         else:
@@ -134,9 +141,14 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
 
     def setData(self, index, value, role=None):
         if index.isValid() and role == Qt.EditRole and value:
-            index.internalPointer().set_name(value)
-            self.dataChanged.emit(index, index, [])
-            return True
+            if index.column() == 0:
+                index.internalPointer().set_name(value)
+                self.dataChanged.emit(index, index, [])
+                return True
+            elif index.column() == 1:
+                index.internalPointer().set_value(value)
+                self.dataChanged.emit(index, index, [])
+                return True
         else:
             return False
 
@@ -185,14 +197,59 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
 
     def clear_all(self):
         if len(self.rootItem.frame_items) > 0:
-            self.removeRows(0, len(self.rootItem.frame_items))
+            # TODO HOW to remove all?
+            # self.removeRows(0, len(self.rootItem.frame_items), QModelIndex(0,0))
+            # self.rootItem.removeChildren(0, len(self.rootItem.frame_items))
             # self.rootItem.removeChildren(0, len(self.rootItem.frame_items))
             self.all_items = []
 
+    def get_json_ready_data(self):
+        json_data = {}
+        json_data[ROOT_TOKEN] = {}
+        for frame in self.rootItem.frame_items:
+            current_item = frame
+            json_data[ROOT_TOKEN][frame.name]={"slots":{}}
+            current_dict_item = json_data[ROOT_TOKEN][frame.name]
+            self.construct_json_frame(current_dict_item, current_item)
+        return json_data
+
+    def construct_json_frame(self,current_dict_item, node):
+        for child in node.frame_items:
+            if isinstance(child.slots, dict) and len(child.slots.keys()) > 0:
+                new_dict_item = current_dict_item["slots"][child.name]={"slots":{}}
+                self.construct_json_frame(new_dict_item, child)
+            else:
+                current_dict_item["slots"][child.name] = child.slot_value
 
 def getLineInfo():
     print(inspect.stack()[1][1], ":", inspect.stack()[1][2], ":",
           inspect.stack()[1][3])
+
+class GraphNodeData:
+    def __init__(self, name,val,frame_name):
+        self.name = name
+        self.value = val
+        self.frame_name = frame_name
+
+
+all_frames = []
+connected_subgraph_names = []
+
+def construct_frame(node):
+    global all_frames
+
+    while(len(node.frame_items)>0):
+        for frame_item in node.frame_items:
+            construct_frame(frame_item)
+
+            if isinstance(frame_item.slot_value, dict):
+                slot_val = "Connect"
+                # if frame_item.parentItem.parentItem.name == "ROOT":
+                #     slot_val = ""
+            else:
+                slot_val = frame_item.slot_value
+            all_frames.append(GraphNodeData(frame_item.name, slot_val, node.name))
+            node.remove_child_by_val(frame_item.name)
 
 
 if __name__ == '__main__':
@@ -200,8 +257,8 @@ if __name__ == '__main__':
 
     app = QApplication(sys.argv)
 
-    'c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame.json'
-    folder = 'C:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame.json'
+    folder = 'c:/Users/ABrodskyi/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame/Frame.json'
+    'C:/Users/Alexander/Dropbox/ProgrammingMaterial/Python/ExpertSystem/ESKnowledgeBase/Frame.json'
     # with open(folder) as f:
     #     data = json.load(f)
 
@@ -211,5 +268,84 @@ if __name__ == '__main__':
     view = QTreeView()
     view.setModel(model)
     view.setWindowTitle("Simple Tree Model")
-    view.show()
+    root_item = model.rootItem
+    root_frames = []
+    data = model.get_json_ready_data()
+    for node in root_item.frame_items:
+        root_frames.append(node.name)
+        construct_frame(node)
+
+    print(all_frames)
+
+    from graphviz import Digraph
+
+    g = Digraph('G', filename='cluster.gv')
+    g.attr(compound='true')
+    # NOTE: the subgraph name needs to begin with 'cluster' (all lowercase)
+    #       so that Graphviz recognizes it as a special cluster subgraph
+
+    for node in all_frames:
+        with g.subgraph(name="cluster_" + node.frame_name) as c:
+            slot_full_description = ""
+            if node.value == "Connect":
+                slot_full_description = node.name
+            else:
+                slot_full_description = node.name + "_" + node.value
+
+            c.node(slot_full_description)
+            c.attr(style='filled')
+            c.attr(color='lightgrey')
+            c.node_attr.update(style='filled', color='white')
+            # c.edges([('a0', 'a1'), ('a1', 'a2'), ('a2', 'a3')])
+            c.attr(label=node.frame_name)
+            # g.edge(slot_full_description, 'b0', lhead="cluster_" + slot_full_description)
+
+            if not node.frame_name == "Connect" and node.frame_name not in connected_subgraph_names and node.frame_name not in root_frames:
+                g.edge(node.frame_name, slot_full_description, lhead="cluster_" + node.frame_name)
+                connected_subgraph_names.append(node.frame_name)
+
+
+    # with g.subgraph(name='cluster_0') as c:
+    #     c.node("GEw3")
+    #     c.node("GEw23")
+    #     c.attr(style='filled')
+    #     c.attr(color='lightgrey')
+    #     c.node_attr.update(style='filled', color='white')
+    #     # c.edges([('a0', 'a1'), ('a1', 'a2'), ('a2', 'a3')])
+    #     c.attr(label='process #1')
+    #
+    # with g.subgraph(name='cluster_0') as c:
+    #     c.node("GEw3444")
+    #     c.node("GEw23555")
+    #     c.attr(style='filled')
+    #     c.attr(color='lightgrey')
+    #     c.node_attr.update(style='filled', color='white')
+    #     # c.edges([('a0', 'a1'), ('a1', 'a2'), ('a2', 'a3')])
+    #     c.attr(label='process #1')
+    # #
+    # with g.subgraph(name='cluster_1') as c:
+    #     c.node_attr.update(style='filled')
+    #     c.edges([('b0', 'b1'), ('b1', 'b2'), ('b2', 'b3')])
+    #     c.attr(label='process #2')
+    #     c.attr(color='blue')
+
+    # g.edge('GEw', 'b0', ltail='cluster_0', lhead='cluster_1')  # cluster to cluster
+    # g.edge('GEw', 'b0', lhead='cluster_1')  # node to cluster
+    # g.edge('start', 'b0')
+    # g.edge('a1', 'b3')
+    # g.edge('b2', 'a3')
+    # g.edge('a3', 'a0')
+    # g.edge('a3', 'end')
+    # g.edge('b3', 'end')
+
+    # g.node('start', shape='Mdiamond')
+    # g.node('end', shape='Msquare')
+
+    #data = model.get_json_ready_data()
+    #g.view()
+
+
+
+
+    # view.show()
     sys.exit(app.exec_())

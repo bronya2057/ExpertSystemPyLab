@@ -22,9 +22,6 @@ class RulesListModel(QAbstractListModel):
         # else:
         if role == Qt.DisplayRole or role == Qt.EditRole:
             data = CommonSerializedData.rules_name[index.row()]
-            print(CommonSerializedData.rules_name)
-            print(CommonSerializedData.rules_list)
-            print(CommonSerializedData.rules_output)
             # print(CommonSerializedData.rules_output)
 
             return QVariant(data)
@@ -38,7 +35,7 @@ class RulesListModel(QAbstractListModel):
         #     return 0
 
     def insertRows(self, row, count, parent=None, *args, **kwargs):
-        print("insert rows" + str(row) + str(count))
+        # print("insert rows" + str(row) + str(count))
         self.beginInsertRows(QModelIndex(), row, count)
 
         self.endInsertRows()
@@ -77,8 +74,8 @@ class RulesListModel(QAbstractListModel):
     def set_all_combo_boxes_for_selected_rule(self, index):
         rules_list_at_index = CommonSerializedData.get_rules_list_at_index(index)
         for index, rule in enumerate(rules_list_at_index):
-            print(index)
-            print(rule)
+            # print(index)
+            # print(rule)
             ColumnButtonDelegate.set_combo_item_at_index(index, rule)
 
     def add_rule(self):
@@ -90,8 +87,8 @@ class RulesListModel(QAbstractListModel):
             self.insertRow(new_row_index)
             rules_names_list.append(self.NEW_RULE_STR)
             CommonSerializedData.add_rule()
-            print(rules_names_list)
-            print(rules_list)
+            # print(rules_names_list)
+            # print(rules_list)
 
     def remove_rule(self, index):
         if index > -1:
@@ -101,7 +98,7 @@ class RulesListModel(QAbstractListModel):
         rules_outputs = CommonSerializedData.get_rules_outputs()
         if -1 < index < len (rules_outputs):
             rules_outputs[index] = output
-            print(rules_outputs)
+            # print(rules_outputs)
 
     def get_output_for_selected_rule(self, index):
         return CommonSerializedData.get_output_for_selected_rule(index)
@@ -116,9 +113,9 @@ class RulesListModel(QAbstractListModel):
 
     def add_rules_from_file(self, rules_struct):
         for index, rule_name in enumerate(rules_struct.rules_names):
-            print(rules_struct.rules_names[index])
-            print(rules_struct.rules_list[index])
-            print(rules_struct.rules_output[index])
+            # print(rules_struct.rules_names[index])
+            # print(rules_struct.rules_list[index])
+            # print(rules_struct.rules_output[index])
             names = CommonSerializedData.get_rules_names()
             outputs = CommonSerializedData.get_rules_outputs()
             rules = CommonSerializedData.get_rules_list()
@@ -133,10 +130,10 @@ class RulesListModel(QAbstractListModel):
                 rule_as_list = rules_struct.rules_list[index]
                 rule_as_list = rule_as_list.replace(", ", ",")
                 rule_as_list = rule_as_list.split(',')
-                print()
+                # print()
                 rules[len(rules) - 1] = rule_as_list
 
-        print (1)
+        # print (1)
         # rules_names_list = CommonSerializedData.get_rules_names()
         # if not (self.NEW_RULE_STR in rules_names_list):
         #     new_row_index = len(rules_names_list)

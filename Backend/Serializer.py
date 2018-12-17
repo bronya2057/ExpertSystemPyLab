@@ -1,6 +1,7 @@
 from collections import OrderedDict
 from json import JSONDecodeError
 
+from GUI import Common
 from GUI.Models.Helpers.SemanticData import SemanticData
 from GUI.Models.Helpers.ESTheme import ESThemeSimple, SemanticNode
 from GUI.Models.Helpers.CommonSerializedData import CommonSerializedData
@@ -28,9 +29,9 @@ def get_json_ready_data():
     print(rules_in_order)
 
     data = {name: {"Questions": questions,
-                "Variables": answers,
-                "Rules": rules_in_order,
-                "RulesNames": rules_names}}
+                   "Variables": answers,
+                   "Rules": rules_in_order,
+                   "RulesNames": rules_names}, Common.TYPE_TOKEN: Common.production_str_token}
 
     return data
 
@@ -54,6 +55,8 @@ def get_json_ready_semantic_data():
                        "out_obj": out_interactions}}
         node_dict.update(data)
 
+    node_dict[Common.TYPE_TOKEN] = Common.semantic_str_token
+
     return node_dict
 
 
@@ -65,38 +68,41 @@ def de_serialize_to_internal_data(file_path):
     with open(file_path) as f:
         try:
             data = json.load(f)
+            lst = list(data.keys())
+            if "TYPE" in list(data.keys()):
+                if data[Common.TYPE_TOKEN] == Common.production_str_token:
+                    del data[Common.TYPE_TOKEN]
+                    theme = ESThemeSimple("")
 
-            theme = ESThemeSimple("")
+                    themes = data.keys()
+                    if len(themes) > 0:
+                        FIRST_THEME_TO_SERIALIZE = 0
+                        all_themes = list(themes)
 
-            themes = data.keys()
-            if len(themes) > 0:
-                FIRST_THEME_TO_SERIALIZE = 0
-                all_themes = list(themes)
+                        print(all_themes[FIRST_THEME_TO_SERIALIZE])
+                        theme.theme_name = all_themes[FIRST_THEME_TO_SERIALIZE]
+                        value_struct = list(data.values())[0]
 
-                print(all_themes[FIRST_THEME_TO_SERIALIZE])
-                theme.theme_name = all_themes[FIRST_THEME_TO_SERIALIZE]
-                value_struct = list(data.values())[0]
+                        theme.questions_list = value_struct["Questions"]
+                        theme.answers_list = value_struct["Variables"]
 
-                theme.questions_list = value_struct["Questions"]
-                theme.answers_list = value_struct["Variables"]
+                        theme.rules_struct.rules_list = list(value_struct["Rules"].keys())
+                        theme.rules_struct.rules_output = list(value_struct["Rules"].values())
+                        theme.rules_struct.rules_names = list(value_struct["RulesNames"])
 
-                theme.rules_struct.rules_list = list(value_struct["Rules"].keys())
-                theme.rules_struct.rules_output = list(value_struct["Rules"].values())
-                theme.rules_struct.rules_names = list(value_struct["RulesNames"])
+                        print(theme)
 
-                print(theme)
-
-            if len(theme.questions_list) == len(theme.answers_list) and \
-                    len(theme.rules_struct.rules_names) == len(theme.rules_struct.rules_output) == len(
-                theme.rules_struct.rules_list):
-                for variable_rules in theme.rules_struct.rules_list:
-                    variable_rules = variable_rules.replace(", ", ",")
-                    variable_rules = variable_rules.split(',')
-                    if not len(variable_rules) == len(theme.answers_list):
+                    if len(theme.questions_list) == len(theme.answers_list) and \
+                            len(theme.rules_struct.rules_names) == len(theme.rules_struct.rules_output) == len(
+                        theme.rules_struct.rules_list):
+                        for variable_rules in theme.rules_struct.rules_list:
+                            variable_rules = variable_rules.replace(", ", ",")
+                            variable_rules = variable_rules.split(',')
+                            if not len(variable_rules) == len(theme.answers_list):
+                                theme = -1
+                                break
+                    else:
                         theme = -1
-                        break
-            else:
-                theme = -1
 
         except JSONDecodeError:
             print("JSON file contains malicious content")
@@ -111,20 +117,22 @@ def de_serialize_semantic_to_internal_data(file_path):
     with open(file_path) as f:
         try:
             data = json.load(f)
-            print(data)
+            lst = list(data.keys())
+            if "TYPE" in list(data.keys()):
+                if data[Common.TYPE_TOKEN] == Common.semantic_str_token:
+                    del data[Common.TYPE_TOKEN]
+                    for index, data_value in enumerate(data):
+                        obj = list(data.keys())[index]
+                        values = list(data.values())[index]
 
-            for index, data_value in enumerate(data):
-                obj = list(data.keys())[index]
-                values = list(data.values())[index]
 
+                        in_obj = values["in_obj"]
+                        in_interaction = values["in_interaction"]
+                        out_interactions = values["out_interactions"]
+                        out_obj = values["out_obj"]
 
-                in_obj = values["in_obj"]
-                in_interaction = values["in_interaction"]
-                out_interactions = values["out_interactions"]
-                out_obj = values["out_obj"]
-
-                if (len(in_obj) == len(in_interaction) and len(out_interactions) == len(out_obj)):
-                    semantic_net.append(SemanticNode(obj, in_obj, in_interaction, out_interactions, out_obj))
+                        if (len(in_obj) == len(in_interaction) and len(out_interactions) == len(out_obj)):
+                            semantic_net.append(SemanticNode(obj, in_obj, in_interaction, out_interactions, out_obj))
         except JSONDecodeError:
             print("JSON file contains malicious content")
 

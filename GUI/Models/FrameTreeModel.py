@@ -8,6 +8,7 @@ import inspect
 
 from GUI import Common
 from GUI.Models.FrameItem import FrameItem
+from GUI.Models.Helpers.CommonWidgetOp import CommonWidgetOp
 
 FRAME_TOKEN = "Frame"
 ROOT_TOKEN = "ROOT"
@@ -35,18 +36,10 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
                         self.parse_data()
                         result = True
                 if not result:
-                    msg = QMessageBox()
-                    msg.setStyleSheet("QLabel{min-width: 150px;}")
-                    msg.setWindowTitle("File extension error")
-                    msg.setText("Not a Frame file")
-                    retval = msg.exec_()
+                    CommonWidgetOp.prompt_error("Not a Frame file", "File extension error")
 
             except JSONDecodeError:
-                msg = QMessageBox()
-                msg.setText("Serialization failed due to file corruption")
-                msg.setStyleSheet("QLabel{min-width: 150px;}")
-                msg.setWindowTitle("JSON serialization fail")
-                retval = msg.exec_()
+                CommonWidgetOp.prompt_error("Serialization failed due to file corruption", "JSON serialization fail")
                 print("JSON file contains malicious content")
 
     def parse_data(self):
@@ -58,19 +51,11 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         for key in all_root_nodes:
             new_node = FrameItem(key, all_root_nodes[key]["slots"], current_node)
             self.rootItem.appendChild(new_node)
-            print()
-        print()
 
-            # current_node = all_root_nodes[key]
-            # node_slots = list(current_node["slots"])
-            # for key,val in current_node.items():
-            #     FrameItem(key, list(val), key)
+    def init_new_model(self):
+        self.all_items.append(self.rootItem)
+        self.rootItem.appendChild(FrameItem("NEW FRAME", {}, self.rootItem))  # ADD PARENT FOR TREE
 
-            # self.rootItem.appendChild(FrameItem(key, all_root_nodes[key].values(), self.rootItem))
-            # pass
-        # self.roost_node.add_child()
-
-        # self.root_node = FrameItem(QModelIndex(), "ROOT")
 
     def getItem(self, index):
         if not index is None:
@@ -88,7 +73,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
             return self.rootItem.columnCount()
 
     def data(self, index, role):
-        print("data:")
+        # print("data:")
         if not index.isValid():
             return None
 
@@ -115,7 +100,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         return None
 
     def index(self, row, column, parent):
-        print("index:")
+        # print("index:")
         if not self.hasIndex(row, column, parent):
             return QtCore.QModelIndex()
         if not parent.isValid():
@@ -146,7 +131,7 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         return self.createIndex(parentItem.childNumber(), 0, parentItem)
 
     def rowCount(self, parent):
-        print("rowCount:")
+        # print("rowCount:")
         if parent.column() > 0:
             return 0
 
@@ -159,8 +144,8 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         return parentItem.childCount()
 
     def setData(self, index, value, role=None):
-        if index.isValid() and role == Qt.EditRole and value:
-            if index.column() == 0:
+        if index.isValid() and role == Qt.EditRole: #and value: Slots could be actually empty
+            if index.column() == 0 and value:
                 index.internalPointer().set_name(value)
                 self.dataChanged.emit(index, index, [])
                 return True
@@ -175,14 +160,14 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
         if index.isValid():
             node = index.internalPointer()
             self.insertRow(0, index)
-            print()
+            # print()
         pass
 
     def add_item_at(self, index):
         if index.isValid():
             node = index.internalPointer()
             self.insertRow(index.row() + 1, index.parent())
-            print()
+            # print()
 
     def remove_item_at(self, index):
         self.removeRow(index.row(), index.parent())
@@ -205,25 +190,12 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
 
         return success
 
-        # if parent.isValid():
-        #     this_item = parent.internalPointer()
-        #     this_parent = this_item.parent()
-        #     self.beginRemoveRows(parent, position, position + rows - 1)
-        #     this_parent.remove_children_at(position)
-        #     print("REMOVE CHILDREN:")
-        #     self.endRemoveRows()
-        #     return True
-
     def clear_all(self):
         if len(self.rootItem.frame_items) > 0:
             self.rootItem = FrameItem(ROOT_TOKEN)
             self.data = {}
             self.all_items = []
             self.dataChanged.emit(QModelIndex(), QModelIndex(), [])
-            # TODO HOW to remove all?
-            # self.removeRows(0, len(self.rootItem.frame_items), QModelIndex(0,0))
-            # self.rootItem.removeChildren(0, len(self.rootItem.frame_items))
-            # self.rootItem.removeChildren(0, len(self.rootItem.frame_items))
             self.all_items = []
 
     def get_json_ready_data(self):
@@ -249,18 +221,14 @@ class FrameTreeModel(QtCore.QAbstractItemModel):
                 current_dict_item["slots"][child.name] = child.slot_value
 
     def construct_graph_frame(self, node):
-        # while (len(node.frame_items) > 0):
         for frame_item in node.frame_items:
             self.construct_graph_frame(frame_item)
 
             if len(frame_item.frame_items) > 0:
                 slot_val = "Connect"
-                # if frame_item.parentItem.parentItem.name == "ROOT":
-                #     slot_val = ""
             else:
                 slot_val = frame_item.slot_value
             self.all_graph_frames.append(GraphNodeData(frame_item.name, slot_val, node.name))
-                # node.remove_child_by_val(frame_item.name)
 
 def getLineInfo():
     print(inspect.stack()[1][1], ":", inspect.stack()[1][2], ":",

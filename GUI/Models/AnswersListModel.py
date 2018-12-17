@@ -16,9 +16,9 @@ class AnswersListModel(QAbstractListModel):
 
     def data(self, index, role=None):
         if role == Qt.DisplayRole or role == Qt.EditRole:
-            print("Change Data")
+            # print("Change Data")
             answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
-            print(answers_list_at_selected_question)
+            # print(answers_list_at_selected_question)
             row = index.row()
             return QVariant(answers_list_at_selected_question[row])
         else:
@@ -34,7 +34,7 @@ class AnswersListModel(QAbstractListModel):
     def request_variables_for_question(self, index):
         CommonSerializedData.set_selected_question_index(index.row())
 
-        print("Question Selected" + str(index.row()))
+        # print("Question Selected" + str(index.row()))
         answers_list_at_selected_question = CommonSerializedData.get_answers_list_at_selected_index()
         self.insertRows(0, len(answers_list_at_selected_question))
         #  self.dataChanged.emit(QModelIndex(), [])
@@ -45,7 +45,7 @@ class AnswersListModel(QAbstractListModel):
     #     return 2  # len(self.es_themes)
 
     def insertRows(self, row, count, parent=None, *args, **kwargs):
-        print("insert rows" + str(row) + str(count))
+        # print("insert rows" + str(row) + str(count))
         self.beginInsertRows(QModelIndex(), row, count)
 
         self.endInsertRows()

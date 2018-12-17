@@ -34,7 +34,7 @@ class ColumnButtonDelegate(QItemDelegate):
 
     def createEditor(self, parent, option, index):
         # create the ProgressBar as our editor.
-        print(index.row())  # just get the needed row data from common
+        # print(index.row())  # just get the needed row data from common
         editor = QComboBox(parent)
         answers_for_indexed_question = CommonSerializedData.get_answers_list_at_index(index.row())
         editor.addItems(answers_for_indexed_question)

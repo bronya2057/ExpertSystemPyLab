@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox
 
 from Backend import Serializer
 from GUI.Common import *
+from GUI.Models.Helpers.CommonWidgetOp import CommonWidgetOp
 from GUI.Models.Helpers.CommonSerializedData import CommonSerializedData
 from GUI.Models.AnswersListModel import AnswersListModel
 from GUI.Models.Helpers.ColumnButtonDelegate import ColumnButtonDelegate
@@ -125,34 +126,29 @@ class RuleEditorController(QDialog):
 
     def on_pb_update_rule_clicked(self):
         complete_rule_list = ColumnButtonDelegate.get_all_combo_box_values_list()
-        print(complete_rule_list)
         index = self.ui.listViewRules.currentIndex()
         self.rules_model.update_rule_at(index.row(), complete_rule_list)
 
     def on_save_clicked(self):
         data = Serializer.get_json_ready_data()
 
-        json_str = json.dumps(data, indent=2)
-        print(json_str)
+        file_name = CommonWidgetOp.prompt_save_dialog(open_file_dialog_desc,
+                                                       "../" + es_knowledge_base_str_token + "/" + production_str_token,
+                                                      self)
 
-        file_name = self.ui.textEditThemeName.text()
-        file_path = os.path.join(os.path.dirname(os.getcwd()), es_knowledge_base_str_token)
-        file_path = os.path.join(file_path, production_str_token)
-        full_file_path = os.path.join(file_path, file_name  + extention_separator_token + es_extension_token)
-        print(full_file_path)
+        file_path = os.path.join(os.path.dirname(os.getcwd()), "../" + es_knowledge_base_str_token + "/" + production_str_token)
+        full_file_path = os.path.join(file_path, file_name)
 
         try:
             with open(full_file_path, "w") as write_file:
                 json.dump(data, write_file, indent=2)
         except OSError as e:
-            RuleEditorController.prompt_error("Theme name too big")
+            CommonWidgetOp.prompt_error("Theme name too big")
 
     def on_load_clicked(self):
-        from PyQt5.QtWidgets import QFileDialog
-
-        options = QFileDialog.Options()
-        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token + "/" + production_str_token,
-                                                  open_file_dialog_label, options=options)
+        fileName = CommonWidgetOp.prompt_open_dialog(open_file_dialog_desc,
+                                                       "../" + es_knowledge_base_str_token + "/" + production_str_token,
+                                                      self)
         if fileName:
             print(fileName)
             theme_struct = Serializer.de_serialize_to_internal_data(fileName)
@@ -166,7 +162,7 @@ class RuleEditorController(QDialog):
                 self.variables_model.add_variables_from_file(theme_struct.answers_list)
                 self.rules_model.add_rules_from_file(theme_struct.rules_struct)
             else:
-                RuleEditorController.prompt_error("Serialization failed due to file corruption")
+                CommonWidgetOp.prompt_error("Not a Rule Base file")
         print("load")
 
     def clear_all(self):
@@ -175,12 +171,6 @@ class RuleEditorController(QDialog):
         self.rules_model.remove_all_rules()
         self.ui.textEditOutput.setText("")
         ColumnButtonDelegate.clear_editors_list()
-
-    @staticmethod
-    def prompt_error(error_text):
-        msg = QMessageBox()
-        msg.setText(error_text)
-        retval = msg.exec_()
 
 def init_rule_editor_gui():
     import sys

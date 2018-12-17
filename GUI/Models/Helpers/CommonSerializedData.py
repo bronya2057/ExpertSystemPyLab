@@ -101,10 +101,10 @@ class CommonSerializedData:
         rule_list_to_add = []
         for question_index, answer_list in enumerate(CommonSerializedData.es_answers_list):
             if len(answer_list) > 0:
-                print("Answer")
-                print(answer_list)
-                print("question")
-                print(question_index)
+                # print("Answer")
+                # print(answer_list)
+                # # print("question")
+                # print(question_index)
                 rule_list_to_add.append(answer_list[0])
 
         CommonSerializedData.rules_list.append(rule_list_to_add)

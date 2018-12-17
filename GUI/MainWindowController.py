@@ -6,6 +6,7 @@ from pyknow import Fact
 from Backend.EmptyExpertEngine import ExpertEngine
 from GUI.Common import *
 from GUI.FrameEditorController import FrameEditorController
+from GUI.Models.Helpers.CommonWidgetOp import CommonWidgetOp
 from GUI.SemanticEditorController import SemanticEditorController
 from GUI.Views.MainWindowView import Ui_MainWindow
 from GUI.Models.Helpers.ColumnButtonDelegate import ColumnButtonDelegate
@@ -41,11 +42,13 @@ class MainWindowController(QMainWindow):
 
     def open_action(self):
         options = QFileDialog.Options()
-        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token,
+        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token + "/" + production_str_token,
                                                   open_file_dialog_label, options=options)
         if fileName:
             print(fileName)
             self.esThemesListModel.load_theme(fileName)
+        else:
+            CommonWidgetOp.prompt_error("Not a production model file")
 
         self.ui.listViewESThemes.clearSelection()
         self.clear_answers_and_questions()
@@ -250,33 +253,9 @@ class MainWindowController(QMainWindow):
         import matplotlib.pyplot as plt
         import matplotlib.image as mpimg
 
-        graph = pydotplus.Dot(graph_type='digraph')
-        node_a = pydotplus.Node("Node A", style="filled", fillcolor="red")
-        node_b = pydotplus.Node("Node B", style="filled", fillcolor="green")
-        node_c = pydotplus.Node("Node C", style="filled", fillcolor="#0000ff")
-        node_d = pydotplus.Node("Node D", style="filled", fillcolor="#976856")
-
-        graph.add_node(node_a)
-        graph.add_node(node_b)
-        graph.add_node(node_c)
-        graph.add_node(node_d)
-
-        graph.add_edge(pydotplus.Edge(node_a, node_b, label="Yes"))
-        graph.add_edge(pydotplus.Edge(node_a, node_c, label="No"))
-        graph.add_edge(pydotplus.Edge(node_b, node_c, label="No"))
-        graph.add_edge(pydotplus.Edge(node_c, node_d, label="Maybe"))
-
-        graph.add_edge(pydotplus.Edge(node_d, node_a, label="and back we go again", labelfontcolor="#009933", fontsize="10.0", color="blue"))
-
         questions_graph = pydotplus.Dot(graph_type='digraph')
 
         questions = self.esThemesListModel.get_current_questions_and_answers()
-        # for question, answers in questions.items():
-        #     # question = self.esThemesListModel.get_current_theme_question(question_index)
-        #     print("GEW")
-
-        # prev_node = pydotplus.Node()
-        # prev_key = ""
 
         selected_prev_node = pydotplus.Node()
         ultimate_prev_node = pydotplus.Node()
@@ -329,17 +308,29 @@ class MainWindowController(QMainWindow):
 
             ultimate_prev_node = selected_prev_node
 
-        node = pydotplus.Node(self.ui.lblQuestion.text(), style="filled", fillcolor="Grey")
+        #self.ui.lblQuestion.text()
+        node = pydotplus.Node("RESULT", style="filled", fillcolor="Grey")
         questions_graph.add_node(node)
         questions_graph.add_edge(pydotplus.Edge(ultimate_prev_node, node, label="RESULT", labelfontcolor="#009933", fontsize="10.0",color="blue"))
 
         facts = self.current_theme_facts
         for fact, value in facts.items():
             print(fact)
-        questions_graph.write_png('example2_graph.png')
-        img = mpimg.imread('example2_graph.png')
-        plt.imshow(img)
-        plt.show()
+        # questions_graph.write_png('example2_graph.png')
+        # questions_graph.write_pdf("iris.pdf")
+        import os
+        current_dir = os.getcwd()
+
+        production_graph_name = 'ProductionGraph.png'
+        full_file_path = os.path.join(current_dir, production_graph_name)
+        questions_graph.write(full_file_path, format='png')
+        if os.path.isfile(full_file_path):
+            img = mpimg.imread(production_graph_name)
+            plt.imshow(img)
+            plt.show()
+        else:
+            print(full_file_path)
+            print("NOT FOUND")
 
 def init_gui():
     import sys

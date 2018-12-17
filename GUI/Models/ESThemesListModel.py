@@ -3,6 +3,8 @@ from json import JSONDecodeError
 from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant, Qt, pyqtSignal
 from PyQt5.QtWidgets import QMessageBox
 
+from GUI import Common
+from GUI.Models.Helpers.CommonWidgetOp import CommonWidgetOp
 from GUI.Models.Helpers.ESTheme import ESTheme
 
 
@@ -52,28 +54,35 @@ class ESThemesListModel(QAbstractListModel):
             with open(file_path) as f:
                 data = json.load(f)
 
-            add_theme = True
+                lst = list(data.keys())
+                if "TYPE" in list(data.keys()):
+                    if data[Common.TYPE_TOKEN] == Common.production_str_token:
+                        del data[Common.TYPE_TOKEN]
 
-            for themeName in data:
-                for index, theme in enumerate(self.es_themes):
-                    if theme.name == themeName:
-                        self.removeRow(index)
-                        del self.es_themes[index]
+                        add_theme = True
 
-                if add_theme:
-                    self.insertRow(len(self.es_themes))
-                    self.es_themes.append(ESTheme(themeName, {}, {}))
-                    for i, questionText in enumerate(data[themeName]["Questions"]):
-                        #  print(str(i) + " " + questionText)
-                        my_list = list()
-                        for variable in data[themeName]["Variables"][i]:
-                            my_list.append(variable)
-                        print(variable)
-                        self.es_themes[-1].questions[questionText] = my_list
+                        for themeName in data:
+                            for index, theme in enumerate(self.es_themes):
+                                if theme.name == themeName:
+                                    self.removeRow(index)
+                                    del self.es_themes[index]
 
-                    for facts, rule_output in data[themeName]["Rules"].items():
-                        self.es_themes[-1].rules[facts] = rule_output
-                        print(facts + " " + rule_output)
+                            if add_theme:
+                                self.insertRow(len(self.es_themes))
+                                self.es_themes.append(ESTheme(themeName, {}, {}))
+                                for i, questionText in enumerate(data[themeName]["Questions"]):
+                                    #  print(str(i) + " " + questionText)
+                                    my_list = list()
+                                    for variable in data[themeName]["Variables"][i]:
+                                        my_list.append(variable)
+                                    print(variable)
+                                    self.es_themes[-1].questions[questionText] = my_list
+
+                                for facts, rule_output in data[themeName]["Rules"].items():
+                                    self.es_themes[-1].rules[facts] = rule_output
+                                    print(facts + " " + rule_output)
+                else:
+                    CommonWidgetOp.prompt_error("Not a Production Base file")
         except JSONDecodeError:
             msg = QMessageBox()
             msg.setText("Serialization failed due to file corruption")

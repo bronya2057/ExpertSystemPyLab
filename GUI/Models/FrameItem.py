@@ -1,5 +1,5 @@
 class FrameItem(object):
-    def __init__(self, frame_name, slots={}, parent=None, slot_value="SLOT value"):
+    def __init__(self, frame_name, slots={}, parent=None, slot_value=""):
         self.parentItem = parent
         self.name = frame_name
         self.slots = slots
@@ -37,10 +37,10 @@ class FrameItem(object):
         return self.frame_items[row]
 
     def childCount(self):
-        print("Node")
-        print(self.name)
-        print("ChildCount:")
-        print(len(self.frame_items))
+        # print("Node")
+        # print(self.name)
+        # print("ChildCount:")
+        # print(len(self.frame_items))
         return len(self.frame_items)
 
     def columnCount(self):
@@ -61,10 +61,10 @@ class FrameItem(object):
         return self.parentItem
 
     def row(self):
-        print("ROW: Node")
-        print(self.name)
-        print("parent:")
-        print(self.parentItem.name)
+        # print("ROW: Node")
+        # print(self.name)
+        # print("parent:")
+        # print(self.parentItem.name)
         if self.parentItem:
             return self.parentItem.frame_items.index(self)
 
@@ -85,7 +85,7 @@ class FrameItem(object):
     def remove_children_at(self, pos):
         if pos < len(self.frame_items):
             del self.frame_items[pos]
-            print("GFW")
+            # print("GFW")
 
     def remove_parent(self):
         self.parentItem = None

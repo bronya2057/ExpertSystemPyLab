@@ -22,7 +22,7 @@ class SemanticObjectListModel(QAbstractListModel):
         return SemanticData.get_len()
 
     def insertRows(self, row, count, parent=None, *args, **kwargs):
-        print("insert rows" + str(row) + str(count))
+        # print("insert rows" + str(row) + str(count))
         self.beginInsertRows(QModelIndex(), row, count)
         self.endInsertRows()
 

@@ -12,7 +12,7 @@ class Ui_FrameEditor(object):
     def setupUi(self, FrameEditor):
         FrameEditor.setObjectName("FrameEditor")
         FrameEditor.setEnabled(True)
-        FrameEditor.resize(1175, 624)
+        FrameEditor.resize(1006, 623)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -150,30 +150,34 @@ class Ui_FrameEditor(object):
         self.horizontalLayout_4.addWidget(self.pbRemoveObject)
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_2.addLayout(self.verticalLayout_3)
-        self.gridLayout.addWidget(self.gBConnections, 0, 0, 1, 3)
-        self.pbLoad = QtWidgets.QPushButton(FrameEditor)
-        self.pbLoad.setObjectName("pbLoad")
-        self.gridLayout.addWidget(self.pbLoad, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.gBConnections, 0, 1, 1, 5)
         self.pbGraph = QtWidgets.QPushButton(FrameEditor)
         self.pbGraph.setObjectName("pbGraph")
-        self.gridLayout.addWidget(self.pbGraph, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.pbGraph, 1, 5, 1, 1)
         self.pbSave = QtWidgets.QPushButton(FrameEditor)
         self.pbSave.setObjectName("pbSave")
-        self.gridLayout.addWidget(self.pbSave, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.pbSave, 1, 4, 1, 1)
+        self.pbLoad = QtWidgets.QPushButton(FrameEditor)
+        self.pbLoad.setObjectName("pbLoad")
+        self.gridLayout.addWidget(self.pbLoad, 1, 3, 1, 1)
+        self.pbNewModel = QtWidgets.QPushButton(FrameEditor)
+        self.pbNewModel.setObjectName("pbNewModel")
+        self.gridLayout.addWidget(self.pbNewModel, 1, 1, 1, 2)
 
         self.retranslateUi(FrameEditor)
         QtCore.QMetaObject.connectSlotsByName(FrameEditor)
 
     def retranslateUi(self, FrameEditor):
         _translate = QtCore.QCoreApplication.translate
-        FrameEditor.setWindowTitle(_translate("FrameEditor", "RuleEditor"))
+        FrameEditor.setWindowTitle(_translate("FrameEditor", "FrameEditor"))
         self.gBConnections.setTitle(_translate("FrameEditor", "Frame objects Editor"))
         self.pbAddNode.setText(_translate("FrameEditor", "Add Node"))
         self.pbAddChild.setText(_translate("FrameEditor", "Add Child"))
         self.pbRemoveObject.setText(_translate("FrameEditor", "Remove Object"))
-        self.pbLoad.setText(_translate("FrameEditor", "Load Frame Model"))
         self.pbGraph.setText(_translate("FrameEditor", "Draw Frame Graph"))
         self.pbSave.setText(_translate("FrameEditor", "Save Frame Model"))
+        self.pbLoad.setText(_translate("FrameEditor", "Load Frame Model"))
+        self.pbNewModel.setText(_translate("FrameEditor", "New Frame Model"))
 
 
 if __name__ == "__main__":

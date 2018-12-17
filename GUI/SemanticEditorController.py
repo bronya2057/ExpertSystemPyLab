@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QMessageBox
 from Backend import Serializer
 from GUI.Common import INVALID_INDEX, open_file_dialog_desc, es_knowledge_base_str_token, open_file_dialog_label, \
     semantic_str_token, extention_separator_token, es_extension_token
+from GUI.Models.Helpers.CommonWidgetOp import CommonWidgetOp
 from GUI.Models.Helpers.SemanticData import SemanticData
 from GUI.Models.SemanticInputTableModel import SemanticInputTableModel
 from GUI.Models.SemanticObjectListModel import SemanticObjectListModel
@@ -82,7 +83,7 @@ class SemanticEditorController(QDialog):
         if self.ui.listViewObjects.currentIndex().row() > INVALID_INDEX:
             SemanticData.set_selected_index = row
             # Request input and output
-        print(row)
+        # print(row)
 
     def request_in_out_data(self):
         selected_object_index = self.ui.listViewObjects.currentIndex().row()
@@ -112,7 +113,7 @@ class SemanticEditorController(QDialog):
         options = {
             'node_color': 'White',
             'node_size': 500,
-            'width': 3,
+            'width': 2,
         }
 
         G = nx.DiGraph()
@@ -160,14 +161,17 @@ class SemanticEditorController(QDialog):
                 G.add_edge(node1, node2, label=str(length), length=length)
                 edge_labels[(node1, node2)] = length  # store the string version as a label
 
+        plt.figure(3, figsize=(12, 12))
         pos = nx.spring_layout(G, k=10)  # set the positions of the nodes/edges/labels
         nx.draw_networkx(G, pos=pos)  # draw everything but the edge labels
-        nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels)
+        # label_pos = 0.25 where is the label positioned
+        nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=edge_labels, label_pos=0.25)
 
         if os.path.exists("Plot.png"):
             os.remove("Plot.png")
         else:
             print("The file does not exist")
+
 
         plt.show()
 
@@ -175,17 +179,13 @@ class SemanticEditorController(QDialog):
         pass
 
     def on_save_clicked(self):
-        from PyQt5.QtWidgets import QFileDialog
-
         data = Serializer.get_json_ready_semantic_data()
 
         import json
         json_str = json.dumps(data, indent=2)
         print(json_str)
 
-        options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getSaveFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token + "/" + semantic_str_token,
-                                                  open_file_dialog_label, options=options)
+        file_name = CommonWidgetOp.prompt_save_dialog(open_file_dialog_desc, "../" + es_knowledge_base_str_token + "/" + semantic_str_token, self)
 
         file_path = os.path.join(os.path.dirname(os.getcwd()), es_knowledge_base_str_token + "/" + semantic_str_token)
         full_file_path = os.path.join(file_path, file_name)
@@ -195,14 +195,13 @@ class SemanticEditorController(QDialog):
             with open(full_file_path, "w") as write_file:
                 json.dump(data, write_file, indent=2)
         except OSError as e:
-            SemanticEditorController.prompt_error("File name too big")
+            CommonWidgetOp.prompt_error("File name too big")
 
     def on_load_clicked(self):
-        from PyQt5.QtWidgets import QFileDialog
+        fileName = CommonWidgetOp.prompt_open_dialog(open_file_dialog_desc,
+                                                     "../" + es_knowledge_base_str_token + "/" + semantic_str_token,
+                                                     self)
 
-        options = QFileDialog.Options()
-        fileName, _ = QFileDialog.getOpenFileName(self, open_file_dialog_desc, "../" + es_knowledge_base_str_token + "/" + semantic_str_token,
-                                                  open_file_dialog_label, options=options)
         if fileName:
             print(fileName)
             semantic_net_struct = Serializer.de_serialize_semantic_to_internal_data(fileName)
@@ -210,18 +209,14 @@ class SemanticEditorController(QDialog):
                 print("not empty")
                 self.clear_all()
                 self.semantic_object_model.add_net_from_file(semantic_net_struct)
+            else:
+                CommonWidgetOp.prompt_error("Not a semantic net or empty")
 
     def clear_all(self):
         self.out_model.clear_all_inputs()
         self.in_model.clear_all_inputs()
         self.semantic_object_model.clear_all_objects()
         self.ui.listViewObjects.clearSelection()
-
-    @staticmethod
-    def prompt_error(error_text):
-        msg = QMessageBox()
-        msg.setText(error_text)
-        retval = msg.exec_()
 
 def init_semantic_editor_gui():
     import sys
